@@ -1,9 +1,10 @@
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall
 
-SRCS = 
+SRCS = src/main.cpp src/global.cpp src/CmdHandler.cpp src/utaste.cpp src/person.cpp 
 
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+
+
 OBJS = $(SRCS:.cpp=.o)
 EXEC = utaste
 

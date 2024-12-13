@@ -4,7 +4,7 @@
 #include "global.hpp"
 #include "reservation.hpp"
 
-class{
+class table{
 
 public:
 

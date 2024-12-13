@@ -4,7 +4,7 @@
 #include "global.hpp"
 #include "food.hpp"
 
-class{
+class reservation{
 
 public:
 

@@ -5,13 +5,13 @@
 
 
 
-class{
+class neighborhood{
 
 public:
 
 private:
 	vector<string> neighbors;
-	vector<string> neghbor_restaurant;
+	vector<string> neighbor_restaurant;
 }
 
 #endif

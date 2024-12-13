@@ -3,7 +3,7 @@
 
 #include "global.hpp"
 
-class{
+class food{
 
 public:
 

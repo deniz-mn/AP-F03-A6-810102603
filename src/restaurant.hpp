@@ -6,7 +6,7 @@
 #include "reservation.hpp"
 #include "table.hpp"
 
-class{
+class restaurant{
 
 public:
 

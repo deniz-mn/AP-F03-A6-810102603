@@ -5,7 +5,7 @@
 #include "person.hpp"
 
 
-class{
+class utaste{
 
 public:
 	utaste();
@@ -16,6 +16,6 @@ private:
 	vector<person> people ;
 
 	
-}
+};
 
 #endif

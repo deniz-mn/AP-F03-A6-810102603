@@ -8,7 +8,7 @@ class{
 public:
 
 private:
-	name;
-	price;
+	string name;
+	int price;
 };
 #endif

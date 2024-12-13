@@ -9,10 +9,10 @@ class{
 public:
 
 private:
-	restaurant_name;
-	table_number;
-	start_time;
-	end_time;
+	string restaurant_name;
+	int table_number;
+	int start_time;
+	int end_time;
 	vector<food> ordered_food;
 };
 #endif

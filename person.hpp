@@ -2,18 +2,23 @@
 #define PERSON_HPP
 
 #include "global.hpp"
-#include "food.hpp"
 #include "reservation.hpp"
 
 class{
 
 public:
+	person();
+	void signup(string username_ , string password_);
+	void login(string username_ , string password_);
+	void save_login();
+	string get_username();
+	string get_password();
 
 private:
 	string username;
 	string password;
 	vector<reservation> reservations;
-	bool login;
+	bool is_login;
 	bool have_account;
 };
 #endif

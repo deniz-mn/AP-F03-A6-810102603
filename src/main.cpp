@@ -1,15 +1,30 @@
 #include "CmdHandler.hpp"
-#include "person.hpp"
+#include "Person.hpp"
 #include "global.hpp"
-#include "utaste.hpp"
+#include "Utaste.hpp"
 
 int main(){
 
-	string input;
-	CmdHandler cmdd;
-	getline(cin,input);
-	cmdd(input);
-	cmdd.check_cmd();
+	
+	Utaste* utaste;
 
+	for(int i=0 ; i<2 ; i++){
+		cout<<"i = "<<i<<endl;
+		string input;
+		getline(cin,input);
+		CmdHandler cmdd(input ,utaste);
+		cout<<"befor checking cmd"<<endl;
+		cmdd.check_cmd();
+		cout<<" first cycle of while cmd"<<endl;
+
+	}
+	// while(getline(cin,input)){
+	// 	CmdHandler cmdd(input ,&utaste);
+	// 	cout<<"befor checking cmd"<<endl;
+	// 	cmdd.check_cmd();
+	// 	cout<<" first cycle of while cmd"<<endl;
+	// }
+	
+	
 
 }

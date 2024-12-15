@@ -13,17 +13,4 @@ using namespace std;
 
 
 
-
-
-
-
-
-
-enum State{
-    START_GAME,
-    IN_GAME,
-    VICTORY,
-    EXIT
-};
-
 #endif

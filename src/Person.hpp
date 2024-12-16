@@ -9,7 +9,6 @@ public:
 	//Person();
 	Person(const string& username_ ,const string& password_);
 	~Person();
-	void signup (string username_ , string password_);
 	bool login (string username_ , string password_);
 	void save_login();
 	string get_username();

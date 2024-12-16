@@ -15,7 +15,7 @@ public:
 	void print();
 
 private:
-	vector<Person*> persons;
+	vector<shared_ptr<Person>> persons;
 
 };
 

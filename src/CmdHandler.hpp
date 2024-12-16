@@ -10,14 +10,15 @@ class CmdHandler{
 
 public:
 	//CmdHandler();
-	CmdHandler(string s,Utaste* utaste);
+	CmdHandler(shared_ptr<Utaste> utaste);
 	~CmdHandler();
-	void  check_cmd ();
+	void  check_cmd (string s);
+	vector<string>  add_to_vector (string s);
 	
 
 private:
-	vector<string> cmd;
-	Utaste* utaste;
+	
+	shared_ptr<Utaste>  utaste;
 };
 
 #endif

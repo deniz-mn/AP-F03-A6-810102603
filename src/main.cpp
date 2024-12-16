@@ -6,24 +6,17 @@
 int main(){
 
 	
-	Utaste* utaste;
-
-	for(int i=0 ; i<2 ; i++){
-		cout<<"i = "<<i<<endl;
-		string input;
+	auto  utaste = make_shared<Utaste>();
+	CmdHandler cmdd(utaste);
+	string input;
+	
+	while(true){
+		
 		getline(cin,input);
-		CmdHandler cmdd(input ,utaste);
 		cout<<"befor checking cmd"<<endl;
-		cmdd.check_cmd();
+		cmdd.check_cmd(input);
 		cout<<" first cycle of while cmd"<<endl;
-
 	}
-	// while(getline(cin,input)){
-	// 	CmdHandler cmdd(input ,&utaste);
-	// 	cout<<"befor checking cmd"<<endl;
-	// 	cmdd.check_cmd();
-	// 	cout<<" first cycle of while cmd"<<endl;
-	// }
 	
 	
 

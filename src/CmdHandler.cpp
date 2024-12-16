@@ -1,24 +1,26 @@
 #include "CmdHandler.hpp"
 
-// CmdHandler :: CmdHandler(){
-// 	vector<string> c = {};
-// 	cmd = c;
-// }
-CmdHandler :: CmdHandler(string s , Utaste* utaste) : utaste(utaste){
-	stringstream ss (s);
-	string word;
-	while(ss>>word)
-		cmd.push_back(word);
+
+CmdHandler :: CmdHandler(shared_ptr<Utaste> utaste) : utaste(utaste){
+	
 }
 CmdHandler :: ~CmdHandler(){
 
-	delete utaste;
-	cout<<"pak kardamesh cmd handler rooo"<<endl;
 }
+vector<string>  CmdHandler :: add_to_vector (string s){
+	vector<string> cmd;
+	istringstream ss (s);
+	string word;
+	while(ss>>word)
+		cmd.push_back(word);
 
-void CmdHandler :: check_cmd (){
+	return cmd;
+}
+void CmdHandler :: check_cmd (string s){
 
-cout<<"check cmd shoro shod"<<endl;
+	vector<string> cmd = add_to_vector(s);
+
+	
 	if(cmd[0] == "login"){
 		utaste->login(cmd[1] , cmd[2]);
 	}
@@ -28,8 +30,5 @@ cout<<"check cmd shoro shod"<<endl;
 	if(cmd[0] == "print"){
 		utaste->print();
 	}
-
-	cout<<"check cmd tamom shod"<<endl;
-
 }
 

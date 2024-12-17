@@ -2,9 +2,9 @@
 #define RESERVATION_HPP
 
 #include "global.hpp"
-#include "food.hpp"
+#include "Food.hpp"
 
-class reservation{
+class Reservation{
 
 public:
 
@@ -13,6 +13,6 @@ private:
 	int table_number;
 	int start_time;
 	int end_time;
-	vector<food> ordered_food;
+	vector<Food> ordered_food;
 };
 #endif

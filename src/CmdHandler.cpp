@@ -20,15 +20,20 @@ void CmdHandler :: check_cmd (string s){
 
 	vector<string> cmd = add_to_vector(s);
 
-	
-	if(cmd[0] == "login"){
-		utaste->login(cmd[1] , cmd[2]);
+	if(cmd[0] == POST){
+
 	}
-	if(cmd[0] == "signup"){
-		utaste->signup(cmd[1] , cmd[2]);
+	if(cmd[0] == PUT){
+		
 	}
-	if(cmd[0] == "print"){
-		utaste->print();
+	if(cmd[0] == GET){
+		
+	}
+	if(cmd[0] == DELETE){
+		
+	}
+	else{
+		cout<<BAD_REQUEST<<endl;
 	}
 }
 

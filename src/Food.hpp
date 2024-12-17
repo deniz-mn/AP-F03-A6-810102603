@@ -3,10 +3,12 @@
 
 #include "global.hpp"
 
-class food{
+class Food{
 
 public:
-
+	Food (const string& name_ , int price_);
+	string get_name();
+	int get_price();
 private:
 	string name;
 	int price;

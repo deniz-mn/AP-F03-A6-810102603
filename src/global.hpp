@@ -22,4 +22,7 @@ const string NOT_FOUND = "Not Found";
 const string BAD_REQUEST = "Bad Request";
 const string PERMISSION_DENIED = "Permission Denied";
 
+const int CMD_USERNAME = 4; 
+const int CMD_PASSWORD = 6;
+
 #endif

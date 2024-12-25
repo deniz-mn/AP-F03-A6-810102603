@@ -6,9 +6,12 @@ Utaste :: Utaste(){
 Utaste :: ~Utaste(){
 	
 }
+
 vector<string> file_reader (string file_name);
 vector<string> string_seprator(string line , char seprator);
 vector<shared_ptr<Food>> save_menu (string input);
+string remove_double_quote(string word);
+
 
 void Utaste :: save_restaurant_input(const string& file_name){
 	
@@ -21,6 +24,8 @@ void Utaste :: save_restaurant_input(const string& file_name){
 		restaurants.push_back(restaurant);
 	}
 }
+
+
 void Utaste :: save_neighbors_input(const string& file_name){
 
 	vector<string> file_input = file_reader(file_name);
@@ -32,26 +37,71 @@ void Utaste :: save_neighbors_input(const string& file_name){
 		neighborhoods.push_back(neighborhood);
 	}
 }
+bool check_login(string username,string password){}
+bool wrong_pass(string username, string password){}
+bool find_username(string username){}
 
 
-// void Utaste :: login(string username , string password){
-// 	for(auto p : persons){
-// 		if(p->login(username,password)){
-			
-// 		}
-// 	}
-// }
-void Utaste :: signup(string& username , string& password){
+void Utaste :: signup(string& username_ , string& password_){
 
-	auto p = make_shared<Person>(username , password);
+	string username = remove_double_quote(username_);
+	string password = remove_double_quote(password_);
+	if(check_login(username,password))
+		throw	Premission_Denied();
+	
+	if(find_person(username))
+		throw	Bad_Request();
+	
+	else{
+		auto p = make_shared<Person>(username , password);
 		persons.push_back(p);
-		
+	}	
 }
-void Utaste :: print(){
-	for(auto n : neighborhoods){
-		n->print();
+void Utaste :: login(string& username_ , string& password_){
+
+	string username = remove_double_quote(username_);
+	string password = remove_double_quote(password_);
+
+	if(check_login(username,password))
+		throw	Premission_Denied();
+	if(!find_username(username))
+		throw	Not_Found();
+	if(wrong_pass(username,password))
+		throw	Premission_Denied();
+	else{
+		auto p = find_person(username);
+		p->save_login();
+	}	
+}
+
+bool Utaste :: check_login(string username,string password){
+	auto p = find_person(username);
+		if(p->get_login())
+			return true;
+	return false;
+}
+bool Utaste :: find_username(string username){
+	for(auto p : persons){
+		if(p->get_username() == username)
+			return true;
+	}
+	return false;
+}
+shared_ptr<Person> Utaste :: find_person(string username){
+	for(auto p : persons){
+		if(p->get_username() == username)
+			return p;
 	}
 }
+bool  Utaste ::  wrong_pass(string username, string password){
+	
+	auto p = find_person(username);
+	if(p->get_password() == password)
+		return false;
+	return true;
+}
+
+
 vector<string> file_reader (string file_name){
 		
 		ifstream file(file_name);
@@ -88,4 +138,11 @@ vector<shared_ptr<Food>> save_menu (string input){
 		}
 		return foods;
 }
+string remove_double_quote(string word){
+
+	return word.substr(1,word.length()-2);
+}
+
+
+
 

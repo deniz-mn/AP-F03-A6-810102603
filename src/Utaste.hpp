@@ -5,6 +5,7 @@
 #include "Person.hpp"
 #include "Restaurant.hpp"
 #include "Neighborhood.hpp"
+#include "Exception.hpp"
 
 class Utaste{
 
@@ -13,8 +14,13 @@ public:
 	~Utaste();
 	void save_restaurant_input(const string& file_name);
 	void save_neighbors_input(const string& file_name);
-	//void login(string username , string password);
-	void signup (string& username , string& password);
+	void signup (string& username_ , string& password_);
+	void login (string& username_ , string& password_);
+	shared_ptr<Person> find_person(string username);
+	bool find_username(string username);
+	bool check_login(string username,string password);
+	bool wrong_pass(string username, string password);
+	bool duplicate_username(string username);
 	void print();
 
 private:
@@ -27,4 +33,10 @@ private:
 vector<string> file_reader (string file_name);
 vector<string> string_seprator(string line , char seprator);
 vector<shared_ptr<Food>> save_menu (string input);
+
+
+
+
+
+
 #endif

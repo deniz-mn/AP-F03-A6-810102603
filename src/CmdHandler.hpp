@@ -3,22 +3,26 @@
 
 #include "global.hpp"
 #include "Utaste.hpp"
+#include "Exception.hpp"
 
 
 
 class CmdHandler{
 
 public:
-	//CmdHandler();
 	CmdHandler(shared_ptr<Utaste> utaste);
 	~CmdHandler();
-	void  check_cmd (string s);
-	vector<string>  add_to_vector (string s);
+	void check_cmd (string s);
+	
+	
 	
 
 private:
 	
 	shared_ptr<Utaste>  utaste;
 };
+
+
+vector<string>  add_to_vector (string s);
 
 #endif

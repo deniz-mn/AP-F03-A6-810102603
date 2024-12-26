@@ -7,12 +7,47 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 	closing_time = closing_time_;
 	openning_time = openning_time_;
 	num_of_tables = num_of_tables_;
+	sort(menu.begin(),menu.end(),compare_name);
 }
-int Restaurant :: get_openning (){ return openning_time; }
-string Restaurant :: get_name(){ return name ;}
-void Restaurant :: get_menu(){ 
-	for(auto f : menu){
-		cout<<f->get_name()<<"esme qaza"<<endl;
-		cout<<f->get_price()<<"qeimat qaza"<<endl;
+
+bool  Restaurant :: is_here(string name_){
+	if(district == name_)
+		return true;
+	return false;
+}
+bool  Restaurant ::  is_same_restaurant(shared_ptr<Restaurant>& restaurant){
+	return (name == restaurant->name);
+}
+void  Restaurant ::   print_name_district(){
+	cout<<name<<" ("<<district<<")"<<endl;
+}
+bool  Restaurant ::   have_food(string name){
+	for(auto food : menu){
+		if(food->is_this_food(name))
+			return true;
 	}
+	return false;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void  Restaurant  ::  print_menu(){
+	for(int i=0 ; i<menu.size()-1 ; i++){
+			cout<<menu[i]->get_name_food()<<"("<<menu[i]->get_price_food()<<")"<<", ";
+	}
+	cout<<menu[ menu.size()-1 ]<<endl;
+}
+void  Restaurant  ::  print_detail(){
+	cout<<"Name: "<<name<<endl;
+	cout<<"District: "<<district<<endl;
+	cout<<"Time: "<<openning_time<<"-"<<closing_time<<endl;
+	cout<<"Menu: ";
+	print_menu();
+	//cout<<
+
+}
+
+int Restaurant :: get_openning (){ return openning_time; }
+string Restaurant :: get_name_restaurant(){ return name ;}
+
+bool compare_name(shared_ptr<Food>& a ,shared_ptr<Food>& b){
+	return a->get_name_food()[0] < b->get_name_food()[0];
 }

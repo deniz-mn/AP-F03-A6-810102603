@@ -7,8 +7,9 @@ class Food{
 
 public:
 	Food (const string& name_ , int price_);
-	string get_name();
-	int get_price();
+	bool is_this_food(string name_);
+	string get_name_food();
+	int get_price_food();
 private:
 	string name;
 	int price;

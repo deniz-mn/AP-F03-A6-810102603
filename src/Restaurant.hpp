@@ -9,15 +9,21 @@
 class Restaurant{
 
 public:
-	Restaurant(const string& name_,const string& district_,
-			   const vector<shared_ptr<Food>>& menu_,int openning_time_,
-			   int closing_time_,int num_of_tables_);
+	Restaurant(const string& name_,const string& district_,const vector<shared_ptr<Food>>& menu_,
+			   int openning_time_,int closing_time_,int num_of_tables_);
+
+	bool is_here(string name_);
+	bool is_same_restaurant(shared_ptr<Restaurant>& restaurant);
+	bool have_food(string name);
+	void print_menu();
+	void print_detail();
+
+	void print_name_district();
 	int get_openning ();
-	string get_name();
-	void get_menu();
+	string get_name_restaurant();
 private:
 	string name;
-	string district;
+	string district ;
 	vector<shared_ptr<Food>> menu;
 	int openning_time;
 	int closing_time;
@@ -28,5 +34,7 @@ private:
 
 	
 };
+
+bool compare_name(shared_ptr<Food>& a ,shared_ptr<Food>& b);
 
 #endif

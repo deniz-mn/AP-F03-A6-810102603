@@ -7,6 +7,7 @@
 #include <sstream>
 #include<fstream>
 #include <memory>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,7 +23,12 @@ const string NOT_FOUND = "Not Found";
 const string BAD_REQUEST = "Bad Request";
 const string PERMISSION_DENIED = "Permission Denied";
 
+const int CMD_TYPE = 0;
 const int CMD_USERNAME = 4; 
 const int CMD_PASSWORD = 6;
+const int CMD_FULL_ARGS = 5; 
+const int CMD_MINIMAL_ARGS = 3;
+const int CMD_DISTRICT_NAME = 4;
+const int CMD_RESTAURANT_NAME = 4;
 
 #endif

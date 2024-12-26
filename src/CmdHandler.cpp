@@ -2,12 +2,22 @@
 
 
 CmdHandler :: CmdHandler(shared_ptr<Utaste> utaste) : utaste(utaste){
-	
+	user_login = false;
 }
 CmdHandler :: ~CmdHandler(){
 
 }
 vector<string> add_to_vector (string s);
+
+bool  CmdHandler ::  is_login(){
+	return user_login;
+}
+void   CmdHandler :: login(){
+	user_login =  true;
+}
+void   CmdHandler :: logout(){
+	user_login  = false;
+}
 
 
 void CmdHandler :: check_cmd (string s){
@@ -16,12 +26,20 @@ void CmdHandler :: check_cmd (string s){
 
 try{
 
-		if(cmd[0] == POST){
-
-			if(cmd[1] == "signup")
-				utaste->signup(cmd[CMD_USERNAME],cmd[CMD_PASSWORD]); 
-			if(cmd[1] == "login")
+		if(cmd[CMD_TYPE] == POST){
+			
+			if(cmd[1] == "signup"){
+				utaste->signup(cmd[CMD_USERNAME],cmd[CMD_PASSWORD]);
+				login();
+			}
+			if(cmd[1] == "login"){
 				utaste->login(cmd[CMD_USERNAME],cmd[CMD_PASSWORD]);
+				login();
+			}
+			if(cmd[1] == "logout"){
+				utaste->logout();
+				logout();
+			}
 
 			
 		
@@ -29,26 +47,60 @@ try{
 		}
 
 
-		if(cmd[0] == PUT){
+		else if(cmd[CMD_TYPE] == PUT){
+			if(!is_login())
+				throw Premission_Denied();
+
+			if(cmd[1] == "my_district")
+				utaste->save_person_district(cmd[CMD_DISTRICT_NAME] );
+		
+
+
+		}
+
+		else if(cmd[CMD_TYPE] == GET){
+			if(!is_login())
+				throw Premission_Denied();
+
+			if(cmd[1] == "districts"){
+				if(cmd.size() == CMD_FULL_ARGS)
+					utaste->show_special_districts(cmd[ CMD_FULL_ARGS-1 ]);
+				if(cmd.size() == CMD_MINIMAL_ARGS)
+					utaste->show_districts();
+			}
+			if(cmd[1] == "restaurants"){
+				if(cmd.size() == CMD_FULL_ARGS)
+					utaste->show_special_restaurants(cmd[ CMD_FULL_ARGS-1 ]);
+				if(cmd.size() == CMD_MINIMAL_ARGS)
+					utaste->show_all_restaurants();
+
+			}
+			if(cmd[1] == "restaurant_detail"){
+				utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
+			}
+
+
 		
 		}
 
 
-		if(cmd[0] == GET){
-		
-		}
+		else if(cmd[CMD_TYPE] == DELETE){
+			if(!is_login())
+				throw Premission_Denied();
 
-
-		if(cmd[0] == DELETE){
 		
 		}
 		else{
+			
 			throw Bad_Request();
 		}
+
+		
 }
 
 catch(Exception& ex){
-	cout<<ex.show_error();
+	
+	cout<<ex.show_error()<<endl;
 		
 }
 

@@ -13,6 +13,9 @@ public:
 	CmdHandler(shared_ptr<Utaste> utaste);
 	~CmdHandler();
 	void check_cmd (string s);
+	bool is_login();
+	void login();
+	void logout();
 	
 	
 	
@@ -20,6 +23,7 @@ public:
 private:
 	
 	shared_ptr<Utaste>  utaste;
+	bool user_login;
 };
 
 

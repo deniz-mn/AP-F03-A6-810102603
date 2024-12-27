@@ -30,5 +30,9 @@ const int CMD_FULL_ARGS = 5;
 const int CMD_MINIMAL_ARGS = 3;
 const int CMD_DISTRICT_NAME = 4;
 const int CMD_RESTAURANT_NAME = 4;
-
+const int CMD_RESERVE_NAME = 4;
+const int CMD_RESERVE_TABLE = 6;
+const int CMD_RESERVE_START = 8;
+const int CMD_RESERVE_END = 10 ;
+const int CMD_RESERVE_FOODS = 12; 
 #endif

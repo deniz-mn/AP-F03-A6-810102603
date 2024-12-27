@@ -4,7 +4,8 @@
 #include "global.hpp"
 #include "Food.hpp"
 #include "Reservation.hpp"
-#include "table.hpp"
+#include "Table.hpp"
+#include "Exception.hpp"
 
 class Restaurant{
 
@@ -18,9 +19,15 @@ public:
 	void print_menu();
 	void print_detail();
 
+	bool is_during_operating_hours(int time);
+	shared_ptr<Reservation> check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods);
+	shared_ptr<Food>  find_food_by_name(string name);
+	vector<shared_ptr<Food>> save_food_in_vector(vector<string>& foods);
+
 	void print_name_district();
 	int get_openning ();
 	string get_name_restaurant();
+
 private:
 	string name;
 	string district ;
@@ -28,9 +35,8 @@ private:
 	int openning_time;
 	int closing_time;
 	int num_of_tables;
-	//vector<shared_ptr<table>> tables;
-	//vector<reservation> reservations;
-	//vector<int> reservation_id;
+	vector<shared_ptr<Table>> tables;
+	int reservation_id;
 
 	
 };

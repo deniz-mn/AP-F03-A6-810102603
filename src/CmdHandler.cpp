@@ -40,7 +40,14 @@ try{
 				utaste->logout();
 				logout();
 			}
+			else{
+				if(!is_login())
+					throw Premission_Denied();
+				if(cmd[1] == "reserve")
+					utaste->add_reservation(cmd[ CMD_RESERVE_NAME ] , stoi(cmd[ CMD_RESERVE_TABLE ]) , stoi(cmd[ CMD_RESERVE_START ]) , stoi(cmd[ CMD_RESERVE_END ]), cmd[ CMD_RESERVE_FOODS ]);
 
+
+			}
 			
 		
 
@@ -118,18 +125,26 @@ vector<string>	add_to_vector (string s){
 	 if (inQuotes){
 	 	name += " " + word;
 	 	if (!word.empty() && word.back() == '"'){
-	 	 inQuotes = false; cmd.push_back(name);
+	 	 	inQuotes = false; 
+	 	 	remove_double_quote(name);
+	 		cmd.push_back(name);
 	 	}
 	 }
 	 else { 
 	 	if (!word.empty() && word.front() == '"'){
 	 		 inQuotes = true; name = word;
 	 		 if (word.back() == '"'){
-	 		 	 inQuotes = false; cmd.push_back(name);
+	 		 	 inQuotes = false; 
+	 		 	 remove_double_quote(name);
+	 		 	 cmd.push_back(name);
 	 		 	} 
 	 		 }
 	 	else { cmd.push_back(word); } }
 	 
     }
 	return cmd;
+}
+string remove_double_quote(string word){
+
+	return word.substr(1,word.length()-2);
 }

@@ -1,6 +1,8 @@
 #include "Food.hpp"
 
 Food :: Food (const string& name_ , int price_): name(name_),price(price_){}
+Food :: Food (const string& name_ ): name(name_){}
+
 string Food :: get_name_food(){ return name;}
 int    Food :: get_price_food(){ return price;}
 

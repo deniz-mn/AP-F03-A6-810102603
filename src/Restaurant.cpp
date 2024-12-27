@@ -7,7 +7,14 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 	closing_time = closing_time_;
 	openning_time = openning_time_;
 	num_of_tables = num_of_tables_;
+	reservation_id = 0;
 	sort(menu.begin(),menu.end(),compare_name);
+
+	for(int i = 0 ; i<num_of_tables-1 ; i++){
+		auto t = make_shared<Table>(i+1);
+		tables.push_back(t);
+
+	}
 }
 
 bool  Restaurant :: is_here(string name_){
@@ -44,6 +51,47 @@ void  Restaurant  ::  print_detail(){
 	//cout<<
 
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool  Restaurant  :: is_during_operating_hours(int time){
+	return time>openning_time && time<closing_time;
+}
+shared_ptr<Food>  Restaurant  :: find_food_by_name(string name){
+	bool found = false;
+	for(auto f : menu){
+		if(f->is_this_food(name))
+			found = true;
+			return f;
+	}
+	if(!found)
+		throw Not_Found();
+}
+vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foods){
+	vector<shared_ptr<Food>> f;
+	for(auto food : foods){
+		f.push_back( find_food_by_name(food) );
+	}
+}
+
+shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods) {
+	table_id --;
+	auto t = tables[ table_id ];
+
+	if( (t->has_reservation_at(start_time)) || (t->has_reservation_at(end_time) ))
+		throw  Premission_Denied();	
+	
+	reservation_id ++;
+	auto ordered_food =  save_food_in_vector(foods);
+
+	auto r = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
+	t->save_table_reservation(r);
+	return r;
+}
+	
+
+
+
+////////////////////////////////////////////////////////////
 
 int Restaurant :: get_openning (){ return openning_time; }
 string Restaurant :: get_name_restaurant(){ return name ;}

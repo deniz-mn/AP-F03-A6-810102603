@@ -28,5 +28,6 @@ private:
 
 
 vector<string>  add_to_vector (string s);
+string remove_double_quote(string word);
 
 #endif

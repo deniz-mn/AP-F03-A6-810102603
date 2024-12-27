@@ -255,12 +255,17 @@ void   Utaste :: show_special_restaurants(string food_){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-void   Utaste :: get_restaurant_detail( string restaurant_name ){
+void   Utaste :: get_restaurant_detail( string restaurant_name_ ){
+	string name = remove_double_quote(restaurant_name_);
+	cout<<name<<" vorodi ke migire"<<endl;
 	bool found = false;
+	if(restaurants[1]->get_name_restaurant() == "san marco")
+	cout<<"san marco barabar shod "<<endl;
 	for(auto r : restaurants){
-		if(r->get_name_restaurant() == restaurant_name){
+		if(r->get_name_restaurant() == name){
 			found = true;
 			r->print_detail();
+
 		}
 	}
 	if(found == false)
@@ -268,7 +273,7 @@ void   Utaste :: get_restaurant_detail( string restaurant_name ){
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
 vector<string> file_reader (string file_name){
 		
 		ifstream file(file_name);

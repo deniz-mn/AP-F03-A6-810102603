@@ -106,12 +106,30 @@ catch(Exception& ex){
 
 
 }
+
 vector<string>	add_to_vector (string s){
 	vector<string> cmd;
 	istringstream ss (s);
-	string word;
-	while(ss>>word)
-		cmd.push_back(word);
+	bool inQuotes = false;
+	string word , name;
 
+	while (ss >> word){
+
+	 if (inQuotes){
+	 	name += " " + word;
+	 	if (!word.empty() && word.back() == '"'){
+	 	 inQuotes = false; cmd.push_back(name);
+	 	}
+	 }
+	 else { 
+	 	if (!word.empty() && word.front() == '"'){
+	 		 inQuotes = true; name = word;
+	 		 if (word.back() == '"'){
+	 		 	 inQuotes = false; cmd.push_back(name);
+	 		 	} 
+	 		 }
+	 	else { cmd.push_back(word); } }
+	 
+    }
 	return cmd;
 }

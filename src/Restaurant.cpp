@@ -33,7 +33,7 @@ void  Restaurant  ::  print_menu(){
 	for(int i=0 ; i<menu.size()-1 ; i++){
 			cout<<menu[i]->get_name_food()<<"("<<menu[i]->get_price_food()<<")"<<", ";
 	}
-	cout<<menu[ menu.size()-1 ]<<endl;
+	cout<<menu[ menu.size()-1 ]->get_name_food()<<"("<<menu[ menu.size()-1 ]->get_price_food()<<")"<<endl;
 }
 void  Restaurant  ::  print_detail(){
 	cout<<"Name: "<<name<<endl;

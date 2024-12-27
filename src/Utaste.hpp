@@ -38,7 +38,7 @@ public:
 	void   show_special_restaurants(string food_);
 
 
-	void   get_restaurant_detail( string restaurant_name );
+	void   get_restaurant_detail( string restaurant_name_ );
 
 
 

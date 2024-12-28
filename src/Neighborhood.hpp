@@ -20,7 +20,7 @@ public:
 private:
 	string name;
 	vector<string> neighbors;
-	//vector<string> neighbor_restaurant;
+	
 };
 
 

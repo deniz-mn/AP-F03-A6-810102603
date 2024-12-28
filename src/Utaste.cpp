@@ -10,7 +10,7 @@ Utaste :: ~Utaste(){
 vector<string> file_reader (string file_name);
 vector<string> string_seprator(string line , char seprator);
 vector<shared_ptr<Food>> save_menu (string input);
-string remove_double_quote(string word);
+
 
 
 void Utaste :: save_restaurant_input(const string& file_name){
@@ -30,7 +30,6 @@ void Utaste :: save_neighbors_input(const string& file_name){
 
 	vector<string> file_input = file_reader(file_name);
 	
-
 	for(int i=0 ; i<file_input.size() ; i++){
 		auto neighborhood_data = string_seprator(file_input[i] , ',');
 		auto neighbors = string_seprator(neighborhood_data[1],';');
@@ -38,7 +37,6 @@ void Utaste :: save_neighbors_input(const string& file_name){
 		auto neighborhood = make_shared<Neighborhood>(neighborhood_data[0],neighbors);
 		neighborhoods.push_back(neighborhood);
 	}
-	
 }
 
 
@@ -187,6 +185,12 @@ void  Utaste ::  save_person_district(string name){
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
+shared_ptr<Neighborhood>  Utaste ::  get_district (string name){
+	for(auto n : neighborhoods){
+		if(n->is_equal(name))
+			return n;
+	}
+}
 bool  Utaste :: contain_restaurant(vector<shared_ptr<Restaurant>>& restaurant_list , shared_ptr<Restaurant>& restaurant){
 	for(auto& r : restaurant_list){
 		if(r ->is_same_restaurant(restaurant))
@@ -203,17 +207,24 @@ void  Utaste :: save_restaurants_in_district(string name, vector<shared_ptr<Rest
 		}
 	}
 }
-void  Utaste :: save_closest_restaurants( shared_ptr<Neighborhood> district, vector<shared_ptr<Restaurant>>& closest_restaurants){
-	string name = district->get_name_district();
-	
-	save_restaurants_in_district(name,closest_restaurants);
+void Utaste :: save_closest_restaurants( shared_ptr<Neighborhood> district, vector<shared_ptr<Restaurant>>& closest_restaurants){
+  queue<string> neighborhoods_queue;
+  map<string, bool> has_added_to_queue;
+  has_added_to_queue[district->get_name_district()] = true;
+  neighborhoods_queue.push(district->get_name_district());
 
-	vector<string> neighbors = district->get_neighbors();
-	
-	for(auto n : neighbors){
-		save_restaurants_in_district(n, closest_restaurants);
-	}
-	
+  while (!neighborhoods_queue.empty()){
+    string neighborhood = neighborhoods_queue.front();
+    neighborhoods_queue.pop();
+    save_restaurants_in_district(neighborhood, closest_restaurants);
+    shared_ptr<Neighborhood> neighborhood_district = get_district(neighborhood);
+    for (auto n : neighborhood_district->get_neighbors()){
+      if (!has_added_to_queue.count(n)){
+        has_added_to_queue[n] = true;
+        neighborhoods_queue.push(n);
+          }
+      }
+  }
 }
 void  Utaste :: save_sort_restaurants(vector<shared_ptr<Restaurant>>& closest_restaurants){
 	auto p = get_login_person();
@@ -233,7 +244,7 @@ void  Utaste :: show_all_restaurants(){
 		r->print_name_district();
 	}
 }
-void   Utaste :: show_special_restaurants(string food){
+void  Utaste :: show_special_restaurants(string food){
 	vector<shared_ptr<Restaurant>> closest_restaurants;
 	save_sort_restaurants(closest_restaurants);
 	for(auto r : closest_restaurants){
@@ -257,24 +268,41 @@ void   Utaste :: get_restaurant_detail( string restaurant_name){
 		throw Not_Found();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
-shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string name){
+shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
+	bool found = false;
+	cout<<" esmi ke vared find restaurant misheee"<<name<<endl;
 	for(auto r : restaurants){
-		if(r->get_name_restaurant() == name)
+		if(r->get_name_restaurant() == name){
+			found = true;
 			return r;
+		}
 	}
+	if(found == false)
+		throw Not_Found();
 }
 void   Utaste :: add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods){
+	cout<<" 11 "<<endl;
+	cout<<" name vorodi"<<restaurant_name<<endl;
 	auto r = find_restaurant_by_name(restaurant_name);
+	cout<<r->get_name_restaurant()<<" esme peyda shodee"<<endl;
 	auto p = get_login_person();
+	cout<<" 22 "<<endl;
 	auto ordered_food = string_seprator(foods , ',');
-
-	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) )
+	cout<<" 33 "<<endl;
+	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
-	if( (p->has_reservation_at(start_time)) || (p->has_reservation_at(end_time)) )
+	cout<<" 44 "<<endl;
+	if( (p->has_reservation_at(start_time)) || (p->has_reservation_at(end_time)) ){
+		//cout<<" too reservation dashti in saat"<<endl;
 		throw  Premission_Denied();
-
+	}
+	cout<<" 55 "<<endl;
 	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food);
+	cout<<" 66 "<<endl;
 	p->save_person_reservation(reservation);
+	cout<<" qable print kardan reserve"<<endl;
+	reservation->print_reservation_req();
+	
 }
 
 
@@ -285,8 +313,11 @@ vector<string> file_reader (string file_name){
 		string line;
 		vector<string> file_input;
 		
-		while(getline(file,line))
+		while(getline(file,line)){
 			file_input.push_back(line);
+		}
+
+		
 	return file_input;
 }
 vector<string> string_seprator(string line , char seprator){
@@ -319,6 +350,7 @@ vector<shared_ptr<Food>> save_menu (string input){
 bool compare_first_char_restaurant(shared_ptr<Restaurant>& a ,shared_ptr<Restaurant>& b){
 	return a->get_name_restaurant()[0] < b->get_name_restaurant()[0];
 }
+
 bool compare_first_char(string& a , string& b){
 	return a[0] < b[0];
 }

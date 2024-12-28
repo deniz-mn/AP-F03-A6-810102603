@@ -6,20 +6,16 @@
 
 //int argc,char *argv[]
 int main(int argc,char *argv[]){
-
+	
 	string line;
 	auto  utaste = make_shared<Utaste>();
 	CmdHandler cmd(utaste);
 	
-
 	utaste->save_restaurant_input(argv[1]);
 	utaste->save_neighbors_input(argv[2]);
-	
 	// utaste->print();
 	
-	// getline(cin,line);
-	// cout<<"go for checking"<<endl;
-	// 	cmd.check_cmd(line);
+	
 
 
 	while(getline(cin,line)){

@@ -85,7 +85,13 @@ try{
 			if(cmd[1] == "restaurant_detail"){
 				utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
 			}
+			if(cmd[1] == "reserves"){
+				if(cmd.size() == CMD_SHOW_RESERVE)
+					utaste->show_special_reservation(cmd[ CMD_SHOW_RESERVE-3 ] , cmd[ CMD_SHOW_RESERVE-1 ]);
+				if(cmd.size() == CMD_ALL_SHOW_RESERVE)
+					utaste->show_all_reservation();
 
+			}
 
 		
 		}
@@ -126,7 +132,7 @@ vector<string>	add_to_vector (string s){
 	 	name += " " + word;
 	 	if (!word.empty() && word.back() == '"'){
 	 	 	inQuotes = false; 
-	 	 	remove_double_quote(name);
+	 	 	name = remove_double_quote(name);
 	 		cmd.push_back(name);
 	 	}
 	 }
@@ -134,14 +140,15 @@ vector<string>	add_to_vector (string s){
 	 	if (!word.empty() && word.front() == '"'){
 	 		 inQuotes = true; name = word;
 	 		 if (word.back() == '"'){
-	 		 	 inQuotes = false; 
-	 		 	 remove_double_quote(name);
+	 		 	inQuotes = false; 
+	 		 	name = remove_double_quote(name);
 	 		 	 cmd.push_back(name);
 	 		 	} 
 	 		 }
 	 	else { cmd.push_back(word); } }
 	 
     }
+
 	return cmd;
 }
 string remove_double_quote(string word){

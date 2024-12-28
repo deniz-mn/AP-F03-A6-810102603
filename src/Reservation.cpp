@@ -9,5 +9,19 @@ Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time
 		ordered_food = ordered_food_;
 }
 bool  Reservation :: is_at_time(int time){
-	return time>start_time && time<end_time ;
+	return time>=start_time && time<=end_time ;
+}
+void  Reservation ::  print_reservation_req(){
+	cout<<" omadam ke print konam hamarooo"<<endl;
+	cout<<"Reserve ID: "<<reserve_id <<endl;
+	cout<<"Table "<<table_number<<" for "<<start_time<<" to "<<end_time<<" in "<<restaurant_name<<endl;
+	int total_cost = total_price();
+	cout<<"Price: "<<total_cost<<endl;
+}
+int   Reservation :: total_price(){
+	int total_price = 0;
+	for( auto food : ordered_food){
+		total_price += food->get_price_food();
+	}
+	return total_price;
 }

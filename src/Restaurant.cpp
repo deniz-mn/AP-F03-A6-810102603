@@ -61,6 +61,7 @@ shared_ptr<Food>  Restaurant  :: find_food_by_name(string name){
 	for(auto f : menu){
 		if(f->is_this_food(name))
 			found = true;
+			cout<<" qqaza peyda shode "<<f->get_price_food()<<" qeimat"<<endl;
 			return f;
 	}
 	if(!found)
@@ -69,28 +70,40 @@ shared_ptr<Food>  Restaurant  :: find_food_by_name(string name){
 vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foods){
 	vector<shared_ptr<Food>> f;
 	for(auto food : foods){
+		cout<<food<<" esem qazaa"<<endl;
 		f.push_back( find_food_by_name(food) );
+		cout<<" yeki push shodd"<<endl;
+
 	}
+	cout<<" save_food_in_vector  tamamm shodd"<<endl;
+	return f;
 }
 
 shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods) {
+	//cout<<name<<" esme resturaneee"<<tables.size()<<" number of tables"<<endl;
+	if( table_id > tables.size() || table_id<1)
+		throw  Not_Found();
 	table_id --;
 	auto t = tables[ table_id ];
+	table_id ++;
+	//cout<<" find table "<<table_id<<endl;
 
-	if( (t->has_reservation_at(start_time)) || (t->has_reservation_at(end_time) ))
+	if( (t->has_reservation_at(start_time)) || (t->has_reservation_at(end_time) )){
+		cout<<" table reservation dareee nemitonii"<<endl;
 		throw  Premission_Denied();	
+	}
 	
 	reservation_id ++;
-	auto ordered_food =  save_food_in_vector(foods);
+	//cout<<reservation_id <<" id reservation in bodd"<<endl;
+	auto  ordered_food =  save_food_in_vector(foods);
+	//cout<<" save kard food haro toye pointer"<<endl;
 
 	auto r = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
+	//cout<<" reservation sakhte shod"<<endl;
 	t->save_table_reservation(r);
 	return r;
 }
 	
-
-
-
 ////////////////////////////////////////////////////////////
 
 int Restaurant :: get_openning (){ return openning_time; }

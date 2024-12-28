@@ -31,8 +31,9 @@ public:
 	void save_person_district(string name);
 
 	bool   contain_restaurant(vector<shared_ptr<Restaurant>>& restaurant_list , shared_ptr<Restaurant>& restaurant);
-	void   save_restaurants_in_district(string name, vector<shared_ptr<Restaurant>>& closest_restaurants);
+	shared_ptr<Neighborhood> get_district (string name);
 	void   save_closest_restaurants( shared_ptr<Neighborhood> district, vector<shared_ptr<Restaurant>>& closest_restaurants);
+	void   save_restaurants_in_district(string name, vector<shared_ptr<Restaurant>>& closest_restaurants);
 	void   save_sort_restaurants(vector<shared_ptr<Restaurant>>& closest_restaurants);
 	void   show_all_restaurants();
 	void   show_special_restaurants(string food);
@@ -40,7 +41,7 @@ public:
 	void   get_restaurant_detail( string restaurant_name );
 
 	void   add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods);
-	shared_ptr<Restaurant>  find_restaurant_by_name(string name);
+	shared_ptr<Restaurant>  find_restaurant_by_name(string& name);
 
 
 	void print();

@@ -107,6 +107,9 @@ try{
 		else if(cmd[CMD_TYPE] == DELETE){
 			if(!is_login())
 				throw Premission_Denied();
+			if(cmd[1] == "reserve"){
+				utaste->delete_reservation(cmd[CMD_RESERVE_NAME] , stoi( cmd[CMD_RESERVE_TABLE]));
+			}
 
 		
 		}

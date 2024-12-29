@@ -326,6 +326,12 @@ void   Utaste ::   show_res_reservation(string restaurant_name ){
 		r->print_all_reservation();
 
 }
+void   Utaste ::  delete_reservation(string restaurant_name , int id){
+	auto p = get_login_person();
+	p->person_delete_reservation(restaurant_name , id);
+	auto r = find_restaurant_by_name(restaurant_name);
+	r->restaurant_delete_reseravtion(id);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 vector<string> file_reader (string file_name){

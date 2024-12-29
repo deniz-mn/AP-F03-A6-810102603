@@ -23,7 +23,9 @@ public:
 	bool has_reservation_at(int time);
 	void save_person_reservation(shared_ptr<Reservation>& r);
 	bool has_reservation_id(string restaurant_name ,int id);
-
+	void person_delete_reservation(string restaurant_name , int id);
+	shared_ptr<Reservation> find_reservation(string restaurant_name , int id);
+	
 	
 	
 	string get_username();
@@ -36,6 +38,7 @@ private:
 	shared_ptr<Neighborhood> district ;
 	bool login;
 	bool have_account;
+
 };
 bool compare_time(shared_ptr<Reservation>& a , shared_ptr<Reservation>& b);
 #endif

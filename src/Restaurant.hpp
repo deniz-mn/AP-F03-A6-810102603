@@ -27,6 +27,8 @@ public:
 	void print_reservation_id(int id);
 	void print_all_reservation();
 	int num_of_reservation();
+	void restaurant_delete_reseravtion(int id);
+	shared_ptr<Reservation>  find_reservation_id(int id);
 
 	void print_name_district();
 	int get_openning ();

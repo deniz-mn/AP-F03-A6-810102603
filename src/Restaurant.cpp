@@ -115,7 +115,7 @@ int    Restaurant :: num_of_reservation(){
 void   Restaurant :: print_reservation_id(int id){
 	if(num_of_reservation() == 0)
 		throw  Empty();
-	
+
 	bool found = false;
 	for(auto t : tables){
 		found = true;
@@ -132,6 +132,17 @@ void   Restaurant :: print_all_reservation(){
 		t->print_reservation();
 	}
 	
+}
+shared_ptr<Reservation>  Restaurant ::  find_reservation_id(int id){
+	for(auto t : tables){
+		if( t->table_has_reserve_id(id)){
+			return t->get_reservation_by_id(id);
+		}
+	}
+}
+void   Restaurant :: restaurant_delete_reseravtion(int id){
+	auto to_delete = find_reservation_id(id);
+	to_delete.reset();
 }
 /////////////////////////////////////////////////////////
 int Restaurant :: get_openning (){ return openning_time; }

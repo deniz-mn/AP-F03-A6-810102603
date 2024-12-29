@@ -42,12 +42,12 @@ void  Reservation :: print_in_line(){
 		cout<<endl;
 	}
 }
-bool  Reservation :: compare_name(const shared_ptr<Food>& a ,const shared_ptr<Food>& b){
-	return a->get_name_food()[0] < b->get_name_food()[0] ;
-}
+// bool  Reservation :: compare_name(const shared_ptr<Food>& a ,const shared_ptr<Food>& b){
+// 	return a->get_name_food()[0] < b->get_name_food()[0] ;
+// }
 void  Reservation :: print_foods(){
 
-	sort(ordered_food.begin() , ordered_food.end() , compare_name);
+	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
 	int counter = 1;
 	for(int i=0 ; i<ordered_food.size()-1 ; i++){
 
@@ -60,6 +60,12 @@ void  Reservation :: print_foods(){
 		}
 	}
 }
-string   Reservation :: get_name_restaurant(){
+string   Reservation  :: get_name_restaurant(){
 	return restaurant_name;
+}
+int      Reservation  :: get_time(){
+	return start_time;
+}
+bool   Reservation  :: has_reserve_id(int id){
+	return reserve_id = id;
 }

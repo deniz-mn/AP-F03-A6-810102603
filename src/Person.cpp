@@ -44,6 +44,20 @@ bool   Person ::  has_reservation_id(string restaurant_name ,int id){
 			return true;
 	}
 }
+shared_ptr<Reservation>   Person :: find_reservation(string restaurant_name , int id){
+
+	for(auto reserve : reservations){
+		if(reserve->is_equal(id) && (reserve->get_name_restaurant() == restaurant_name ))
+			return reserve;
+	}
+
+}
+
+void   Person ::  person_delete_reservation(string restaurant_name , int id){
+
+	auto to_delete = find_reservation(restaurant_name , id);
+	to_delete.reset();
+}
 void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
 	reservations.push_back(r);
 	sort(reservations.begin() , reservations.end(),compare_time);

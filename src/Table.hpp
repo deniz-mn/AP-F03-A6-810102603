@@ -13,9 +13,11 @@ public:
 	void print_reservation_id(int id);
 	void print_reservation();
 	int num_of_reservation_table();
+	bool table_has_reserve_id(int id);
+	shared_ptr<Reservation>  get_reservation_by_id(int id);
 private:
 	int id;
 	vector <shared_ptr<Reservation>> reservations;
 };
-bool compare_time(shared_ptr<Reservation>& a , shared_ptr<Reservation>& b);
+
 #endif

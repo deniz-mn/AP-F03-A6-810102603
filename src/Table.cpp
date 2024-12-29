@@ -19,11 +19,7 @@ int Table :: num_of_reservation_table(){
 void Table ::  save_table_reservation( shared_ptr<Reservation>& r){
 
 	this->reservations.push_back(r);
-	cout<<" toyeee tableeee reservations ezafe shodd"<<endl;
-	cout<<r->get_start()<<" zamane shoroo"<<endl;
 	sort(reservations.begin() , reservations.end(),[](const std::shared_ptr<Reservation>& a, const std::shared_ptr<Reservation>& b) { return a->get_time() < b->get_time(); });
-	cout<<reservations.size()<<" tedadeee reservation"<<endl;
-	cout<<this->num_of_reservation_table()<<" functionnnnnnnnnnnnnnn total"<<endl;
 }
 void Table :: print_reservation_id(int id){
 	for(auto r : reservations){
@@ -72,5 +68,18 @@ shared_ptr<Reservation>  Table ::  get_reservation_by_id(int id){
 		}
 	}
 	return nullptr;
+}
+void  Table ::  print_reservation_hours(){
+	
+	cout<<id<<": ";
+	if(reservations.size() == 0){
+		cout<<endl;
+	}
+	else {
+		for(int i=0 ; i<reservations.size()-1 ; i++){
+		cout<<"("<<reservations[i]->get_start()<<"-"<<reservations[i]->get_end()<<"), ";
+			}
+		cout<<"("<<reservations[ reservations.size()-1 ]->get_start()<<"-"<<reservations[ reservations.size()-1 ]->get_end()<<")"<<endl;
+	}
 }
 

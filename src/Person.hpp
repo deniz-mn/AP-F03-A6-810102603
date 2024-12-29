@@ -25,7 +25,7 @@ public:
 	bool has_reservation_id(string restaurant_name ,int id);
 	void person_delete_reservation(string restaurant_name , int id);
 	shared_ptr<Reservation> find_reservation(string restaurant_name , int id);
-	
+	int num_of_reservation();
 	
 	
 	string get_username();

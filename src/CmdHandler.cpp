@@ -30,22 +30,22 @@ try{
 
     vector<string> cmd = add_to_vector(s);
     map<string, string> cmd_map = create_cmd_map(cmd);
-
+    
     if(cmd[CMD_TYPE] == POST){
       
       if(cmd[1] == "signup"){
-        // if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
-        //   throw Bad_Request();
+        if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
+          throw Bad_Request();
         utaste->signup(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
       }
-      if(cmd[1] == "login"){
+      else if(cmd[1] == "login"){
         if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
           throw Bad_Request();
         utaste->login(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
       }
-      if(cmd[1] == "logout"){
+      else if(cmd[1] == "logout"){
         utaste->logout();
         logout();
       }
@@ -59,11 +59,8 @@ try{
         }
         else
           throw Bad_Request();
-
       }
       throw Ok();
-      
-
     }
 
 
@@ -71,10 +68,11 @@ try{
       if(!is_login())
         throw Premission_Denied();
 
-      else if(cmd[1] == "my_district")
-        utaste->save_person_district(cmd[CMD_DISTRICT_NAME] );
+        else if(cmd[1] == "my_district")
+          utaste->save_person_district(cmd[CMD_DISTRICT_NAME] );
       
-        throw Ok();
+        else
+          throw Bad_Request();
       
 
     }
@@ -86,9 +84,12 @@ try{
       if(cmd[1] == "districts"){
         if(cmd.size() == CMD_FULL_ARGS)
           utaste->show_special_districts(cmd[ CMD_FULL_ARGS-1 ]);
-        if(cmd.size() == CMD_MINIMAL_ARGS)
+        else if(cmd.size() == CMD_MINIMAL_ARGS)
           utaste->show_districts();
+        else
+          throw Bad_Request();
       }
+
       else if(cmd[1] == "restaurants"){
         if(cmd.size() == CMD_FULL_ARGS)
           utaste->show_special_restaurants(cmd[ CMD_FULL_ARGS-1 ]);
@@ -96,9 +97,11 @@ try{
           utaste->show_all_restaurants();
 
       }
+
       else if(cmd[1] == "restaurant_detail"){
         utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
       }
+
       else if(cmd[1] == "reserves"){
     
         if(cmd.size() == CMD_SHOW_RESERVE){
@@ -116,7 +119,7 @@ try{
           throw Bad_Request();
       }
       
-        throw Ok();
+        
     }
 
 
@@ -129,10 +132,11 @@ try{
         if (!cmd_map.count(RESTAURANT_NAME) || !cmd_map.count(RESERVE_ID))
           throw Bad_Request();
 
-        utaste->delete_reservation(cmd_map[ RESTAURANT_NAME ] , stoi( cmd_map[ RESERVE_ID ]));
+          utaste->delete_reservation(cmd_map[ RESTAURANT_NAME ] , stoi( cmd_map[ RESERVE_ID ]));
+        
       }
       
-        throw Ok();
+        
       
     }
     else{

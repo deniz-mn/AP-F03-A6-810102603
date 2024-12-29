@@ -17,6 +17,7 @@ public:
 	shared_ptr<Reservation>  get_reservation_by_id(int id);
 	void delete_reservation_table(int id);
 	shared_ptr<Reservation>  find_reservation_by_id(int id);
+	void print_reservation_hours();
 private:
 	int id;
 	vector <shared_ptr<Reservation>> reservations;

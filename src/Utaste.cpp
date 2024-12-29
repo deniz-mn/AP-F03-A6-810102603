@@ -51,8 +51,12 @@ bool find_username(string username){}
 
 
 void Utaste :: signup(string& username , string& password){
-	if(find_username(username))
+	cout<<" signup function"<<endl;
+	cout<<username <<password<<endl;
+	if(find_username(username)){
+		cout<<" tekrari"<<endl;
 		throw	Bad_Request();
+	}
 	else if(check_login(username,password) )
 		throw	Premission_Denied();
 	else if( get_login_person() != nullptr )
@@ -63,6 +67,7 @@ void Utaste :: signup(string& username , string& password){
 	else{
 		auto p = make_shared<Person>(username , password);
 		persons.push_back(p);
+		cout<<" push shoddd"<<endl;
 	}	
 
 	
@@ -286,32 +291,36 @@ shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
 		throw Not_Found();
 }
 void   Utaste :: add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods){
-	// cout<<" 11 "<<endl;
-	// cout<<" name vorodi"<<restaurant_name<<endl;
+	
 	auto r = find_restaurant_by_name(restaurant_name);
-	//cout<<r->get_name_restaurant()<<" esme peyda shodee"<<endl;
+	
 	auto p = get_login_person();
-	//cout<<" 22 "<<endl;
+
 	auto ordered_food = string_seprator(foods , ',');
-	//cout<<" 33 "<<endl;
+
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
-	//cout<<" 44 "<<endl;
+
 	if( (p->has_reservation_at(start_time , end_time))){
-		//cout<<" too reservation dashti in saat"<<endl;
 		throw  Premission_Denied();
 	}
-	//cout<<" 55 "<<endl;
 	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food);
-	//cout<<" 66 "<<endl;
+
 	p->save_person_reservation(reservation);
-	//cout<<" qable print kardan reserve"<<endl;
+
 	reservation->print_reservation_req();
 	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
-void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+int    Utaste ::   num_of_reservation_ut(){
+	int total = 0 ;
+	auto p = get_login_person();
+	total = p->num_of_reservation_ut();
+}
 
+void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+		if( num_of_reservation_ut() == 0)
+				throw Empty();
 		auto p = get_login_person();
 
 		if(!p->has_reservation_id(restaurant_name, id))
@@ -322,11 +331,17 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 
 }
 void   Utaste ::   show_all_reservation(){
+	if( num_of_reservation_ut() == 0)
+				throw Empty();
+
 	for(auto r : restaurants){
 		r->print_all_reservation();
 	}
 }
 void   Utaste ::   show_res_reservation(string restaurant_name ){
+	if( num_of_reservation_ut() == 0)
+				throw Empty();
+
 		auto r = find_restaurant_by_name(restaurant_name);
 		r->print_all_reservation();
 }

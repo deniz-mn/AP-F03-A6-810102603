@@ -46,6 +46,7 @@ public:
 	void   show_all_reservation();
 	void   show_res_reservation(string restaurant_name );
 	void   delete_reservation(string restaurant_name , int id);
+	int    num_of_reservation_ut();
 
 
 

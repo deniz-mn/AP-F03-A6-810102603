@@ -47,8 +47,10 @@ void  Restaurant  ::  print_detail(){
 	cout<<"Time: "<<openning_time<<"-"<<closing_time<<endl;
 	cout<<"Menu: ";
 	print_menu();
-	//cout<<
-
+	for(auto t : tables){
+		t->print_reservation_hours();
+		cout<<" yeki chap shod"<<endl;
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 

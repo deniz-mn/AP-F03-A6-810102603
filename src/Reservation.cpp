@@ -35,6 +35,9 @@ int   Reservation :: total_price(){
 int   Reservation ::  get_start(){
 	return start_time;
 }
+int   Reservation ::  get_end(){
+	return end_time;
+}
 bool  Reservation :: is_equal(int id){
 	if(reserve_id == id)
 		return true;

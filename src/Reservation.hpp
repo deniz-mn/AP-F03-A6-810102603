@@ -13,7 +13,8 @@ public:
 	void print_reservation_req();
 	int  total_price();
 	void print_foods();
-	int get_start();
+	int  get_start();
+	int    get_end();
 	bool is_equal(int id);
 	string get_name_restaurant();
 	bool  has_reserve_id(int id);

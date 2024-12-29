@@ -25,6 +25,15 @@ const string EMPTY = "Empty";
 const string NOT_FOUND = "Not Found";
 const string BAD_REQUEST = "Bad Request";
 const string PERMISSION_DENIED = "Permission Denied";
+const string USERNAME = "username";
+const string PASSWORD = "password";
+const string RESTAURANT_NAME = "restaurant_name";
+const string TABLE_ID = "table_id";
+const string START_TIME = "start_time";
+const string END_TIME = "end_time";
+const string FOODS = "foods";
+const string RESERVE_ID = "reserve_id";
+
 
 const int CMD_TYPE = 0;
 const int CMD_USERNAME = 4; 

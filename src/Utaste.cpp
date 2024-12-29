@@ -213,6 +213,7 @@ void  Utaste :: save_restaurants_in_district(string name, vector<shared_ptr<Rest
 void Utaste :: save_closest_restaurants( shared_ptr<Neighborhood> district, vector<shared_ptr<Restaurant>>& closest_restaurants){
   queue<string> neighborhoods_queue;
   map<string, bool> has_added_to_queue;
+
   has_added_to_queue[district->get_name_district()] = true;
   neighborhoods_queue.push(district->get_name_district());
 
@@ -221,13 +222,13 @@ void Utaste :: save_closest_restaurants( shared_ptr<Neighborhood> district, vect
     neighborhoods_queue.pop();
     save_restaurants_in_district(neighborhood, closest_restaurants);
     shared_ptr<Neighborhood> neighborhood_district = get_district(neighborhood);
-    for (auto n : neighborhood_district->get_neighbors()){
-      if (!has_added_to_queue.count(n)){
-        has_added_to_queue[n] = true;
-        neighborhoods_queue.push(n);
-          }
-      }
-  }
+    	for (auto n : neighborhood_district->get_neighbors()){
+      	if (!has_added_to_queue.count(n)){
+        		has_added_to_queue[n] = true;
+        		neighborhoods_queue.push(n);
+          	}
+      	}
+  	}
 }
 void  Utaste :: save_sort_restaurants(vector<shared_ptr<Restaurant>>& closest_restaurants){
 	auto p = get_login_person();
@@ -258,6 +259,7 @@ void  Utaste :: show_special_restaurants(string food){
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 void   Utaste :: get_restaurant_detail( string restaurant_name){
+
 	bool found = false;
 	
 	for(auto r : restaurants){
@@ -273,7 +275,7 @@ void   Utaste :: get_restaurant_detail( string restaurant_name){
 /////////////////////////////////////////////////////////////////////////////////////////////////
 shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
 	bool found = false;
-	cout<<" esmi ke vared find restaurant misheee"<<name<<endl;
+	
 	for(auto r : restaurants){
 		if(r->get_name_restaurant() == name){
 			found = true;
@@ -284,31 +286,32 @@ shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
 		throw Not_Found();
 }
 void   Utaste :: add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods){
-	cout<<" 11 "<<endl;
-	cout<<" name vorodi"<<restaurant_name<<endl;
+	// cout<<" 11 "<<endl;
+	// cout<<" name vorodi"<<restaurant_name<<endl;
 	auto r = find_restaurant_by_name(restaurant_name);
-	cout<<r->get_name_restaurant()<<" esme peyda shodee"<<endl;
+	//cout<<r->get_name_restaurant()<<" esme peyda shodee"<<endl;
 	auto p = get_login_person();
-	cout<<" 22 "<<endl;
+	//cout<<" 22 "<<endl;
 	auto ordered_food = string_seprator(foods , ',');
-	cout<<" 33 "<<endl;
+	//cout<<" 33 "<<endl;
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
-	cout<<" 44 "<<endl;
+	//cout<<" 44 "<<endl;
 	if( (p->has_reservation_at(start_time , end_time))){
-		cout<<" too reservation dashti in saat"<<endl;
+		//cout<<" too reservation dashti in saat"<<endl;
 		throw  Premission_Denied();
 	}
-	cout<<" 55 "<<endl;
+	//cout<<" 55 "<<endl;
 	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food);
-	cout<<" 66 "<<endl;
+	//cout<<" 66 "<<endl;
 	p->save_person_reservation(reservation);
-	cout<<" qable print kardan reserve"<<endl;
+	//cout<<" qable print kardan reserve"<<endl;
 	reservation->print_reservation_req();
 	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+
 		auto p = get_login_person();
 
 		if(!p->has_reservation_id(restaurant_name, id))
@@ -319,21 +322,13 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 
 }
 void   Utaste ::   show_all_reservation(){
-	cout<< restaurants.size()<<endl;
 	for(auto r : restaurants){
-		cout<<r->get_name_restaurant()<<" name restaurants"<<endl;
-	}
-
-	for(auto r : restaurants){
-		cout<<" namee restaurants ke print mishe"<<r->get_name_restaurant()<<endl;
 		r->print_all_reservation();
 	}
 }
 void   Utaste ::   show_res_reservation(string restaurant_name ){
-		cout<<restaurant_name <<" name varedeeee show_res_reservation"<<endl;
 		auto r = find_restaurant_by_name(restaurant_name);
 		r->print_all_reservation();
-
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
 	auto p = get_login_person();

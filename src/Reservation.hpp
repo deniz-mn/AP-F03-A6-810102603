@@ -11,6 +11,12 @@ public:
 	bool is_at_time(int time);
 	void print_reservation_req();
 	int  total_price();
+	void print_foods();
+	int get_start();
+	bool is_equal(int id);
+	string get_name_restaurant();
+	void print_in_line();
+	bool compare_name(const shared_ptr<Food>& a , const shared_ptr<Food>& b);
 private:
 	string restaurant_name;
 	int reserve_id;
@@ -19,4 +25,6 @@ private:
 	int end_time;
 	vector<shared_ptr<Food>> ordered_food;
 };
+
+
 #endif

@@ -38,6 +38,7 @@ const int CMD_RESERVE_START = 8;
 const int CMD_RESERVE_END = 10 ;
 const int CMD_RESERVE_FOODS = 12; 
 const int CMD_SHOW_RESERVE = 7; 
-const int CMD_ALL_SHOW_RESERVE = 7;
+const int CMD_SHOW_RES_RESERVE = 5; 
+const int CMD_ALL_SHOW_RESERVE = 3;
 
 #endif

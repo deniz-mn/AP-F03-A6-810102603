@@ -105,7 +105,35 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 }
 	
 ////////////////////////////////////////////////////////////
+int    Restaurant :: num_of_reservation(){
+	int total = 0 ;
+	for(auto t : tables){
+		total += t->num_of_reservation_table();
+	}
+	return total;
+}
+void   Restaurant :: print_reservation_id(int id){
+	if(num_of_reservation() == 0)
+		throw  Empty();
+	
+	bool found = false;
+	for(auto t : tables){
+		found = true;
+		t->print_reservation_id(id);
+	}
+	if(!found)
+		throw Not_Found();
+}
+void   Restaurant :: print_all_reservation(){
+	if(num_of_reservation() == 0)
+		throw  Empty();
 
+	for(auto t : tables){
+		t->print_reservation();
+	}
+	
+}
+/////////////////////////////////////////////////////////
 int Restaurant :: get_openning (){ return openning_time; }
 string Restaurant :: get_name_restaurant(){ return name ;}
 

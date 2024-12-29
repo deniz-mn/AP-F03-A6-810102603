@@ -38,8 +38,18 @@ bool   Person :: has_reservation_at(int time){
 	}
 	return false;
 }
+bool   Person ::  has_reservation_id(string restaurant_name ,int id){
+	for(auto r : reservations){
+		if(r->is_equal(id) && (r->get_name_restaurant() == restaurant_name ))
+			return true;
+	}
+}
 void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
 	reservations.push_back(r);
+	sort(reservations.begin() , reservations.end(),compare_time);
+}
+bool compare_time(shared_ptr<Reservation>& a , shared_ptr<Reservation>& b){
+	return a->get_start() < b->get_start();
 }
 
 

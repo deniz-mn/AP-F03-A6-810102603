@@ -86,11 +86,18 @@ try{
 				utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
 			}
 			if(cmd[1] == "reserves"){
+		
 				if(cmd.size() == CMD_SHOW_RESERVE)
-					utaste->show_special_reservation(cmd[ CMD_SHOW_RESERVE-3 ] , cmd[ CMD_SHOW_RESERVE-1 ]);
-				if(cmd.size() == CMD_ALL_SHOW_RESERVE)
-					utaste->show_all_reservation();
+					utaste->show_special_reservation(cmd[ CMD_SHOW_RESERVE-3 ] , stoi(cmd[ CMD_SHOW_RESERVE-1 ]) );
+				
+				else if((cmd.size() == CMD_SHOW_RES_RESERVE)&& cmd[ CMD_SHOW_RES_RESERVE -2 ] == "restaurant_name")
+					utaste->show_res_reservation(cmd[ CMD_SHOW_RES_RESERVE -1 ]);
 
+				else if(cmd.size() == CMD_ALL_SHOW_RESERVE)
+					utaste->show_all_reservation();
+				
+				else
+					throw Bad_Request();
 			}
 
 		

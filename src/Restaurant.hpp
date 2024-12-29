@@ -24,6 +24,10 @@ public:
 	shared_ptr<Food>  find_food_by_name(string name);
 	vector<shared_ptr<Food>> save_food_in_vector(vector<string>& foods);
 
+	void print_reservation_id(int id);
+	void print_all_reservation();
+	int num_of_reservation();
+
 	void print_name_district();
 	int get_openning ();
 	string get_name_restaurant();
@@ -42,5 +46,6 @@ private:
 };
 
 bool compare_name(shared_ptr<Food>& a ,shared_ptr<Food>& b);
+void print_foods();
 
 #endif

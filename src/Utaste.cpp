@@ -304,7 +304,28 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 	reservation->print_reservation_req();
 	
 }
+///////////////////////////////////////////////////////////////////////////////////////////////
+void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+		auto p = get_login_person();
 
+		if(!p->has_reservation_id(restaurant_name, id))
+			    throw Premission_Denied();
+
+		auto r = find_restaurant_by_name(restaurant_name);
+		r->print_reservation_id(id);
+
+}
+void   Utaste ::   show_all_reservation(){
+	for(auto r : restaurants){
+		r->print_all_reservation();
+	}
+
+}
+void   Utaste ::   show_res_reservation(string restaurant_name ){
+		auto r = find_restaurant_by_name(restaurant_name);
+		r->print_all_reservation();
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 vector<string> file_reader (string file_name){

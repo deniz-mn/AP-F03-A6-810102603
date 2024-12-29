@@ -31,12 +31,22 @@ void   Person :: save_district(shared_ptr<Neighborhood> n){
 	district = n;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-bool   Person :: has_reservation_at(int time){
-	for(auto r : reservations){
-		if(r->is_at_time(time))
-			return true;
+bool   Person :: has_reservation_at(int start_time , int end_time){
+	//cout<<" person check konim reserve dare ya na"<<endl;
+	if(reservations.size() == 0){
+		return false;
 	}
+		
+	for(auto r : reservations){
+		//cout<<" check reserve 11111"<<endl;
+		//cout<<r->get_start()<<" zamane shoroo"<<endl;
+		if(r->is_at_start_time(start_time) || r->is_at_end_time(end_time)){ 
+			//cout<<" ham zamani person reserve"<<endl;
+			return true;
+		}
+	//cout<<" Person has_reservation_at falseee"<<endl;
 	return false;
+	}
 }
 bool   Person ::  has_reservation_id(string restaurant_name ,int id){
 	for(auto r : reservations){
@@ -56,9 +66,16 @@ shared_ptr<Reservation>   Person :: find_reservation(string restaurant_name , in
 void   Person ::  person_delete_reservation(string restaurant_name , int id){
 
 	auto to_delete = find_reservation(restaurant_name , id);
-	to_delete.reset();
+	if (to_delete){
+			reservations.erase(remove(reservations.begin(), reservations.end(), to_delete), reservations.end());
+			to_delete.reset(); 
+		} 
+	else{ 
+		cout << "Reservation not found." << endl;
+	}
 }
 void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
+	cout<<" yek reserve save shodd baraye person "<<r->get_start()<<" zamane shoroo"<<endl;
 	reservations.push_back(r);
 	sort(reservations.begin() , reservations.end(),compare_time);
 }

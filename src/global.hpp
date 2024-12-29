@@ -17,6 +17,7 @@ const string POST = "POST";
 const string PUT = "PUT";
 const string GET = "GET";
 const string DELETE = "DELETE";
+const string OK = "OK";
 
 
 

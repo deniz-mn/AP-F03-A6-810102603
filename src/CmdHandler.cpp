@@ -22,21 +22,22 @@ void   CmdHandler :: logout(){
 
 void CmdHandler :: check_cmd (string s){
 
-	vector<string> cmd = add_to_vector(s);
+	
 
 try{
+	vector<string> cmd = add_to_vector(s);
 
 		if(cmd[CMD_TYPE] == POST){
-			
+
 			if(cmd[1] == "signup"){
 				utaste->signup(cmd[CMD_USERNAME],cmd[CMD_PASSWORD]);
 				login();
 			}
-			if(cmd[1] == "login"){
+			else if(cmd[1] == "login"){
 				utaste->login(cmd[CMD_USERNAME],cmd[CMD_PASSWORD]);
 				login();
 			}
-			if(cmd[1] == "logout"){
+			else if(cmd[1] == "logout"){
 				utaste->logout();
 				logout();
 			}
@@ -45,12 +46,9 @@ try{
 					throw Premission_Denied();
 				if(cmd[1] == "reserve")
 					utaste->add_reservation(cmd[ CMD_RESERVE_NAME ] , stoi(cmd[ CMD_RESERVE_TABLE ]) , stoi(cmd[ CMD_RESERVE_START ]) , stoi(cmd[ CMD_RESERVE_END ]), cmd[ CMD_RESERVE_FOODS ]);
-
-
 			}
 			
-		
-
+			throw Ok();
 		}
 
 
@@ -61,7 +59,7 @@ try{
 			if(cmd[1] == "my_district")
 				utaste->save_person_district(cmd[CMD_DISTRICT_NAME] );
 		
-
+			throw Ok();
 
 		}
 
@@ -90,16 +88,14 @@ try{
 				if(cmd.size() == CMD_SHOW_RESERVE)
 					utaste->show_special_reservation(cmd[ CMD_SHOW_RESERVE-3 ] , stoi(cmd[ CMD_SHOW_RESERVE-1 ]) );
 				
-				else if((cmd.size() == CMD_SHOW_RES_RESERVE)&& cmd[ CMD_SHOW_RES_RESERVE -2 ] == "restaurant_name")
+				else if((cmd.size() == CMD_SHOW_RES_RESERVE) && cmd[ CMD_SHOW_RES_RESERVE -2 ] == "restaurant_name")
 					utaste->show_res_reservation(cmd[ CMD_SHOW_RES_RESERVE -1 ]);
 
 				else if(cmd.size() == CMD_ALL_SHOW_RESERVE)
 					utaste->show_all_reservation();
-				
-				else
-					throw Bad_Request();
+			
 			}
-
+			throw Ok();
 		
 		}
 
@@ -108,15 +104,16 @@ try{
 			if(!is_login())
 				throw Premission_Denied();
 			if(cmd[1] == "reserve"){
-				utaste->delete_reservation(cmd[CMD_RESERVE_NAME] , stoi( cmd[CMD_RESERVE_TABLE]));
+				utaste->delete_reservation(cmd[4] , stoi( cmd[6]));
 			}
 
-		
+			throw Ok();
 		}
 		else{
 			
 			throw Bad_Request();
 		}
+
 
 		
 }
@@ -158,7 +155,8 @@ vector<string>	add_to_vector (string s){
 	 	else { cmd.push_back(word); } }
 	 
     }
-
+    if(cmd[2] != "?")
+    	throw Bad_Request();
 	return cmd;
 }
 string remove_double_quote(string word){

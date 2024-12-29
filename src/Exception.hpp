@@ -37,5 +37,10 @@ public:
 	Premission_Denied();
 	~Premission_Denied();
 };
+class Ok: public Exception{
+public:
+	Ok();
+	~Ok();
+};
 
 #endif

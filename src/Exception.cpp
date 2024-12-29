@@ -22,4 +22,7 @@ Not_Found :: ~Not_Found (){}
 
 Premission_Denied :: Premission_Denied() : Exception(PERMISSION_DENIED){} 
 Premission_Denied :: ~Premission_Denied(){}
+Ok  :: Ok () : Exception(OK){}
+Ok  :: ~Ok () {}
+
 

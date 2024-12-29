@@ -20,7 +20,7 @@ public:
 
 	void save_district(shared_ptr<Neighborhood> n);
 
-	bool has_reservation_at(int time);
+	bool has_reservation_at(int start_time , int end_time);
 	void save_person_reservation(shared_ptr<Reservation>& r);
 	bool has_reservation_id(string restaurant_name ,int id);
 	void person_delete_reservation(string restaurant_name , int id);

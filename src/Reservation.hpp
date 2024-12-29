@@ -8,7 +8,8 @@ class Reservation{
 
 public:
 	Reservation(string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_id);
-	bool is_at_time(int time);
+	bool is_at_start_time(int time);
+	bool is_at_end_time(int time);
 	void print_reservation_req();
 	int  total_price();
 	void print_foods();

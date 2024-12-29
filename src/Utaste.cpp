@@ -56,7 +56,6 @@ void Utaste :: signup(string& username , string& password){
 	else if(check_login(username,password) )
 		throw	Premission_Denied();
 	else if( get_login_person() != nullptr )
-		//cout<<" kasi inja nist"<<endl;
 		throw	Premission_Denied();
 	
 	
@@ -65,6 +64,7 @@ void Utaste :: signup(string& username , string& password){
 		auto p = make_shared<Person>(username , password);
 		persons.push_back(p);
 	}	
+
 	
 }
 void Utaste :: login(string& username , string& password){
@@ -79,6 +79,7 @@ void Utaste :: login(string& username , string& password){
 		auto p = find_person(username,password);
 		p->save_login();
 	}	
+	
 }
 void Utaste :: logout(){
 	int n = 0;
@@ -90,6 +91,8 @@ void Utaste :: logout(){
 	}
 	if(n == 0)
 		throw	Premission_Denied();
+
+		
 }
 bool Utaste :: check_login(string username,string password){
 	
@@ -292,8 +295,8 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
 	cout<<" 44 "<<endl;
-	if( (p->has_reservation_at(start_time)) || (p->has_reservation_at(end_time)) ){
-		//cout<<" too reservation dashti in saat"<<endl;
+	if( (p->has_reservation_at(start_time , end_time))){
+		cout<<" too reservation dashti in saat"<<endl;
 		throw  Premission_Denied();
 	}
 	cout<<" 55 "<<endl;
@@ -316,12 +319,18 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 
 }
 void   Utaste ::   show_all_reservation(){
+	cout<< restaurants.size()<<endl;
 	for(auto r : restaurants){
-		r->print_all_reservation();
+		cout<<r->get_name_restaurant()<<" name restaurants"<<endl;
 	}
 
+	for(auto r : restaurants){
+		cout<<" namee restaurants ke print mishe"<<r->get_name_restaurant()<<endl;
+		r->print_all_reservation();
+	}
 }
 void   Utaste ::   show_res_reservation(string restaurant_name ){
+		cout<<restaurant_name <<" name varedeeee show_res_reservation"<<endl;
 		auto r = find_restaurant_by_name(restaurant_name);
 		r->print_all_reservation();
 

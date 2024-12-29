@@ -4,17 +4,26 @@ Table :: Table(int num){
 	id = num ;
 }
 
-bool Table ::  has_reservation_at(int time){
+bool Table ::  has_reservation_at(int start_time , int end_time){
 	for( auto r : reservations){
-		if(r->is_at_time(time))
+		if(r->is_at_start_time(start_time) || r->is_at_end_time(end_time))
 			return true;
 	}
 	return false;
 }
+int Table :: num_of_reservation_table(){
+	cout<<" function num_of_reservation_table  mikhadd return konee"<<reservations.size()<<endl;
+	return this->reservations.size();
+
+}
 void Table ::  save_table_reservation( shared_ptr<Reservation>& r){
 
-	reservations.push_back(r);
+	this->reservations.push_back(r);
+	cout<<" toyeee tableeee reservations ezafe shodd"<<endl;
+	cout<<r->get_start()<<" zamane shoroo"<<endl;
 	sort(reservations.begin() , reservations.end(),[](const std::shared_ptr<Reservation>& a, const std::shared_ptr<Reservation>& b) { return a->get_time() < b->get_time(); });
+	cout<<reservations.size()<<" tedadeee reservation"<<endl;
+	cout<<this->num_of_reservation_table()<<" functionnnnnnnnnnnnnnn total"<<endl;
 }
 void Table :: print_reservation_id(int id){
 	for(auto r : reservations){
@@ -23,7 +32,27 @@ void Table :: print_reservation_id(int id){
 		}
 	}
 }
+shared_ptr<Reservation>  Table ::  find_reservation_by_id(int id){
+	for( auto r : reservations){
+		if(r->has_reserve_id(id))
+			return r;
+	}
+}
+void  Table ::   delete_reservation_table(int id){
+	auto to_delete = find_reservation_by_id(id);
+
+
+	if (to_delete){
+			reservations.erase(remove(reservations.begin(), reservations.end(), to_delete), reservations.end());
+			to_delete.reset(); 
+		} 
+	else{ 
+		cout << "Reservation not found." << endl;
+	}
+
+}
 void Table ::  print_reservation(){
+
 	for(auto r : reservations){
 			r->print_in_line();
 	}
@@ -45,6 +74,3 @@ shared_ptr<Reservation>  Table ::  get_reservation_by_id(int id){
 	return nullptr;
 }
 
-int Table :: num_of_reservation_table(){
-	return reservations.size();
-}

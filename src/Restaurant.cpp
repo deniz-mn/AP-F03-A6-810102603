@@ -10,11 +10,14 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 	reservation_id = 0;
 	sort(menu.begin(),menu.end(),compare_name);
 
-	for(int i = 0 ; i<num_of_tables-1 ; i++){
-		auto t = make_shared<Table>(i+1);
-		tables.push_back(t);
+	// cout<<" num table vorodi file"<<num_of_tables<<endl;
 
+	for(int i = 0 ; i<num_of_tables ; i++){
+		// cout<< " 555555"<<endl;
+		auto t = make_shared<Table>(i+1);
+		this->tables.push_back(t);
 	}
+	cout<<this->tables.size()<<"nummm tables"<<endl;
 }
 
 bool  Restaurant :: is_here(string name_){
@@ -81,14 +84,17 @@ vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foo
 
 shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods) {
 	//cout<<name<<" esme resturaneee"<<tables.size()<<" number of tables"<<endl;
+	cout<<this->tables.size()<<"nummm tables"<<endl;
+
 	if( table_id > tables.size() || table_id<1)
 		throw  Not_Found();
+
 	table_id --;
 	auto t = tables[ table_id ];
 	table_id ++;
 	//cout<<" find table "<<table_id<<endl;
 
-	if( (t->has_reservation_at(start_time)) || (t->has_reservation_at(end_time) )){
+	if( (t->has_reservation_at(start_time , end_time))){
 		cout<<" table reservation dareee nemitonii"<<endl;
 		throw  Premission_Denied();	
 	}
@@ -99,22 +105,28 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	//cout<<" save kard food haro toye pointer"<<endl;
 
 	auto r = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
-	//cout<<" reservation sakhte shod"<<endl;
+	cout<<" reservation sakhte shod"<<endl;
 	t->save_table_reservation(r);
+	cout<<r->get_start()<<"shoroo"<<endl;
 	return r;
 }
 	
 ////////////////////////////////////////////////////////////
 int    Restaurant :: num_of_reservation(){
+	cout<<name<<" namee restaurant"<<endl;
 	int total = 0 ;
+	cout<<tables.size()<<"nummm tables"<<endl;
 	for(auto t : tables){
+		cout<<"ab";
 		total += t->num_of_reservation_table();
 	}
 	return total;
 }
 void   Restaurant :: print_reservation_id(int id){
-	if(num_of_reservation() == 0)
-		throw  Empty();
+	// if(num_of_reservation() == 0){
+	// 	cout<<" Restaurant num_of_tables reservation 0 hast"<<endl;
+	// 	throw  Empty();
+	// }
 
 	bool found = false;
 	for(auto t : tables){
@@ -125,24 +137,25 @@ void   Restaurant :: print_reservation_id(int id){
 		throw Not_Found();
 }
 void   Restaurant :: print_all_reservation(){
-	if(num_of_reservation() == 0)
-		throw  Empty();
+	// if(num_of_reservation() == 0)
+	// 	throw  Empty();
 
 	for(auto t : tables){
 		t->print_reservation();
 	}
 	
 }
-shared_ptr<Reservation>  Restaurant ::  find_reservation_id(int id){
+shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 	for(auto t : tables){
 		if( t->table_has_reserve_id(id)){
-			return t->get_reservation_by_id(id);
+			return t;
 		}
 	}
 }
 void   Restaurant :: restaurant_delete_reseravtion(int id){
-	auto to_delete = find_reservation_id(id);
-	to_delete.reset();
+	auto table = find_reservation_table(id);
+
+	table->delete_reservation_table(id);
 }
 /////////////////////////////////////////////////////////
 int Restaurant :: get_openning (){ return openning_time; }

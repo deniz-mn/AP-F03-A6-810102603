@@ -12,7 +12,6 @@ bool Table ::  has_reservation_at(int start_time , int end_time){
 	return false;
 }
 int Table :: num_of_reservation_table(){
-	cout<<" function num_of_reservation_table  mikhadd return konee"<<reservations.size()<<endl;
 	return this->reservations.size();
 
 }
@@ -37,13 +36,13 @@ shared_ptr<Reservation>  Table ::  find_reservation_by_id(int id){
 void  Table ::   delete_reservation_table(int id){
 	auto to_delete = find_reservation_by_id(id);
 
-
 	if (to_delete){
+			cout<< to_delete->get_reservation_id()<<" id ke mikhad pak kone"<<endl;
 			reservations.erase(remove(reservations.begin(), reservations.end(), to_delete), reservations.end());
 			to_delete.reset(); 
 		} 
 	else{ 
-		cout << "Reservation not found." << endl;
+		throw Not_Found();
 	}
 
 }
@@ -56,6 +55,7 @@ void Table ::  print_reservation(){
 bool Table :: table_has_reserve_id(int id){
 	for(auto r : reservations){
 		if(r->has_reserve_id(id)){
+			cout<<" in table  found id"<<endl;
 			return true;
 		}
 	}

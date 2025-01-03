@@ -1,7 +1,7 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall
+CXXFLAGS = -std=c++20
 
-SRCS = src/main.cpp src/global.cpp src/CmdHandler.cpp src/Utaste.cpp src/Person.cpp src/Restaurant.cpp src/Reservation.cpp src/Food.cpp src/Neighborhood.cpp src/Exception.cpp src/Table.cpp
+SRCS = src/main.cpp src/global.cpp src/CmdHandler.cpp src/Utaste.cpp src/Person.cpp src/Restaurant.cpp src/Reservation.cpp src/Food.cpp src/Neighborhood.cpp src/Exception.cpp src/Table.cpp src/Discount.cpp
 
 
 

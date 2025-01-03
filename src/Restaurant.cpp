@@ -7,6 +7,7 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 	closing_time = closing_time_;
 	openning_time = openning_time_;
 	num_of_tables = num_of_tables_;
+	item_discount_res = {};
 	reservation_id = 0;
 	sort(menu.begin(),menu.end(),compare_name);
 
@@ -15,6 +16,35 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 		this->tables.push_back(t);
 	}
 }
+void save_discounts(vector<string> total_discount_input,vector<string> first_order_discount_input,vector<string> item_discount_input){
+	if(total_discount_input.size() == 1){
+		auto total_discount = make_shared<Item_discount>(true);
+
+		
+	}
+	if(total_discount_input.size() > 1){
+		auto total_discount = make_shared<Item_discount>(total_discount_input[ discount_type ] , stoi(total_discount_input[ discount_value_total ]) ,stoi( total_discount_input[ discount_min ]));
+	}
+	if(first_order_discount_input.size() == 1){
+		auto first_order_discount = make_shared<First_order_discount>(true);
+	}
+	if(first_order_discount_input.size() > 1){
+		auto first_order_discount = make_shared<First_order_discount>(first_order_discount_input[ discount_type ] , stoi(first_order_discount_input[ discount_value_first ]) );
+	}
+	if(item_discount_input.size() == 1){
+		auto item = make_shared<Item_discount>(true);
+		item_discount_res.push_back(item);
+	}
+	if (item_discount_input.size() > 1){
+		for(int i=0 ; i<item_discount_input.size() ; i++){
+			auto item_discount_detail = save_item_discount(item_discount_input[i]);
+			auto item = make_shared<Item_discount>(item_discount_detail[ discount_type ] , stoi(item_discount_detail[ discount_value_total ]) , item_discount_detail[ discount_food ]);
+			item_discount_res.push_back(item);
+		}
+	}
+
+}
+
 
 bool  Restaurant :: is_here(string name_){
 	if(district == name_)
@@ -49,7 +79,6 @@ void  Restaurant  ::  print_detail(){
 	print_menu();
 	for(auto t : tables){
 		t->print_reservation_hours();
-		cout<<" yeki chap shod"<<endl;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,9 +89,10 @@ bool  Restaurant  :: is_during_operating_hours(int time){
 shared_ptr<Food>  Restaurant  :: find_food_by_name(string name){
 	bool found = false;
 	for(auto f : menu){
-		if(f->is_this_food(name))
+		if(f->is_this_food(name)){
 			found = true;
 			return f;
+		}
 	}
 	if(!found)
 		throw Not_Found();
@@ -83,20 +113,21 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	table_id --;
 	auto t = tables[ table_id ];
 	table_id ++;
-	//cout<<" find table "<<table_id<<endl;
 
 	if( (t->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();	
 	}
 	
 	reservation_id ++;
-
+	
 	auto  ordered_food =  save_food_in_vector(foods);
+	
+	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
 
-	auto r = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
+	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id,table_id);
 
-	t->save_table_reservation(r);
-	return r;
+	t->save_table_reservation(r_table);
+	return r_person;
 }
 	
 ////////////////////////////////////////////////////////////
@@ -139,6 +170,7 @@ shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 	}
 }
 void   Restaurant :: restaurant_delete_reseravtion(int id){
+	
 	auto table = find_reservation_table(id);
 
 	table->delete_reservation_table(id);
@@ -149,4 +181,37 @@ string Restaurant :: get_name_restaurant(){ return name ;}
 
 bool compare_name(shared_ptr<Food>& a ,shared_ptr<Food>& b){
 	return a->get_name_food()[0] < b->get_name_food()[0];
+}
+vector<string> save_item_discount(string line){
+	vector<string> save_item;
+	string str;
+	bool firstPart = true;
+
+	for (char ch : line){
+		if(firstPart){
+		 	if(ch == ';'){
+		 		save_item.push_back(str);
+		 		str.clear();
+		 		firstPart = false;
+		 	}
+		 	else{
+		 	 str += ch; 
+		 	}
+		}
+		else{
+			if(ch == ':' || ch == ';'){
+				save_item.push_back(str);
+				str.clear();
+			}
+			else{
+				str += ch;
+			} 
+		} 
+	} 
+	if(!str.empty()){ 
+		save_item.push_back(str); 
+	}
+
+
+		return save_item;
 }

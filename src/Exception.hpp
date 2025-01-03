@@ -1,5 +1,5 @@
-#ifndef EXCEPTION.HPP
-#define EXCEPTION.HPP
+#ifndef  EXCEPTION.HPP
+#define  EXCEPTION.HPP
 
 #include "global.hpp"
 

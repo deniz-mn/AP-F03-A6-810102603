@@ -51,4 +51,11 @@ const int CMD_SHOW_RESERVE = 7;
 const int CMD_SHOW_RES_RESERVE = 5; 
 const int CMD_ALL_SHOW_RESERVE = 3;
 
+const int discount_type = 0;
+const int discount_min = 1;
+const int discount_value_total = 2;
+const int discount_value_first = 1;
+const int discount_food = 1;
+
+
 #endif

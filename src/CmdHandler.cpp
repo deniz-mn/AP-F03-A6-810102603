@@ -38,16 +38,25 @@ try{
           throw Bad_Request();
         utaste->signup(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
+        throw Ok();
       }
       else if(cmd[1] == "login"){
         if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
           throw Bad_Request();
         utaste->login(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
+        throw Ok();
       }
       else if(cmd[1] == "logout"){
         utaste->logout();
         logout();
+        throw Ok();
+      }
+      else if(cmd[1] == "increase_budget"){
+        if(!is_login())
+          throw Premission_Denied();
+        utaste->increase_budget(cmd[4]);
+          throw Ok();
       }
       else{
         if(!is_login())
@@ -60,7 +69,7 @@ try{
         else
           throw Bad_Request();
       }
-      throw Ok();
+      
     }
 
 
@@ -106,7 +115,8 @@ try{
     
         if(cmd.size() == CMD_SHOW_RESERVE){
           if (!cmd_map.count(RESTAURANT_NAME) || !cmd_map.count(RESERVE_ID))
-            throw Bad_Request();
+                throw Bad_Request();
+         
           utaste->show_special_reservation(cmd_map[ RESTAURANT_NAME ] , stoi(cmd_map[ RESERVE_ID ]) );
         }
         else if((cmd.size() == CMD_SHOW_RES_RESERVE) && cmd[ CMD_SHOW_RES_RESERVE -2 ] == "restaurant_name")
@@ -117,6 +127,9 @@ try{
         
         else
           throw Bad_Request();
+      }
+      else if(cmd[1] == "show_budget"){
+        utaste->show_budget();
       }
       
         
@@ -133,7 +146,7 @@ try{
           throw Bad_Request();
 
           utaste->delete_reservation(cmd_map[ RESTAURANT_NAME ] , stoi( cmd_map[ RESERVE_ID ]));
-        
+        throw Ok();
       }
       
         

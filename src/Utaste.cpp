@@ -16,6 +16,7 @@ vector<shared_ptr<Food>> save_menu (string input);
 void Utaste :: save_restaurant_input(const string& file_name){
 	
 	vector<string> file_input = file_reader(file_name);
+
 	for(int i=0 ; i<file_input.size() ; i++){
 		auto restaurant_data = string_seprator(file_input[i] , ',');
 		auto foods = save_menu(restaurant_data[2]);
@@ -38,6 +39,22 @@ void Utaste :: save_neighbors_input(const string& file_name){
 		neighborhoods.push_back(neighborhood);
 	}
 }
+void Utaste :: save_discount_input(const string& file_name){
+
+	vector<string> file_input = file_reader(file_name);
+
+	for(int i=0 ; i<file_input.size() ; i++){
+		auto line = string_seprator(file_input[i] , ',');
+		auto restaurant = find_restaurant_by_name(line[0]);
+		auto total_discount = string_seprator(line[1] , ';');
+		auto first_order_discount = string_seprator(line[2] , ';');
+		auto item_discount = string_seprator(line[3] , '|');
+		restaurant->save_discounts(total_discount,first_order_discount,item_discount);
+	}
+
+
+}
+
 
 
 
@@ -51,10 +68,8 @@ bool find_username(string username){}
 
 
 void Utaste :: signup(string& username , string& password){
-	cout<<" signup function"<<endl;
-	cout<<username <<password<<endl;
+	
 	if(find_username(username)){
-		cout<<" tekrari"<<endl;
 		throw	Bad_Request();
 	}
 	else if(check_login(username,password) )
@@ -62,12 +77,9 @@ void Utaste :: signup(string& username , string& password){
 	else if( get_login_person() != nullptr )
 		throw	Premission_Denied();
 	
-	
-	
 	else{
 		auto p = make_shared<Person>(username , password);
 		persons.push_back(p);
-		cout<<" push shoddd"<<endl;
 	}	
 
 	
@@ -163,6 +175,7 @@ void  Utaste :: show_districts(){
 	}
 }
 shared_ptr<Person>  Utaste :: get_login_person(){
+
 	for(auto p : persons){ 
 		if(p->get_login()){
 			return p;
@@ -298,6 +311,7 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 
 	auto ordered_food = string_seprator(foods , ',');
 
+
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
 
@@ -313,26 +327,37 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int    Utaste ::   num_of_reservation_ut(){
+	
 	int total = 0 ;
 	auto p = get_login_person();
-	total = p->num_of_reservation_ut();
+	total = p->num_of_reservation();
+	return total;
 }
 
 void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+	
 		if( num_of_reservation_ut() == 0)
-				throw Empty();
-		auto p = get_login_person();
+			throw Empty();
+		
+		else{
 
-		if(!p->has_reservation_id(restaurant_name, id))
-			    throw Premission_Denied();
+		auto p = get_login_person();
+		
+		if(!p->has_reservation_id(restaurant_name, id)){
+			 throw Premission_Denied();
+		}
+			   
 
 		auto r = find_restaurant_by_name(restaurant_name);
 		r->print_reservation_id(id);
+		}
 
 }
 void   Utaste ::   show_all_reservation(){
-	if( num_of_reservation_ut() == 0)
-				throw Empty();
+	if( num_of_reservation_ut() == 0){
+			throw Empty();
+	}
+			
 
 	for(auto r : restaurants){
 		r->print_all_reservation();
@@ -346,6 +371,7 @@ void   Utaste ::   show_res_reservation(string restaurant_name ){
 		r->print_all_reservation();
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
+
 	auto p = get_login_person();
 	p->person_delete_reservation(restaurant_name , id);
 	auto r = find_restaurant_by_name(restaurant_name);
@@ -353,6 +379,19 @@ void   Utaste ::  delete_reservation(string restaurant_name , int id){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+void   Utaste ::   increase_budget(int amount){
+	if(amount < 0)
+		throw Bad_Request();
+
+	auto p = get_login_person();
+	p->update_person_budget(amount , '+');
+}
+void   Utaste ::   show_budget(){
+	auto p = get_login_person();
+	p->show_person_budget();
+
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
 vector<string> file_reader (string file_name){
 		
 		ifstream file(file_name);

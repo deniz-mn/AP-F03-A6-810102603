@@ -10,16 +10,15 @@ Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time
 		
 }
 bool  Reservation :: is_at_start_time(int time){
-	//cout<<" in is_at_start_time  omad"<<endl;
+
 	return time>=start_time && time<end_time ;
 }
 bool  Reservation :: is_at_end_time(int time){
-	//cout<<" in is_at_end_time  omad"<<endl;
+	
 	return time>start_time && time<=end_time ;
 }
 
 void  Reservation ::  print_reservation_req(){
-	//cout<<" omadam ke print konam hamarooo"<<endl;
 	cout<<"Reserve ID: "<<reserve_id <<endl;
 	cout<<"Table "<<table_number<<" for "<<start_time<<" to "<<end_time<<" in "<<restaurant_name<<endl;
 	int total_cost = total_price();
@@ -46,18 +45,20 @@ bool  Reservation :: is_equal(int id){
 void  Reservation :: print_in_line(){
 
 	cout<<reserve_id<<": "<<restaurant_name<<" "<<table_number<<" "<<start_time<<"-"<<end_time<<" ";
-	if( ordered_food.size() > 0){
+	if( ordered_food.size() == 0 ){
+		cout<<endl;
+	}
+	else if( ordered_food.size() > 0){
 		print_foods( );
 		cout<<endl;
 	}
 }
-// bool  Reservation :: compare_name(const shared_ptr<Food>& a ,const shared_ptr<Food>& b){
-// 	return a->get_name_food()[0] < b->get_name_food()[0] ;
-// }
-void  Reservation :: print_foods(){
 
+void  Reservation :: print_foods(){
+	cout<<"11"<<endl;
 	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
 	int counter = 1;
+	cout<<"22"<<endl;
 	for(int i=0 ; i<ordered_food.size()-1 ; i++){
 
 		if(ordered_food[i]->get_name_food() != ordered_food[i+1]->get_name_food()){
@@ -68,6 +69,10 @@ void  Reservation :: print_foods(){
 			counter ++;
 		}
 	}
+	cout<<"33"<<endl;
+}
+int  Reservation  ::  get_reservation_id(){
+	return reserve_id ;
 }
 string   Reservation  :: get_name_restaurant(){
 	return restaurant_name;

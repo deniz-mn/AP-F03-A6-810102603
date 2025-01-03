@@ -4,6 +4,7 @@
 #include "global.hpp"
 #include "Utaste.hpp"
 #include "Exception.hpp"
+#include "Discount.hpp"
 
 
 

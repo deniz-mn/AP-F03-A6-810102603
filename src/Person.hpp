@@ -5,6 +5,7 @@
 #include "Exception.hpp"
 #include "Neighborhood.hpp"
 #include "Reservation.hpp"
+#include "Discount.hpp"
 
 class Person{
 public:
@@ -26,6 +27,9 @@ public:
 	void person_delete_reservation(string restaurant_name , int id);
 	shared_ptr<Reservation> find_reservation(string restaurant_name , int id);
 	int num_of_reservation();
+
+	void update_person_budget(int amount , char a);
+	void show_person_budget();
 	
 	
 	string get_username();
@@ -38,6 +42,7 @@ private:
 	shared_ptr<Neighborhood> district ;
 	bool login;
 	bool have_account;
+	int wallet;
 
 };
 bool compare_time(shared_ptr<Reservation>& a , shared_ptr<Reservation>& b);

@@ -68,9 +68,20 @@ void   Person ::  person_delete_reservation(string restaurant_name , int id){
 		to_delete.reset(); 
 }
 void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
-	cout<<" yek reserve save shodd baraye person "<<r->get_start()<<" zamane shoroo"<<endl;
 	reservations.push_back(r);
 	sort(reservations.begin() , reservations.end(),compare_time);
+}
+void   Person :: update_p_budget(int amount , char a){
+	if(a == '+')
+		wallet += amount;
+	if(a == '-'){
+		if(amount > wallet)
+			throw Bad_Request();
+		wallet -= amount;
+	}
+}
+void   Person :: show_person_budget(){
+	cout<<wallet<<endl;
 }
 int    Person  ::  num_of_reservation(){
 	return reservations.size();

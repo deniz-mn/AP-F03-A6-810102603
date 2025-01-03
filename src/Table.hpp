@@ -3,6 +3,7 @@
 
 #include "global.hpp"
 #include "Reservation.hpp"
+#include "Exception.hpp"
 
 class Table{
 

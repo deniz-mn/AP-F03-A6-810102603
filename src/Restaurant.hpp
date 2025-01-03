@@ -6,6 +6,7 @@
 #include "Reservation.hpp"
 #include "Table.hpp"
 #include "Exception.hpp"
+#include "Discount.hpp"
 
 class Restaurant{
 
@@ -19,10 +20,14 @@ public:
 	void print_menu();
 	void print_detail();
 
+	vector<shared_ptr<Food>> save_food_in_vector(vector<string>& foods);
+	void save_discounts(vector<string> total_discount_input,vector<string> first_order_discount_input,vector<string> item_discount_input);
+
 	bool is_during_operating_hours(int time);
 	shared_ptr<Reservation> check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods);
 	shared_ptr<Food>  find_food_by_name(string name);
-	vector<shared_ptr<Food>> save_food_in_vector(vector<string>& foods);
+	
+
 
 	void print_reservation_id(int id);
 	void print_all_reservation();
@@ -46,10 +51,14 @@ private:
 	vector<shared_ptr<Table>> tables;
 	int reservation_id;
 
+	shared_ptr<First_order_discount> first_order_discount;
+	shared_ptr<Total_discount> total_discount;
+	vector<shared_ptr<Item_discount>> item_discount_res;
 	
 };
 
 bool compare_name(shared_ptr<Food>& a ,shared_ptr<Food>& b);
+vector<string> save_item_discount(string line);
 void print_foods();
 
 #endif

@@ -3,6 +3,7 @@
 #include "global.hpp"
 #include "Utaste.hpp"
 #include "Exception.hpp"
+#include "Discount.hpp"
 
 //int argc,char *argv[]
 int main(int argc,char *argv[]){
@@ -13,10 +14,9 @@ int main(int argc,char *argv[]){
 	
 	utaste->save_restaurant_input(argv[1]);
 	utaste->save_neighbors_input(argv[2]);
-	// utaste->print();
-	
-	
+	utaste->save_discount_input(argv[3]);
 
+	
 
 	while(getline(cin,line)){
 		cmd.check_cmd(line);

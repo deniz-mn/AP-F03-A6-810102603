@@ -20,6 +20,7 @@ public:
 	bool  has_reserve_id(int id);
 	void print_in_line();
 	int  get_time();
+	int get_reservation_id();
 	//bool compare_name(const shared_ptr<Food>& a , const shared_ptr<Food>& b);
 private:
 	string restaurant_name;

@@ -6,6 +6,7 @@
 #include "Restaurant.hpp"
 #include "Neighborhood.hpp"
 #include "Exception.hpp"
+#include "Discount.hpp"
 
 class Utaste{
 
@@ -14,6 +15,7 @@ public:
 	~Utaste();
 	void save_restaurant_input(const string& file_name);
 	void save_neighbors_input(const string& file_name);
+	void save_discount_input(const string& file_name);
 
 	void signup (string& username, string& password);
 	void login (string& username , string& password);
@@ -47,6 +49,10 @@ public:
 	void   show_res_reservation(string restaurant_name );
 	void   delete_reservation(string restaurant_name , int id);
 	int    num_of_reservation_ut();
+
+
+	void increase_budget(int amount);
+	void show_budget();
 
 
 

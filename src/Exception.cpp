@@ -1,4 +1,4 @@
-#include "Exception.hpp"
+#include  "Exception.hpp"
 
 Exception :: Exception(string message_){
 	message = message_;

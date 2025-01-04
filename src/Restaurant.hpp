@@ -51,9 +51,10 @@ private:
 	vector<shared_ptr<Table>> tables;
 	int reservation_id;
 
-	shared_ptr<First_order_discount> first_order_discount;
-	shared_ptr<Total_discount> total_discount;
-	vector<shared_ptr<Item_discount>> item_discount_res;
+
+	shared_ptr<Discount> total_discount;
+	shared_ptr<Discount> first_order_discount;
+	vector<shared_ptr<Discount>> item_discount;
 	
 };
 

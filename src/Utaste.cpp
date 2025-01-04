@@ -51,8 +51,6 @@ void Utaste :: save_discount_input(const string& file_name){
 		auto item_discount = string_seprator(line[3] , '|');
 		restaurant->save_discounts(total_discount,first_order_discount,item_discount);
 	}
-
-
 }
 
 

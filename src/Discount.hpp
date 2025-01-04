@@ -9,6 +9,7 @@ class Discount {
 public:
 Discount(string type , int value);
 Discount(bool none);
+
 bool is_none();
 
 private:

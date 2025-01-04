@@ -3,11 +3,15 @@
 
 #include "global.hpp"
 #include "Food.hpp"
+#include "Discount.hpp"
+
 
 class Reservation{
 
 public:
-	Reservation(string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_id);
+	Reservation(string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_id
+				,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,vector<shared_ptr<Discount>> item_discount_ );
+
 	bool is_at_start_time(int time);
 	bool is_at_end_time(int time);
 	void print_reservation_req();
@@ -29,6 +33,10 @@ private:
 	int start_time;
 	int end_time;
 	vector<shared_ptr<Food>> ordered_food;
+
+	shared_ptr<Discount> total_discount ;
+	shared_ptr<Discount> first_order_discount;
+	vector<shared_ptr<Discount>> item_discount;
 };
 
 

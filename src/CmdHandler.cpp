@@ -52,12 +52,12 @@ try{
         logout();
         throw Ok();
       }
-      else if(cmd[1] == "increase_budget"){
-        if(!is_login())
-          throw Premission_Denied();
-        utaste->increase_budget(cmd[4]);
-          throw Ok();
-      }
+      // else if(cmd[1] == "increase_budget"){
+      //   if(!is_login())
+      //     throw Premission_Denied();
+      //   utaste->increase_budget(cmd[4]);
+      //     throw Ok();
+      // }
       else{
         if(!is_login())
           throw Premission_Denied();

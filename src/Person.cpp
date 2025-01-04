@@ -71,7 +71,7 @@ void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
 	reservations.push_back(r);
 	sort(reservations.begin() , reservations.end(),compare_time);
 }
-void   Person :: update_p_budget(int amount , char a){
+void   Person :: update_person_budget(int amount , char a){
 	if(a == '+')
 		wallet += amount;
 	if(a == '-'){

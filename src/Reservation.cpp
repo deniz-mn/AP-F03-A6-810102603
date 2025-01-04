@@ -1,6 +1,6 @@
 #include "Reservation.hpp"
 
-Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_number_ ){
+Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_number_ ,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,vector<shared_ptr<Discount>> item_discount_){
 		restaurant_name = restaurant_name_;
 		reserve_id = reserve_id_;
 		table_number = table_number_ ;

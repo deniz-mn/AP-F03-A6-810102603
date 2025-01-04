@@ -1,7 +1,7 @@
 #include "Discount.hpp"
 
 Discount :: Discount (string type , int value): type(type) , value(value), none(false){}
-Discount :: Discount(bool none):nane(none), type(""), value(0) {}
+Discount :: Discount(bool none):none(none), type(""), value(0) {}
 
 bool Discount :: is_none(){
 	return none;

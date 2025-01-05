@@ -15,7 +15,7 @@ public:
 	bool is_at_start_time(int time);
 	bool is_at_end_time(int time);
 	void print_reservation_req();
-	int  total_price();
+	int  original_price();
 	void print_foods();
 	int  get_start();
 	int    get_end();
@@ -33,6 +33,7 @@ private:
 	int start_time;
 	int end_time;
 	vector<shared_ptr<Food>> ordered_food;
+	bool is_first_order;
 
 	shared_ptr<Discount> total_discount ;
 	shared_ptr<Discount> first_order_discount;

@@ -27,6 +27,7 @@ public:
 	void person_delete_reservation(string restaurant_name , int id);
 	shared_ptr<Reservation> find_reservation(string restaurant_name , int id);
 	int num_of_reservation();
+	bool has_ordered_from(string name);
 
 	void update_person_budget(int amount , char a);
 	void show_person_budget();
@@ -40,6 +41,7 @@ private:
 	string password;
 	vector<shared_ptr<Reservation>> reservations;
 	shared_ptr<Neighborhood> district ;
+	vector<string> ordered_restaurant;
 	bool login;
 	bool have_account;
 	int wallet;

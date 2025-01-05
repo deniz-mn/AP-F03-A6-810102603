@@ -282,7 +282,6 @@ void   Utaste :: get_restaurant_detail( string restaurant_name){
 		if(r->get_name_restaurant() ==restaurant_name){
 			found = true;
 			r->print_detail();
-
 		}
 	}
 	if(found == false)
@@ -316,7 +315,8 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 	if( (p->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();
 	}
-	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food);
+	bool is_first_order = p->has_ordered_from(restaurant_name);
+	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order);
 
 	p->save_person_reservation(reservation);
 

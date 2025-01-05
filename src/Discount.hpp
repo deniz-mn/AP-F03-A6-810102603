@@ -1,4 +1,4 @@
-#ifndef DISCOUNT_HPP
++#ifndef DISCOUNT_HPP
 #define DISCOUNT_HPP
 
 #include "global.hpp"
@@ -11,7 +11,7 @@ Discount(string type_ , int value_);
 Discount(bool none);
 string get_type_discount();
 int  get_value_discount();
-virtual int apply();
+virtual int apply(int total_price) = 0;
 
 bool is_none();
 
@@ -28,7 +28,9 @@ Item_discount(bool none);
 string get_type();
 int  get_value();
 string get_name_food();
-int apply();
+bool is_equal(string food_name);
+int apply(int price);
+
 
 private:
 string food;
@@ -57,7 +59,7 @@ Total_discount(bool none);
 string get_type();
 int get_min_discount();
 int  get_value();
-int apply();
+int apply(int total_price);
 
 private:
 int min;

@@ -65,9 +65,11 @@ bool  Restaurant ::   have_food(string name){
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void  Restaurant  ::  print_menu(){
 	for(int i=0 ; i<menu.size()-1 ; i++){
-			cout<<menu[i]->get_name_food()<<"("<<menu[i]->get_price_food()<<")"<<", ";
+			cout<<menu[i]->get_name_food()<<"("
+				<<menu[i]->get_price_food()<<")"<<", ";
 	}
-	cout<<menu[ menu.size()-1 ]->get_name_food()<<"("<<menu[ menu.size()-1 ]->get_price_food()<<")"<<endl;
+	cout<<menu[ menu.size()-1 ]->get_name_food()<<"("
+		<<menu[ menu.size()-1 ]->get_price_food()<<")"<<endl;
 }
 void  Restaurant  ::  print_total_discount(){
 	auto total_discount_ptr =  dynamic_pointer_cast<Total_discount>(total_discount);
@@ -112,7 +114,6 @@ void  Restaurant  ::  print_detail(){
 		t->print_reservation_hours();
 	}
 	
-	
 	cout<<"Order Amount Discount: ";
 	print_total_discount();
 	
@@ -147,7 +148,7 @@ vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foo
 	return f;
 }
 
-shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods) {
+shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods , bool is_first_order) {
 
 	if( table_id > tables.size() || table_id<1)
 		throw  Not_Found();
@@ -164,9 +165,9 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	
 	auto  ordered_food =  save_food_in_vector(foods);
 	
-	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount );
+	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order);
 
-	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount );
+	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order);
 
 	t->save_table_reservation(r_table);
 	return r_person;

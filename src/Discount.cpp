@@ -16,9 +16,21 @@ bool Discount :: is_none(){
 int  Discount :: get_value_discount(){
 	return value;
 }
-int  Discount :: apply(){
-	return 10;
+// int  Discount :: apply(){
+// 	return 0;
+// }
+int  Discount :: calculate_discount(int price){
+	if( type == "percentage" ){
+		int final_price = price - (  value*total_price / 100 );
+		return final_price;
+	}
+	else if( type == "amount" ){
+		int final_price = price - value;
+		return final_price;
+	}
+return ;
 }
+
 
 
 
@@ -34,8 +46,18 @@ int Item_discount ::  get_value(){
 string  Item_discount ::  get_name_food(){
 	return food ;
 }
-int   Item_discount ::   apply(){
-	return 100;
+bool  Item_discount ::   is_equal(string food_name){
+	if(food_name == food)
+		return true;
+	return false;
+}
+int  Item_discount ::   apply(int price){
+	if(is_none())
+		return price;
+
+	int final_price = calculate_discount(price);
+
+	return final_price;
 }
 
 
@@ -48,8 +70,12 @@ string  First_order_discount :: get_type(){
 int First_order_discount ::  get_value(){
 	return get_value_discount();
 }
-int First_order_discount :: apply(){
-	return 50;
+int First_order_discount ::  apply(int price){
+	if(is_none())
+		return total_price;
+
+	int final_price = calculate_discount(total_price);
+	return final_price;
 }
 
 
@@ -65,6 +91,13 @@ int   Total_discount :: get_min_discount(){
 int   Total_discount ::  get_value(){
 	return get_value_discount();
 }
-int  Total_discount :: apply(){
-	return 55;
+int   Total_discount :: apply(int total_price){
+	if(is_none())
+		return total_price;
+	else if(total_price < min)
+		return total_price;
+	esle{
+		int final_price = calculate_discount(total_price);
+		return final_price;
+	}
 }

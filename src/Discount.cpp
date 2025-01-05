@@ -16,6 +16,9 @@ bool Discount :: is_none(){
 int  Discount :: get_value_discount(){
 	return value;
 }
+int  Discount :: apply(){
+	return 10;
+}
 
 
 
@@ -31,6 +34,9 @@ int Item_discount ::  get_value(){
 string  Item_discount ::  get_name_food(){
 	return food ;
 }
+int   Item_discount ::   apply(){
+	return 100;
+}
 
 
 
@@ -41,6 +47,9 @@ string  First_order_discount :: get_type(){
 }
 int First_order_discount ::  get_value(){
 	return get_value_discount();
+}
+int First_order_discount :: apply(){
+	return 50;
 }
 
 
@@ -55,4 +64,7 @@ int   Total_discount :: get_min_discount(){
 }
 int   Total_discount ::  get_value(){
 	return get_value_discount();
+}
+int  Total_discount :: apply(){
+	return 55;
 }

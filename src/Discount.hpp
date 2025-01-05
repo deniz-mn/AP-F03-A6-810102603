@@ -11,6 +11,7 @@ Discount(string type_ , int value_);
 Discount(bool none);
 string get_type_discount();
 int  get_value_discount();
+virtual int apply();
 
 bool is_none();
 
@@ -24,10 +25,10 @@ class Item_discount : public Discount {
 public:
 Item_discount(string type , int value , string food);
 Item_discount(bool none);
-virtual ~Discount() = default;
-virtual string get_type();
-virtual int  get_value();
-virtual string get_name_food();
+string get_type();
+int  get_value();
+string get_name_food();
+int apply();
 
 private:
 string food;
@@ -41,6 +42,7 @@ First_order_discount(string type , int value);
 First_order_discount(bool none);
 string get_type();
 int  get_value();
+int apply();
 
 
 private:
@@ -55,6 +57,7 @@ Total_discount(bool none);
 string get_type();
 int get_min_discount();
 int  get_value();
+int apply();
 
 private:
 int min;

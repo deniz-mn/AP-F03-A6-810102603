@@ -10,6 +10,7 @@ class Table{
 public:
 	Table(int num);
 	bool has_reservation_at(int start_time , int end_time);
+	bool is_this_id(int id_);
 	void save_table_reservation( shared_ptr<Reservation>& r);
 	void print_reservation_id(int id);
 	void print_reservation();

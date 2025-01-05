@@ -16,22 +16,33 @@ bool Discount :: is_none(){
 int  Discount :: get_value_discount(){
 	return value;
 }
-// int  Discount :: apply(){
-// 	return 0;
-// }
 int  Discount :: calculate_discount(int price){
 	if( type == "percentage" ){
-		int final_price = price - (  value*total_price / 100 );
+		int final_price = price - (  value*price / 100 );
 		return final_price;
 	}
-	else if( type == "amount" ){
+	else {
 		int final_price = price - value;
 		return final_price;
 	}
-return ;
 }
 
 
+First_order_discount :: First_order_discount(string type , int value) :  Discount( type , value) , num(1){}
+First_order_discount :: First_order_discount(bool none):Discount(none){}
+string  First_order_discount :: get_type(){
+	return  get_type_discount();
+}
+int First_order_discount ::  get_value(){
+	return get_value_discount();
+}
+int First_order_discount ::  apply(int price){
+	if(is_none())
+		return price;
+
+	int final_price = calculate_discount(price);
+	return final_price;
+}
 
 
 
@@ -62,21 +73,7 @@ int  Item_discount ::   apply(int price){
 
 
 
-First_order_discount :: First_order_discount(string type , int value) :  Discount( type , value){}
-First_order_discount :: First_order_discount(bool none):Discount(none){}
-string  First_order_discount :: get_type(){
-	return  get_type_discount();
-}
-int First_order_discount ::  get_value(){
-	return get_value_discount();
-}
-int First_order_discount ::  apply(int price){
-	if(is_none())
-		return total_price;
 
-	int final_price = calculate_discount(total_price);
-	return final_price;
-}
 
 
 
@@ -92,11 +89,13 @@ int   Total_discount ::  get_value(){
 	return get_value_discount();
 }
 int   Total_discount :: apply(int total_price){
-	if(is_none())
+	if(is_none()){
 		return total_price;
-	else if(total_price < min)
+	}
+	else if(total_price < min){
 		return total_price;
-	esle{
+	}
+	else{
 		int final_price = calculate_discount(total_price);
 		return final_price;
 	}

@@ -3,6 +3,11 @@
 Table :: Table(int num){
 	id = num ;
 }
+bool Table ::   is_this_id(int id_){
+	if(id == id_)
+		return true;
+	return false;
+}
 
 bool Table ::  has_reservation_at(int start_time , int end_time){
 	for( auto r : reservations){
@@ -55,7 +60,6 @@ void Table ::  print_reservation(){
 bool Table :: table_has_reserve_id(int id){
 	for(auto r : reservations){
 		if(r->has_reserve_id(id)){
-			cout<<" in table  found id"<<endl;
 			return true;
 		}
 	}

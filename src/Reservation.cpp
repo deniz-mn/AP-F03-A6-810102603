@@ -1,6 +1,8 @@
 #include "Reservation.hpp"
 
-Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_number_ ,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,vector<shared_ptr<Discount>> item_discount_ , bool is_first_order_){
+Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_,
+							 int reserve_id_,int table_number_ ,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,
+							 vector<shared_ptr<Discount>> item_discount_ , bool is_first_order_){
 		restaurant_name = restaurant_name_;
 		reserve_id = reserve_id_;
 		table_number = table_number_ ;
@@ -11,6 +13,7 @@ Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time
 		first_order_discount = first_order_discount_;
 		item_discount = item_discount_ ;
 		is_first_order = is_first_order_;
+		
 }
 bool  Reservation :: is_at_start_time(int time){
 
@@ -21,7 +24,7 @@ bool  Reservation :: is_at_end_time(int time){
 	return time>start_time && time<=end_time ;
 }
 
-int   Reservation :: original_price(){
+int   Reservation :: count_original_price(){
 	int original_price = 0;
 	for( auto food : ordered_food){
 		original_price += food->get_price_food();
@@ -83,19 +86,38 @@ int   Reservation ::  amount_first_discount(int price){
 	int amount = price - after_apply ;
 	return amount;
 }
+int   Reservation ::  get_final_price(){
+	int original_price = count_original_price();
+	int price_after_item_discount = original_price - amount_item_discount( original_price );
+	int price_after_first_discount = price_after_item_discount - amount_first_discount( price_after_item_discount );
+	int price_after_total_discount = price_after_first_discount -  amount_total_discount(price_after_first_discount);
+	int amount_discount = amount_item_discount( original_price ) + amount_first_discount( price_after_item_discount )
+								+ price_after_first_discount -  amount_total_discount(price_after_first_discount);
+
+	int final_price = original_price - amount_discount ;
+	return final_price;
+
+}
 void  Reservation ::  print_reservation_req(){
 
-	int final_discount = amount_total_discount() + amount_item_discount() + amount_first_discount() ;
-	int final_price = original_price() - final_discount ;
+	int original_price = count_original_price();
+	int price_after_item_discount = original_price - amount_item_discount( original_price );
+	int price_after_first_discount = price_after_item_discount - amount_first_discount( price_after_item_discount );
+	int price_after_total_discount = price_after_first_discount -  amount_total_discount(price_after_first_discount);
+	int amount_discount = amount_item_discount( original_price ) + amount_first_discount( price_after_item_discount )
+								+ price_after_first_discount -  amount_total_discount(price_after_first_discount);
+	int final_price = original_price - amount_discount ;
+
+	
 
 	cout<<"Reserve ID: "<<reserve_id <<endl;
 	cout<<"Table "<<table_number<<" for "<<start_time<<" to "<<end_time<<" in "<<restaurant_name<<endl;
-	cout<<"Original Price: "<<original_price()<<endl;
-	cout<<"Order Amount Discount: "<<amount_total_discount()<<endl;
-	cout<<"Total Item Specific Discount: "<<amount_item_discount( original_price(one) )<<endl;
-	cout<<"First Order Discount: "<<amount_first_discount()<<endl;
-	cout<<"Total Discount: "<< final_discount<<endl;
-	cout<<"Total Price: "<< final_price<<endl;
+	cout<<"Original Price: "<<original_price<<endl;
+	cout<<"Order Amount Discount: "<< amount_total_discount(price_after_first_discount)<<endl;
+	cout<<"Total Item Specific Discount: "<<amount_item_discount( original_price )<<endl;
+	cout<<"First Order Discount: "<< amount_first_discount( price_after_item_discount )<<endl;
+	cout<<"Total Discount: "<<amount_discount <<endl;
+	cout<<"Total Price: "<<final_price<<endl;
 }
 int   Reservation ::  get_start(){
 	return start_time;

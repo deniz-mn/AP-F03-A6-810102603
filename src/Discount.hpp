@@ -1,4 +1,4 @@
-+#ifndef DISCOUNT_HPP
+#ifndef DISCOUNT_HPP
 #define DISCOUNT_HPP
 
 #include "global.hpp"
@@ -12,6 +12,7 @@ Discount(bool none);
 string get_type_discount();
 int  get_value_discount();
 virtual int apply(int total_price) = 0;
+int  calculate_discount(int price);
 
 bool is_none();
 
@@ -44,11 +45,12 @@ First_order_discount(string type , int value);
 First_order_discount(bool none);
 string get_type();
 int  get_value();
-int apply();
+int apply(int price);
+
 
 
 private:
-
+int num;
 
 };
 

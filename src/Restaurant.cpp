@@ -16,31 +16,33 @@ Restaurant :: Restaurant(const string& name_,const string& district_,const vecto
 		this->tables.push_back(t);
 	}
 }
-void  Restaurant :: save_discounts(vector<string> total_discount_input,vector<string> first_order_discount_input,vector<string> item_discount_input){
-	if(total_discount_input.size() == 1){
-		total_discount = make_shared<Total_discount>(true);
-	}
-	if(total_discount_input.size() > 1){
-		total_discount = make_shared<Total_discount>(total_discount_input[ discount_type ] , stoi(total_discount_input[ discount_value_total ]) ,stoi( total_discount_input[ discount_min ]));
-	}
+void  Restaurant :: save_discounts(vector<string> total_discount_input,
+								   vector<string> first_order_discount_input,
+								   vector<string> item_discount_input){
+
 	if(first_order_discount_input.size() == 1){
 		first_order_discount = make_shared<First_order_discount>(true);
 	}
-	if(first_order_discount_input.size() > 1){
-		first_order_discount = make_shared<First_order_discount>(first_order_discount_input[ discount_type ] , stoi(first_order_discount_input[ discount_value_first ]) );
+	else if(first_order_discount_input.size() > 1){
+		first_order_discount = make_shared<First_order_discount>(first_order_discount_input[0], stoi(first_order_discount_input[1]));
+	}
+	if(total_discount_input.size() == 1){
+		total_discount = make_shared<Total_discount>(true);
+	}
+	else if(total_discount_input.size() > 2){
+		total_discount = make_shared<Total_discount>(total_discount_input[ discount_type ] , stoi(total_discount_input[ discount_value_total ]) ,stoi( total_discount_input[ discount_min ]));
 	}
 	if(item_discount_input.size() == 1){
 		auto item = make_shared<Item_discount>(true);
 		item_discount.push_back(item);
 	}
-	if (item_discount_input.size() > 1){
+	else if (item_discount_input.size() > 1){
 		for(int i=0 ; i<item_discount_input.size() ; i++){
 			auto item_discount_detail = save_item_discount(item_discount_input[i]);
 			auto item = make_shared<Item_discount>(item_discount_detail[ discount_type ] , stoi(item_discount_detail[ discount_value_total ]) , item_discount_detail[ discount_food ]);
 			item_discount.push_back(item);
 		}
 	}
-
 }
 
 
@@ -148,7 +150,8 @@ vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foo
 	return f;
 }
 
-shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods , bool is_first_order) {
+shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods , 
+																		bool is_first_order,shared_ptr<Person>& login_person) {
 
 	if( table_id > tables.size() || table_id<1)
 		throw  Not_Found();
@@ -165,9 +168,13 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	
 	auto  ordered_food =  save_food_in_vector(foods);
 	
-	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order);
+	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
 
-	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order);
+	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
+
+	int total_price_reservation = r_table->get_final_price();
+
+	login_person->update_person_budget(total_price_reservation , '-');
 
 	t->save_table_reservation(r_table);
 	return r_person;
@@ -183,18 +190,9 @@ int    Restaurant :: num_of_reservation(){
 	return total;
 }
 void   Restaurant :: print_reservation_id(int id){
-	// if(num_of_reservation() == 0){
-	// 	cout<<" Restaurant num_of_tables reservation 0 hast"<<endl;
-	// 	throw  Empty();
-	// }
-
-	bool found = false;
-	for(auto t : tables){
-		found = true;
-		t->print_reservation_id(id);
-	}
-	if(!found)
-		throw Not_Found();
+	
+	auto table = find_reservation_table(id);
+	table->print_reservation_id(id);
 }
 void   Restaurant :: print_all_reservation(){
 	// if(num_of_reservation() == 0)
@@ -206,11 +204,16 @@ void   Restaurant :: print_all_reservation(){
 	
 }
 shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
+	bool found = false;
 	for(auto t : tables){
 		if( t->table_has_reserve_id(id)){
+			found = true;
 			return t;
 		}
 	}
+
+	if(!found)
+		throw Not_Found();
 }
 void   Restaurant :: restaurant_delete_reseravtion(int id){
 	

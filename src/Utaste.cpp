@@ -316,7 +316,7 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 		throw  Premission_Denied();
 	}
 	bool is_first_order = p->has_ordered_from(restaurant_name);
-	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order);
+	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order, p);
 
 	p->save_person_reservation(reservation);
 

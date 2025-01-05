@@ -7,6 +7,7 @@
 #include "Table.hpp"
 #include "Exception.hpp"
 #include "Discount.hpp"
+#include "Person.hpp"
 
 class Restaurant{
 
@@ -27,7 +28,8 @@ public:
 	void save_discounts(vector<string> total_discount_input,vector<string> first_order_discount_input,vector<string> item_discount_input);
 
 	bool is_during_operating_hours(int time);
-	shared_ptr<Reservation> check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods);
+	shared_ptr<Reservation> check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods , 
+																		bool is_first_order,shared_ptr<Person>& login_person);
 	shared_ptr<Food>  find_food_by_name(string name);
 	
 

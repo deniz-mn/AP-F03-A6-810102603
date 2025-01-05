@@ -6,16 +6,18 @@
 #include "Discount.hpp"
 
 
+
 class Reservation{
 
 public:
 	Reservation(string restaurant_name_,int start_time_,int end_time_,vector<shared_ptr<Food>> ordered_food_, int reserve_id_,int table_id
-				,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,vector<shared_ptr<Discount>> item_discount_ );
+				,shared_ptr<Discount> total_discount_ ,shared_ptr<Discount> first_order_discount_ ,vector<shared_ptr<Discount>> item_discount_
+				, bool is_first_order_ );
 
 	bool is_at_start_time(int time);
 	bool is_at_end_time(int time);
 	void print_reservation_req();
-	int  original_price();
+	int  count_original_price();
 	void print_foods();
 	int  get_start();
 	int    get_end();
@@ -25,7 +27,14 @@ public:
 	void print_in_line();
 	int  get_time();
 	int get_reservation_id();
-	//bool compare_name(const shared_ptr<Food>& a , const shared_ptr<Food>& b);
+	int get_final_price();
+	shared_ptr<Food>  find_food_by_name(string food_name);
+	int  apply_food_discount(string food_name);
+	int  amount_item_discount(int price);
+	int  amount_total_discount(int price);
+	int  amount_first_discount(int price);
+
+
 private:
 	string restaurant_name;
 	int reserve_id;

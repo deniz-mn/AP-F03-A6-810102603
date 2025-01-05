@@ -20,6 +20,7 @@ int Table :: num_of_reservation_table(){
 	return this->reservations.size();
 
 }
+
 void Table ::  save_table_reservation( shared_ptr<Reservation>& r){
 
 	this->reservations.push_back(r);
@@ -86,4 +87,8 @@ void  Table ::  print_reservation_hours(){
 		cout<<"("<<reservations[ reservations.size()-1 ]->get_start()<<"-"<<reservations[ reservations.size()-1 ]->get_end()<<")"<<endl;
 	}
 }
-
+int  Table ::  get_final_reservation_price(int id){
+	auto r = get_reservation_by_id(id);
+	int price = r-> get_final_price();
+	return price;
+}

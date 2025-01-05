@@ -215,10 +215,11 @@ shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 	if(!found)
 		throw Not_Found();
 }
-void   Restaurant :: restaurant_delete_reseravtion(int id){
+void   Restaurant :: restaurant_delete_reseravtion(int id , shared_ptr<Person>& login_person){
 	
 	auto table = find_reservation_table(id);
-
+	int price = ( table->get_final_reservation_price(id) ) * 0.6;
+	login_person->update_person_budget(price , '+');
 	table->delete_reservation_table(id);
 }
 /////////////////////////////////////////////////////////

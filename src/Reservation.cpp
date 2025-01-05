@@ -133,13 +133,12 @@ bool  Reservation :: is_equal(int id){
 void  Reservation :: print_in_line(){
 
 	cout<<reserve_id<<": "<<restaurant_name<<" "<<table_number<<" "<<start_time<<"-"<<end_time<<" ";
-	if( ordered_food.size() == 0 ){
-		cout<<endl;
-	}
-	else if( ordered_food.size() > 0){
+	
+	if( ordered_food.size() > 0){
 		print_foods( );
-		cout<<endl;
 	}
+	cout<<count_original_price()<<" "<<get_final_price()<<endl;
+
 }
 
 void  Reservation :: print_foods(){

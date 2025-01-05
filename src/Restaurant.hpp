@@ -36,8 +36,8 @@ public:
 
 	void print_reservation_id(int id);
 	void print_all_reservation();
-	int num_of_reservation();
-	void restaurant_delete_reseravtion(int id);
+	int  num_of_reservation();
+	void restaurant_delete_reseravtion(int id, shared_ptr<Person>& login_person);
 	
 	shared_ptr<Table>  find_reservation_table(int id);
 

@@ -373,7 +373,7 @@ void   Utaste ::  delete_reservation(string restaurant_name , int id){
 	auto p = get_login_person();
 	p->person_delete_reservation(restaurant_name , id);
 	auto r = find_restaurant_by_name(restaurant_name);
-	r->restaurant_delete_reseravtion(id);
+	r->restaurant_delete_reseravtion(id , p);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

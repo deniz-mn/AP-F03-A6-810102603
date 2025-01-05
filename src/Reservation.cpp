@@ -7,7 +7,9 @@ Reservation :: Reservation (string restaurant_name_,int start_time_,int end_time
 		start_time = start_time_; 			
 		end_time = end_time_;
 		ordered_food = ordered_food_;
-		
+		total_discount = total_discount_;
+		first_order_discount = first_order_discount_;
+		item_discount = item_discount_ ;
 }
 bool  Reservation :: is_at_start_time(int time){
 
@@ -55,10 +57,10 @@ void  Reservation :: print_in_line(){
 }
 
 void  Reservation :: print_foods(){
-	cout<<"11"<<endl;
+	
 	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
 	int counter = 1;
-	cout<<"22"<<endl;
+	
 	for(int i=0 ; i<ordered_food.size()-1 ; i++){
 
 		if(ordered_food[i]->get_name_food() != ordered_food[i+1]->get_name_food()){
@@ -69,7 +71,7 @@ void  Reservation :: print_foods(){
 			counter ++;
 		}
 	}
-	cout<<"33"<<endl;
+	
 }
 int  Reservation  ::  get_reservation_id(){
 	return reserve_id ;

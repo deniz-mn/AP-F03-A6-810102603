@@ -69,6 +69,27 @@ void  Restaurant  ::  print_menu(){
 	}
 	cout<<menu[ menu.size()-1 ]->get_name_food()<<"("<<menu[ menu.size()-1 ]->get_price_food()<<")"<<endl;
 }
+void  Restaurant  ::  print_total_discount(){
+	shared_ptr<Total_discount> total_discount_ptr = (shared_ptr<Total_discount>)total_discount ;
+	cout<<total_discount_ptr->get_type()<<", "<<total_discount_ptr->get_min_discount()<<", "<<total_discount_ptr->get_value()<<endl;
+}
+void  Restaurant  ::  print_item_discount(){
+	vector<shared_ptr<Item_discount>> item_discount_ptr ;
+	for(auto item : item_discount){
+		shared_ptr<Item_discount> item_ptr;
+		item_ptr = dynamic_pointer_cast<Item_discount>(item);
+		item_discount_ptr.push_back(item_ptr);
+	}
+	for(int i=0 ; i<item_discount_ptr.size()-1 ; i++){
+		cout<<item_discount_ptr[i]->get_name_food()<<"("<<item_discount_ptr[i]->get_type()<<": "<<total_discount_ptr[i]->get_value()<<"), ";
+	}
+	int last_item = item_discount_ptr.size()-1;
+	cout<<item_discount_ptr[last_item]->get_name_food()<<"("<<item_discount_ptr[last_item]->get_type()<<": "<<total_discount_ptr[last_item]->get_value()<<")"<<endl;
+}
+void  Restaurant  ::  print_first_discount(){
+	shared_ptr<First_order_discount> first_order_discount_ptr = (shared_ptr<First_order_discount>) first_order_discount ;
+	cout<<first_order_discount_ptr->get_type()<<", "<<first_order_discount_ptr->get_value()<<endl;
+}
 void  Restaurant  ::  print_detail(){
 	cout<<"Name: "<<name<<endl;
 	cout<<"District: "<<district<<endl;
@@ -78,6 +99,17 @@ void  Restaurant  ::  print_detail(){
 	for(auto t : tables){
 		t->print_reservation_hours();
 	}
+	
+	
+	cout<<"Order Amount Discount: ";
+	print_total_discount();
+	
+	cout<<"Item Specific Discount: ";
+	print_item_discount();
+
+	cout<<"First Order Discount: ";
+	print_first_discount();
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 

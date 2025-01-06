@@ -52,12 +52,14 @@ try{
         logout();
         throw Ok();
       }
-      // else if(cmd[1] == "increase_budget"){
-      //   if(!is_login())
-      //     throw Premission_Denied();
-      //   utaste->increase_budget(cmd[4]);
-      //     throw Ok();
-      // }
+      else if(cmd[1] == "increase_budget"){
+        if(!is_login())
+          throw Premission_Denied();
+        if (!cmd_map.count("amount"))
+          throw Bad_Request();
+        utaste->increase_budget(stoi(cmd_map["amount"]));
+        throw Ok();
+      }
       else{
         if(!is_login())
           throw Premission_Denied();
@@ -106,7 +108,13 @@ try{
           utaste->show_all_restaurants();
 
       }
-
+    else if(cmd[1] == "show_budget"){
+       if (!is_login())
+        throw Premission_Denied();
+       if (cmd.size() != 3)
+        throw Bad_Request();
+     utaste->show_budget();
+    }
       else if(cmd[1] == "restaurant_detail"){
         utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
       }

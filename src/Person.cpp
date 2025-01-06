@@ -36,10 +36,12 @@ bool   Person :: has_reservation_at(int start_time , int end_time){
 		return false;
 	}	
 	for(auto r : reservations){	
+
 		if(r->is_at_start_time(start_time) || r->is_at_end_time(end_time)){ 
 			return true;
 		}
 	return false;
+	
 	}
 }
 bool   Person ::  has_reservation_id(string restaurant_name ,int id){

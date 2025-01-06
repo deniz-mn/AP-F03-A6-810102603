@@ -43,7 +43,6 @@ void  Table ::   delete_reservation_table(int id){
 	auto to_delete = find_reservation_by_id(id);
 
 	if (to_delete){
-			cout<< to_delete->get_reservation_id()<<" id ke mikhad pak kone"<<endl;
 			reservations.erase(remove(reservations.begin(), reservations.end(), to_delete), reservations.end());
 			to_delete.reset(); 
 		} 

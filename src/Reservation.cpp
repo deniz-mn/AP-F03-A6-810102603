@@ -146,10 +146,10 @@ void  Reservation :: print_foods(){
 	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
 	int counter = 1;
 	
-	for(int i=0 ; i<ordered_food.size()-1 ; i++){
+	for(int i=1 ; i<ordered_food.size()-1 ; i++){
 
-		if(ordered_food[i]->get_name_food() != ordered_food[i+1]->get_name_food()){
-			cout<<ordered_food[i]->get_name_food()<<"("<<counter<<")"<<" ";
+		if(ordered_food[i]->get_name_food() != ordered_food[i-1]->get_name_food()){
+			cout<<ordered_food[i-1]->get_name_food()<<"("<<counter<<")"<<" ";
 			counter = 1 ;
 		}
 		else{

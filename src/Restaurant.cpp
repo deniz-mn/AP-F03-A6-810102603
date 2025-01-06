@@ -195,9 +195,7 @@ void   Restaurant :: print_reservation_id(int id){
 	table->print_reservation_id(id);
 }
 void   Restaurant :: print_all_reservation(){
-	// if(num_of_reservation() == 0)
-	// 	throw  Empty();
-
+	
 	for(auto t : tables){
 		t->print_reservation();
 	}

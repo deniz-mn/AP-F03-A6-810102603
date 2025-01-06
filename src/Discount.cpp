@@ -7,6 +7,7 @@ Discount :: Discount (string type_ , int value_): value(value_), type(type_), no
 		type = "amount";
 }
 Discount :: Discount(bool none):none(none), type(""), value(0) {}
+
 string  Discount ::get_type_discount(){
 	return type;
 }
@@ -48,6 +49,7 @@ int First_order_discount ::  apply(int price){
 
 Item_discount :: Item_discount ( string type , int value , string food): Discount( type , value) , food(food){}
 Item_discount :: Item_discount (bool none):Discount(none), food(""){}
+
 string Item_discount :: get_type(){
 	return  get_type_discount();
 }

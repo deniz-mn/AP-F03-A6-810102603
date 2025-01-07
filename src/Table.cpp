@@ -22,9 +22,23 @@ int Table :: num_of_reservation_table(){
 }
 
 void Table ::  save_table_reservation( shared_ptr<Reservation>& r){
+	
 
-	this->reservations.push_back(r);
+	reservations.push_back(r);
 	sort(reservations.begin() , reservations.end(),[](const std::shared_ptr<Reservation>& a, const std::shared_ptr<Reservation>& b) { return a->get_time() < b->get_time(); });
+
+}
+void Table :: print_table_details (){
+
+	cout<<"print_table_details"<<endl;
+
+	for(auto r : reservations){
+		cout<<endl;
+		cout<<r->get_reservation_id()<<" id reserve bodd"<<endl;
+		cout<<r->get_name_restaurant()<<" restaurant_name reserve bodd"<<endl;
+		cout<<r->get_start()<<" start time reserve bodd"<<endl;
+		cout<<endl;
+	}
 }
 void Table :: print_reservation_id(int id){
 	for(auto r : reservations){

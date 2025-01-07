@@ -14,7 +14,6 @@ vector<shared_ptr<Food>> save_menu (string input);
 
 
 void Utaste :: save_restaurant_input(const string& file_name){
-	
 	vector<string> file_input = file_reader(file_name);
 
 	for(int i=0 ; i<file_input.size() ; i++){
@@ -40,7 +39,7 @@ void Utaste :: save_neighbors_input(const string& file_name){
 	}
 }
 void Utaste :: save_discount_input(const string& file_name){
-
+	
 	vector<string> file_input = file_reader(file_name);
 
 	for(int i=0 ; i<file_input.size() ; i++){
@@ -280,6 +279,7 @@ void   Utaste :: get_restaurant_detail( string restaurant_name){
 	
 	for(auto r : restaurants){
 		if(r->get_name_restaurant() ==restaurant_name){
+
 			found = true;
 			r->print_detail();
 		}
@@ -308,20 +308,21 @@ void   Utaste :: add_reservation(string restaurant_name , int table_id , int sta
 
 	auto ordered_food = string_seprator(foods , ',');
 
-
+	
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
 
 	if( (p->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();
 	}
-	bool is_first_order = p->has_ordered_from(restaurant_name);
+	
+	bool is_first_order =!( p-> has_ordered_from(restaurant_name));
+	
 	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order, p);
 
 	p->save_person_reservation(reservation);
 
 	reservation->print_reservation_req();
-	
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int    Utaste ::   num_of_reservation_ut(){
@@ -333,11 +334,9 @@ int    Utaste ::   num_of_reservation_ut(){
 }
 
 void   Utaste ::   show_special_reservation(string restaurant_name , int id){
-	
+		
 		if( num_of_reservation_ut() == 0)
 			throw Empty();
-		
-		else{
 
 		auto p = get_login_person();
 		
@@ -347,9 +346,8 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 			   
 
 		auto r = find_restaurant_by_name(restaurant_name);
-		r->print_reservation_id(id);
-		}
 
+		r->print_reservation_id(id);
 }
 void   Utaste ::   show_all_reservation(){
 	if( num_of_reservation_ut() == 0){
@@ -369,11 +367,15 @@ void   Utaste ::   show_res_reservation(string restaurant_name ){
 		r->print_all_reservation();
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
-
+	cout<<"11"<<endl;
 	auto p = get_login_person();
+	cout<<"11"<<endl;
 	p->person_delete_reservation(restaurant_name , id);
+	cout<<"11"<<endl;
 	auto r = find_restaurant_by_name(restaurant_name);
+	cout<<"11"<<endl;
 	r->restaurant_delete_reseravtion(id , p);
+	cout<<"11"<<endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

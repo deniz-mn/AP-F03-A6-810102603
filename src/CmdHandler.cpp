@@ -145,6 +145,7 @@ try{
 
 
     else if(cmd[CMD_TYPE] == DELETE){
+     
       if(!is_login())
         throw Premission_Denied();
 
@@ -152,7 +153,7 @@ try{
 
         if (!cmd_map.count(RESTAURANT_NAME) || !cmd_map.count(RESERVE_ID))
           throw Bad_Request();
-
+        
           utaste->delete_reservation(cmd_map[ RESTAURANT_NAME ] , stoi( cmd_map[ RESERVE_ID ]));
         throw Ok();
       }

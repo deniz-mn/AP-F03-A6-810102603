@@ -20,6 +20,7 @@ void  Restaurant :: save_discounts(vector<string> total_discount_input,
 								   vector<string> first_order_discount_input,
 								   vector<string> item_discount_input){
 
+	
 	if(first_order_discount_input.size() == 1){
 		first_order_discount = make_shared<First_order_discount>(true);
 	}
@@ -75,9 +76,15 @@ void  Restaurant  ::  print_menu(){
 }
 void  Restaurant  ::  print_total_discount(){
 	auto total_discount_ptr =  dynamic_pointer_cast<Total_discount>(total_discount);
-	cout<<total_discount_ptr->get_type()<<", "
-		<<total_discount_ptr->get_min_discount()<<", "
-		<<total_discount_ptr->get_value()<<endl;
+	if(!total_discount_ptr->is_none()){
+		cout<<total_discount_ptr->get_type()<<", "
+			<<total_discount_ptr->get_min_discount()<<", "
+			<<total_discount_ptr->get_value()<<endl;
+	}
+	else{
+		cout<<endl;
+	}
+	
 }
 void  Restaurant  ::  print_item_discount(){
 	vector<shared_ptr<Item_discount>> item_discount_ptr ;
@@ -90,21 +97,33 @@ void  Restaurant  ::  print_item_discount(){
 	
 	if(item_discount_ptr.size() > 0){
 		for(int i=0 ; i<item_discount_ptr.size()-1 ; i++){
-			cout<<item_discount_ptr[i]->get_name_food()<<"("
-				<<item_discount_ptr[i]->get_type()<<": "
-				<<item_discount_ptr[i]->get_value()<<"), ";
+			if(!item_discount_ptr[i]->is_none()){
+				cout<<item_discount_ptr[i]->get_name_food()<<"("
+					<<item_discount_ptr[i]->get_type()<<": "
+					<<item_discount_ptr[i]->get_value()<<"), ";
+			}
+			
 			}
 		int last_item = item_discount_ptr.size()-1;
-		cout<<item_discount_ptr[last_item]->get_name_food()<<"("
-			<<item_discount_ptr[last_item]->get_type()<<": "
-			<<item_discount_ptr[last_item]->get_value()<<")"<<endl;
-
+		if(!item_discount_ptr[last_item]->is_none()){
+			cout<<item_discount_ptr[last_item]->get_name_food()<<"("
+				<<item_discount_ptr[last_item]->get_type()<<": "
+				<<item_discount_ptr[last_item]->get_value()<<")"<<endl;
+		}
+		else{
+			cout<<endl;
+		}	
 	}
 }
 void  Restaurant  ::  print_first_discount(){
 	auto first_order_discount_ptr = dynamic_pointer_cast<First_order_discount>(first_order_discount);
-	cout<<first_order_discount_ptr->get_type()<<", "
+	if(!first_order_discount_ptr->is_none()){
+		cout<<first_order_discount_ptr->get_type()<<", "
 		<<first_order_discount_ptr->get_value()<<endl;
+	}
+	else{
+		cout<<endl;
+	}
 }
 void  Restaurant  ::  print_detail(){
 	cout<<"Name: "<<name<<endl;
@@ -129,7 +148,7 @@ void  Restaurant  ::  print_detail(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool  Restaurant  :: is_during_operating_hours(int time){
-	return time>openning_time && time<closing_time;
+	return time>=openning_time && time<=closing_time;
 }
 shared_ptr<Food>  Restaurant  :: find_food_by_name(string name){
 	bool found = false;
@@ -152,14 +171,14 @@ vector<shared_ptr<Food>>  Restaurant  :: save_food_in_vector(vector<string>& foo
 
 shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int table_id ,int  start_time ,int  end_time ,vector<string> foods , 
 																		bool is_first_order,shared_ptr<Person>& login_person) {
-
+	
 	if( table_id > tables.size() || table_id<1)
 		throw  Not_Found();
 
 	table_id --;
 	auto t = tables[ table_id ];
 	table_id ++;
-
+	
 	if( (t->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();	
 	}
@@ -167,16 +186,19 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	reservation_id ++;
 	
 	auto  ordered_food =  save_food_in_vector(foods);
-	
+	//cout<<"22"<<endl;
 	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
-
+	
 	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
-
+	//cout<<"33"<<endl;
+	reservation_id --;
 	int total_price_reservation = r_table->get_final_price();
-
+	//cout<<"444"<<endl;
 	login_person->update_person_budget(total_price_reservation , '-');
-
+	//cout<<"55"<<endl;
 	t->save_table_reservation(r_table);
+	//cout<<"66"<<endl;
+	reservation_id ++;
 	return r_person;
 }
 	
@@ -190,16 +212,24 @@ int    Restaurant :: num_of_reservation(){
 	return total;
 }
 void   Restaurant :: print_reservation_id(int id){
+
+	for(auto t : tables){
+		t->print_reservation_id(id);
+	}
 	
-	auto table = find_reservation_table(id);
-	table->print_reservation_id(id);
+}
+void Restaurant :: print_tables_details(){
+	for(auto t : tables){
+		cout<<endl;
+		t->print_table_details();
+		cout<<endl;
+	}
 }
 void   Restaurant :: print_all_reservation(){
 	
 	for(auto t : tables){
 		t->print_reservation();
 	}
-	
 }
 shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 	bool found = false;
@@ -214,11 +244,15 @@ shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 		throw Not_Found();
 }
 void   Restaurant :: restaurant_delete_reseravtion(int id , shared_ptr<Person>& login_person){
-	
+	cout<<"aa"<<endl;
 	auto table = find_reservation_table(id);
+	cout<<"bb"<<endl;
 	int price = ( table->get_final_reservation_price(id) ) * 0.6;
+	cout<<"cc"<<endl;
 	login_person->update_person_budget(price , '+');
+	cout<<"dd"<<endl;
 	table->delete_reservation_table(id);
+	cout<<"gg"<<endl;
 }
 /////////////////////////////////////////////////////////
 int Restaurant :: get_openning (){ return openning_time; }

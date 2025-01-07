@@ -14,7 +14,7 @@ int  get_value_discount();
 virtual int apply(int total_price) = 0;
 int  calculate_discount(int price);
 
-bool is_none();
+bool get_none();
 
 private:
 bool none;
@@ -31,6 +31,7 @@ int  get_value();
 string get_name_food();
 bool is_equal(string food_name);
 int apply(int price);
+bool is_none();
 
 
 private:
@@ -46,6 +47,7 @@ First_order_discount(bool none);
 string get_type();
 int  get_value();
 int apply(int price);
+bool is_none();
 
 
 
@@ -62,6 +64,7 @@ string get_type();
 int get_min_discount();
 int  get_value();
 int apply(int total_price);
+bool is_none();
 
 private:
 int min;

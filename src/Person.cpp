@@ -74,17 +74,21 @@ void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
 	sort(reservations.begin() , reservations.end(),compare_time);
 }
 bool   Person :: has_ordered_from(string name){
+	
 	if(ordered_restaurant.size() > 0){
+	
 		for(auto r : ordered_restaurant){
-		if(r == name)
-			return true;
+			if(r == name){ 	
+				return true;
+			}	
 		}
 		ordered_restaurant.push_back(name);
 	return false;
 	}
-	
-	ordered_restaurant.push_back(name);
-	return false;
+	else{
+		ordered_restaurant.push_back(name);
+		return false;
+	}
 }
 void   Person :: update_person_budget(int amount , char a){
 	if(a == '+')

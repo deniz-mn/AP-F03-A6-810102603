@@ -92,7 +92,7 @@ int   Reservation ::  get_final_price(){
 	int price_after_first_discount = price_after_item_discount - amount_first_discount( price_after_item_discount );
 	int price_after_total_discount = price_after_first_discount -  amount_total_discount(price_after_first_discount);
 	int amount_discount = amount_item_discount( original_price ) + amount_first_discount( price_after_item_discount )
-								+ price_after_first_discount -  amount_total_discount(price_after_first_discount);
+								+  amount_total_discount(price_after_first_discount);
 
 	int final_price = original_price - amount_discount ;
 	return final_price;
@@ -105,7 +105,7 @@ void  Reservation ::  print_reservation_req(){
 	int price_after_first_discount = price_after_item_discount - amount_first_discount( price_after_item_discount );
 	int price_after_total_discount = price_after_first_discount -  amount_total_discount(price_after_first_discount);
 	int amount_discount = amount_item_discount( original_price ) + amount_first_discount( price_after_item_discount )
-								+ price_after_first_discount -  amount_total_discount(price_after_first_discount);
+							+  amount_total_discount(price_after_first_discount);
 	int final_price = original_price - amount_discount ;
 
 	
@@ -137,26 +137,20 @@ void  Reservation :: print_in_line(){
 	if( ordered_food.size() > 0){
 		print_foods( );
 	}
-	cout<<count_original_price()<<" "<<get_final_price()<<endl;
+	cout<<" "<<count_original_price()<<" "<<get_final_price()<<endl;
 
 }
 
 void  Reservation :: print_foods(){
 	
 	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
-	int counter = 1;
-	
-	for(int i=1 ; i<ordered_food.size()-1 ; i++){
-
-		if(ordered_food[i]->get_name_food() != ordered_food[i-1]->get_name_food()){
-			cout<<ordered_food[i-1]->get_name_food()<<"("<<counter<<")"<<" ";
-			counter = 1 ;
-		}
-		else{
-			counter ++;
-		}
+	map<string , int> food_count ;
+	for(auto food : ordered_food){
+		food_count[ food->get_name_food() ] ++;
 	}
-	
+	for(auto item : food_count){
+		cout<<item.first <<"("<<item.second<<")";
+	}
 }
 int  Reservation  ::  get_reservation_id(){
 	return reserve_id ;

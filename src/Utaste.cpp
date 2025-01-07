@@ -344,7 +344,6 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 			 throw Premission_Denied();
 		}
 			   
-
 		auto r = find_restaurant_by_name(restaurant_name);
 
 		r->print_reservation_id(id);
@@ -367,15 +366,13 @@ void   Utaste ::   show_res_reservation(string restaurant_name ){
 		r->print_all_reservation();
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
-	cout<<"11"<<endl;
+	
 	auto p = get_login_person();
-	cout<<"11"<<endl;
 	p->person_delete_reservation(restaurant_name , id);
-	cout<<"11"<<endl;
+
 	auto r = find_restaurant_by_name(restaurant_name);
-	cout<<"11"<<endl;
+
 	r->restaurant_delete_reseravtion(id , p);
-	cout<<"11"<<endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

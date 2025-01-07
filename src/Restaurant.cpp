@@ -186,18 +186,17 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	reservation_id ++;
 	
 	auto  ordered_food =  save_food_in_vector(foods);
-	//cout<<"22"<<endl;
+	
 	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
 	
 	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
-	//cout<<"33"<<endl;
+
 	reservation_id --;
 	int total_price_reservation = r_table->get_final_price();
-	//cout<<"444"<<endl;
+	
 	login_person->update_person_budget(total_price_reservation , '-');
-	//cout<<"55"<<endl;
+
 	t->save_table_reservation(r_table);
-	//cout<<"66"<<endl;
 	reservation_id ++;
 	return r_person;
 }
@@ -244,15 +243,11 @@ shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){
 		throw Not_Found();
 }
 void   Restaurant :: restaurant_delete_reseravtion(int id , shared_ptr<Person>& login_person){
-	cout<<"aa"<<endl;
 	auto table = find_reservation_table(id);
-	cout<<"bb"<<endl;
 	int price = ( table->get_final_reservation_price(id) ) * 0.6;
-	cout<<"cc"<<endl;
+
 	login_person->update_person_budget(price , '+');
-	cout<<"dd"<<endl;
 	table->delete_reservation_table(id);
-	cout<<"gg"<<endl;
 }
 /////////////////////////////////////////////////////////
 int Restaurant :: get_openning (){ return openning_time; }

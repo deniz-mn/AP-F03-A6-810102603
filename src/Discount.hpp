@@ -9,6 +9,7 @@ class Discount {
 public:
 Discount(string type_ , int value_);
 Discount(bool none);
+bool get_none();
 string get_type_discount();
 int  get_value_discount();
 virtual int apply(int total_price) = 0;

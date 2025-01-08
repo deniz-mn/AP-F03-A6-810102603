@@ -135,15 +135,20 @@ void  Restaurant  ::  print_detail(){
 		t->print_reservation_hours();
 	}
 	
-	cout<<"Order Amount Discount: ";
-	print_total_discount();
+	if(!(total_discount->get_none())){
+		cout<<"Order Amount Discount: ";
+		print_total_discount();
+	}
 	
-	cout<<"Item Specific Discount: ";
-	print_item_discount();
-
-	cout<<"First Order Discount: ";
-	print_first_discount();
-
+	if(!(item_discount->get_none())){
+		cout<<"Item Specific Discount: ";
+		print_item_discount();
+	}
+	
+	if(!(first_discount->get_none())){
+		cout<<"First Order Discount: ";
+		print_first_discount();
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -17,6 +17,7 @@ public:
 	void save_neighbors_input(const string& file_name);
 	void save_discount_input(const string& file_name);
 
+	vector<shared_ptr<Restaurant>> get_all_restaurants();
 	void signup (string& username, string& password);
 	void login (string& username , string& password);
 	void logout();

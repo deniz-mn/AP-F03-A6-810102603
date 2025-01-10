@@ -140,12 +140,12 @@ void  Restaurant  ::  print_detail(){
 		print_total_discount();
 	}
 	
-	if(!(item_discount->get_none())){
+	if(item_discount.size() > 0){
 		cout<<"Item Specific Discount: ";
 		print_item_discount();
 	}
 	
-	if(!(first_discount->get_none())){
+	if(!(first_order_discount->get_none())){
 		cout<<"First Order Discount: ";
 		print_first_discount();
 	}

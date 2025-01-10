@@ -27,9 +27,7 @@ int  Discount :: calculate_discount(int price){
 		return final_price;
 	}
 }
-bool  Discount ::  get_none(){
-	return none;
-}
+
 
 
 First_order_discount :: First_order_discount(string type , int value) :  Discount( type , value) , num(1){}

@@ -57,7 +57,9 @@ void Utaste :: save_discount_input(const string& file_name){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
+vector<shared_ptr<Restaurant>>  Utaste :: get_all_restaurants(){
+	return restaurants;
+}
 
 bool check_login(string username,string password){}
 bool wrong_pass(string username, string password){}
@@ -352,18 +354,16 @@ void   Utaste ::   show_all_reservation(){
 	if( num_of_reservation_ut() == 0){
 			throw Empty();
 	}
-			
+	auto p = get_login_person();
+	p->print_all_reservation();
 
-	for(auto r : restaurants){
-		r->print_all_reservation();
-	}
 }
 void   Utaste ::   show_res_reservation(string restaurant_name ){
 	if( num_of_reservation_ut() == 0)
 				throw Empty();
 
-		auto r = find_restaurant_by_name(restaurant_name);
-		r->print_all_reservation();
+		auto p = get_login_person();
+		p->print_restaurant_reservation(restaurant_name);
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
 	

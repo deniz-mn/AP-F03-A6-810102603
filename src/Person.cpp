@@ -31,6 +31,28 @@ void   Person :: save_district(shared_ptr<Neighborhood> n){
 	district = n;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+void    Person ::  print_restaurant_reservation(string name){
+	if(reservations.size() == 0){
+		throw Empty();
+	}
+	bool found = false;
+	for(auto r : reservations){
+		if(r->get_name_restaurant() == name){
+			found = true;
+			r->print_in_line();
+		}	
+	}
+	if(!found)
+		throw Empty();
+}
+void    Person ::  print_all_reservation(){
+	if(reservations.size() == 0){
+		throw Empty();
+	}
+	for(auto r : reservations){
+		r->print_in_line();
+	}
+}
 bool   Person :: has_reservation_at(int start_time , int end_time){
 	if(reservations.size() == 0){
 		return false;

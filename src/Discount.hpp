@@ -15,7 +15,7 @@ int  get_value_discount();
 virtual int apply(int total_price) = 0;
 int  calculate_discount(int price);
 
-bool get_none();
+
 
 private:
 bool none;

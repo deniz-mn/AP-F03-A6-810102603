@@ -65,10 +65,10 @@ void  Table ::   delete_reservation_table(int id){
 	}
 
 }
-void Table ::  print_reservation(){
+void Table ::  print_reservation(ostream& out){
 
 	for(auto r : reservations){
-			r->print_in_line();
+			r->print_in_line(out);
 	}
 }
 bool Table :: table_has_reserve_id(int id){

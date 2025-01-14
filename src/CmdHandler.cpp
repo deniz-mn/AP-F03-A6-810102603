@@ -116,22 +116,23 @@ try{
      utaste->show_budget();
     }
       else if(cmd[1] == "restaurant_detail"){
-        utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ]);
+        ostringstream out;
+        utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ] , out);
       }
 
       else if(cmd[1] == "reserves"){
-    
+      ostringstream out;
         if(cmd.size() == CMD_SHOW_RESERVE){
           if (!cmd_map.count(RESTAURANT_NAME) || !cmd_map.count(RESERVE_ID))
                 throw Bad_Request();
          
-          utaste->show_special_reservation(cmd_map[ RESTAURANT_NAME ] , stoi(cmd_map[ RESERVE_ID ]) );
+          utaste->show_special_reservation(cmd_map[ RESTAURANT_NAME ] , stoi(cmd_map[ RESERVE_ID ]) , out );
         }
         else if((cmd.size() == CMD_SHOW_RES_RESERVE) && cmd[ CMD_SHOW_RES_RESERVE -2 ] == "restaurant_name")
-          utaste->show_res_reservation(cmd[ CMD_SHOW_RES_RESERVE -1 ]);
+          utaste->show_res_reservation(cmd[ CMD_SHOW_RES_RESERVE -1 ] , out);
 
         else if(cmd.size() == CMD_ALL_SHOW_RESERVE)
-          utaste->show_all_reservation();
+          utaste->show_all_reservation(out);
         
         else
           throw Bad_Request();
@@ -156,9 +157,7 @@ try{
         
           utaste->delete_reservation(cmd_map[ RESTAURANT_NAME ] , stoi( cmd_map[ RESERVE_ID ]));
         throw Ok();
-      }
-      
-        
+      }      
       
     }
     else{

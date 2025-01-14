@@ -2,7 +2,7 @@
 #include "web_handler.hpp"
 #include <cstdlib>
 #include <iostream>
-#include "ex.hpp"
+#include "Exception.hpp"
 #include <ctime>
 
 
@@ -11,13 +11,9 @@ home_handler::home_handler(shared_ptr<Utaste> utaste , CmdHandler* cmd_handler)
 
 
 Response* home_handler::callback(Request* req) {
-    if (!cmd_handler->is_login()) {
-        return Response::redirect("/permissionDenied");
-    }
-
+   
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
-
     std::string body = R"(
     <!DOCTYPE html>
     <html lang="en">
@@ -49,14 +45,15 @@ Response* home_handler::callback(Request* req) {
     <body>
         <h1>Welcome to UTaste</h1>
         <div class="nav">
+            <a href="/signup">signup</a>
+            <a href="/logout">Logout</a>
+            <a href="/login">Login</a>
             <a href="/viewReservations">View Reservations</a>
             <a href="/viewAllRestaurants">View Restaurants</a>
-            <a href="/logout">Logout</a>
         </div>
     </body>
     </html>
     )";
-
     res->setBody(body);
     return res;
 }
@@ -65,9 +62,12 @@ signup_handler :: signup_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_hand
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* signup_handler :: callback(Request* req) {
-string username = req->getBodyParam("username");
-string password = req->getBodyParam("password");
+    cout<<"horaaaaa"<<endl;
+    string username = req->getBodyParam("username");
+    string password = req->getBodyParam("password");
 try{
+    cout<<"horaaaaa"<<endl;
+
 	utaste->signup(username,password);
 	cmd_handler->login();
 }
@@ -142,9 +142,9 @@ view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> 
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_all_restaurants_handler::callback(Request* req) {
-    if (!cmd_handler->is_login()) {
-        return Response::redirect("/permissionDenied");
-    }
+    // if (!cmd_handler->is_login()) {
+    //     return Response::redirect("/permissionDenied");
+    // }
 
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
@@ -211,7 +211,7 @@ Response* view_restaurant_handler::callback(Request* req) {
         return Response::redirect("/permissionDenied");
     }
 
-    if (!req->hasQueryParam("name")) {
+    if (!req->getQueryParam("name").empty()) {
         return Response::redirect("/badRequest");
     }
 
@@ -292,13 +292,16 @@ return res;
 }
 
 Response* permission_denied_handler::callback(Request* req) {
+     cout<<" innnnnn permission_denied_handler"<<endl;
 	Response* res = new Response();
 	res->setHeader("Content-Type", "text/html");
 	res->setBody("<html><body><h1>403 Forbidden</h1><p>You do not havepermission to access this page.</p></body></html>");
 return res;
 }
 
-
+view_reserves_handler  :: view_reserves_handler (shared_ptr<Utaste> utaste, CmdHandler* cmd_handler)
+        : utaste(utaste) , cmd_handler(cmd_handler) {}
+        
 Response* view_reserves_handler :: callback(Request* req){
 	if (!cmd_handler->is_login()) {
 		return Response::redirect("/permissionDenied");
@@ -324,20 +327,21 @@ body << "</head>";
 body << "<body>";
 body << "<h1>All Reservations</h1>";
 
-	if (req->hasQueryParam("restaurant_name") && req->hasQueryParam("reserve_id")) {
-			std::string restaurant_name = req->getQueryParam("restaurant_name");
-			int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
-			body << "<div><strong>Speciﬁc Reservation:</strong><br>";
+
+
+	if (!req->getQueryParam("restaurant_name").empty() && !req->getQueryParam("reserve_id").empty()) {
+            std::string restaurant_name = req->getQueryParam("restaurant_name");
+            int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
 			ostringstream output;
 			utaste->show_special_reservation(restaurant_name, reserve_id,output);
 			body <<output.str() ;
 				body << "</div>";
 	} 
-	else if (req->hasQueryParam("restaurant_name")) {
-			std::string restaurant_name = req->getQueryParam("restaurant_name");
+	else if (!req->getQueryParam("restaurant_name").empty()) {
+            std::string restaurant_name = req->getQueryParam("restaurant_name");
 			body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
 			ostringstream output;
-			utaste->show_res_reservation(restaurant_name,output)
+			utaste->show_res_reservation(restaurant_name,output);
 			body <<output.str();
 			body << "</div>";
 	}

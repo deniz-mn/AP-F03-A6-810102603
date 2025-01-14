@@ -22,22 +22,31 @@
 // 	}
 // }
 
-int main() {
+int main(int argc,char *argv[]) {
+
+	try {
 	const int port = 8080; 
 	auto utaste = std::make_shared<Utaste>();
+	utaste->save_restaurant_input(argv[1]);
+	
+ 	utaste->save_neighbors_input(argv[2]);
+ 	
+ 	utaste->save_discount_input(argv[3]);
+ 	
 	CmdHandler cmdHandler(utaste);Server server(port);
 
-
-	server.get("/Home", new home_handler(utaste, &cmd_handler));
+	server.get("/", new home_handler(utaste, &cmdHandler));
+	server.get("/Home", new home_handler(utaste, &cmdHandler));
+	server.get("/signup", new ShowPage("static/signup.html"));
 	server.post("/signup", new signup_handler(utaste, &cmdHandler));
+	server.get("/login", new ShowPage("static/login.html"));
 	server.post("/login", new login_handler(utaste, &cmdHandler));
 	server.get("/logout", new logout_handler(utaste, &cmdHandler));
-	server.get("/viewAllRestaurants", new view_all_restaurants_handler(utaste,&cmdHandler));
+	server.get("/viewAllRestaurants", new view_all_restaurants_handler(utaste, &cmdHandler));
 	server.get("/viewRestaurant", new view_restaurant_handler(utaste, &cmdHandler));
 	server.get("/viewReservations", new view_reserves_handler(utaste, &cmdHandler));
 	server.setNotFoundErrPage("404.html");
 
-	try {
 		cout << "Server is running on port " << port << "..." << std::endl;
 		server.run();
 	}

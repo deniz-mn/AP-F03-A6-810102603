@@ -229,10 +229,10 @@ void Restaurant :: print_tables_details(){
 		cout<<endl;
 	}
 }
-void   Restaurant :: print_all_reservation(){
+void   Restaurant :: print_all_reservation(ostream& out){
 	
 	for(auto t : tables){
-		t->print_reservation();
+		t->print_reservation(out);
 	}
 }
 shared_ptr<Table>  Restaurant ::  find_reservation_table(int id){

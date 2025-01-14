@@ -13,7 +13,7 @@ public:
 	bool is_this_id(int id_);
 	void save_table_reservation( shared_ptr<Reservation>& r);
 	void print_reservation_id(int id,ostream& out);
-	void print_reservation();
+	void print_reservation(ostream& out);
 	int num_of_reservation_table();
 	bool table_has_reserve_id(int id);
 	shared_ptr<Reservation>  get_reservation_by_id(int id);

@@ -135,7 +135,7 @@ void  Reservation :: print_in_line(ostream& out){
 	out<<reserve_id<<": "<<restaurant_name<<" "<<table_number<<" "<<start_time<<"-"<<end_time<<" ";
 	
 	if( ordered_food.size() > 0){
-		print_foods( );
+		print_foods( out);
 	}
 	out<<" "<<count_original_price()<<" "<<get_final_price()<<"<br>";
 

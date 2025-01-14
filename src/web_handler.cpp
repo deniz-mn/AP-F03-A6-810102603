@@ -1,4 +1,5 @@
 #include "CmdHandler.hpp"
+#include "web_handler.hpp"
 #include <cstdlib>
 #include <iostream>
 #include "ex.hpp"
@@ -123,12 +124,12 @@ Response* logout_handler :: callback(Request* req) {
 
 
 view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> utaste, CmdHandler* cmd_handler)
- : utaste(utaste) , cmd_handler(cmd_handler) {}
+ 		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_all_restaurants_handler :: callback(Request* req){
-		if (!cmd_handler->is_login()) {
-			return Response :: redirect("/permissionDenied");
-		}
+	if (!cmd_handler->is_login()) {
+		return Response :: redirect("/permissionDenied");
+	}
 	Response* res = new Response();
 	res->setHeader("Content-Type", "text/html");
 
@@ -155,8 +156,7 @@ vector<shared_ptr<Restaurant>> restaurants = utaste->get_all_restaurants();
 for (auto restaurant : restaurants) {
 body += "<div class=\"restaurant\">";
 body += " <p><strong>" + restaurant->get_name_restaurant() + "</strong></p>";
-body += " <a href=\"/viewRestaurant?name=" + restaurant-
->get_name_restaurant() + "\">View Details</a>";
+body += " <a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">View Details</a>";
 body += "</div>";
 }
 body += " <a href=\"/logout\" class=\"logout-btn\">Logout</a>";
@@ -187,4 +187,54 @@ Response* permission_denied_handler::callback(Request* req) {
 return res;
 }
 
+
+Response* view_reserves_handler :: callback(Request* req){
+	if (!cmd_handler->is_login()) {
+		return Response::redirect("/permissionDenied");
+	}
+Response* res = new Response();
+res->setHeader("Content-Type", "text/html");
+std::ostringstream body;
+body << "<!DOCTYPE html>";
+body << "<html lang=\"en\">";
+body << "<head>";
+body << "<meta charset=\"UTF-8\">";
+body << "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
+body << "<title>All Reservations</title>";
+body << "<style>";
+body << "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0;padding: 20px; color: #333; }";
+body << "h1 { color: #81daf8; }";
+body << "p { font-size: 18px; }";
+body << "a { color: #007BFF; text-decoration: none; }";
+body << "a:hover { text-decoration: underline; }";
+body << "div { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #qf; }";
+body << "</style>";
+body << "</head>";
+body << "<body>";
+body << "<h1>All Reservations</h1>";
+
+	if (req->hasQueryParam("restaurant_name") && req->hasQueryParam("reserve_id")) {
+			std::string restaurant_name = req->getQueryParam("restaurant_name");
+			int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
+			body << "<div><strong>Speciﬁc Reservation:</strong><br>";
+			body << utaste->show_special_reservation(restaurant_name, reserve_id);
+				body << "</div>";
+	} 
+	else if (req->hasQueryParam("restaurant_name")) {
+			std::string restaurant_name = req->getQueryParam("restaurant_name");
+			body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
+			body << utaste->show_res_reservation(restaurant_name);
+			body << "</div>";
+	}
+	else {
+		body << "<div><strong>All Reservations:</strong><br>";
+		body << utaste->show_all_reservation();
+		body << "</div>";
+	}
+	body << "<a href=\"/logout\">Logout</a>";
+	body << "</body>";
+	body << "</html>";
+	res->setBody(body.str());
+	return res;
+}
 

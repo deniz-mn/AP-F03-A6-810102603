@@ -10,41 +10,56 @@ home_handler::home_handler(shared_ptr<Utaste> utaste , CmdHandler* cmd_handler)
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 
-Response* home_handler :: callback(Request* req) {
-	if (!cmd_handler->is_login()) {
-		return Response :: redirect("/permissionDenied");
-	}
-	Response* res = new Response();
-	res->setHeader("Content-Type", "text/html");
-string username = utaste->get_login_person()->get_username();
-string body;
-body += "<!DOCTYPE html>";
-body += "<html lang=\"en\">";
-body += "<head>";
-body += " <meta charset=\"UTF-8\">";
-body += " <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
-body += " <title>UTaste</title>";
-body += "<style>";
-body += " body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;margin:0;padding: 20px;color: #333;}";
-body += " h1 {color: #81daf8;}img {border-radius: 50%;margin: 20px 0;}";
-body += " p {font-size: 18px;}";
-body += " a {display: inline-block;margin: 10px;padding: 10px 20px;background-color:#81daf8;color: white;text-decoration: none;border-radius: 5px;transition: background-color 0.3s ease;}";body += " a:hover {background-color: #6ccbe5;}";
-body += " .logout-btn {padding: 10px 20px;color: white;background-color:#f54f4f;border-radius: 5px;}";
-body += " header {background-color: #333;padding: 10px 0;text-align: center;color:white;}";
-body += " .footer {background-color: #333;padding: 10px 0;text-align: center;color:white;position: fixed;width: 100%;bottom: 0;}";
-body += "</style>";
-body += "</head>";
-body += "<body style=\"text-align: center;\">";
-body += "<header><h1>Welcome to UTaste</h1></header>";
-body += " <p>Name: " + username + "</p>";
-body += " <a href=\"/logout\" class=\"logout-btn\">Logout</a>";
-body += "<div class=\"footer\">&copy; 2025 UTaste Inc.</div>";
-body += "</body>";
-body += "</html>";
-res->setBody(body);
-return res;
-}
+Response* home_handler::callback(Request* req) {
+    if (!cmd_handler->is_login()) {
+        return Response::redirect("/permissionDenied");
+    }
 
+    Response* res = new Response();
+    res->setHeader("Content-Type", "text/html");
+
+    std::string body = R"(
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                text-align: center;
+            }
+            .nav {
+                margin: 20px 0;
+            }
+            .nav a {
+                margin: 0 10px;
+                text-decoration: none;
+                color: #007BFF;
+                font-size: 18px;
+            }
+            .nav a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome to UTaste</h1>
+        <div class="nav">
+            <a href="/viewReservations">View Reservations</a>
+            <a href="/viewAllRestaurants">View Restaurants</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </body>
+    </html>
+    )";
+
+    res->setBody(body);
+    return res;
+}
 
 signup_handler :: signup_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_handler)
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
@@ -126,46 +141,142 @@ Response* logout_handler :: callback(Request* req) {
 view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> utaste, CmdHandler* cmd_handler)
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
-Response* view_all_restaurants_handler :: callback(Request* req){
-	if (!cmd_handler->is_login()) {
-		return Response :: redirect("/permissionDenied");
-	}
-	Response* res = new Response();
-	res->setHeader("Content-Type", "text/html");
+Response* view_all_restaurants_handler::callback(Request* req) {
+    if (!cmd_handler->is_login()) {
+        return Response::redirect("/permissionDenied");
+    }
 
-string body;
-body += "<!DOCTYPE html>";
-body += "<html lang=\"en\">";
-body += "<head>";
-body += " <meta charset=\"UTF-8\">";
-body += " <meta name=\"viewport\" content=\"width=device-width, initial-
-scale=1.0\">";
-body += " <title>All Restaurants</title>";
-body += " <style>";
-body += " body {font-family: 'Arial', sans-serif;background-color: #f4f4f4;margin:
-0;padding: 20px;color: #333;}";
-body += " h1 {color: #81daf8;}";
-body += " p {font-size: 18px;}";
-body += " .restaurant {margin: 10px; padding: 10px; border: 1px solid #ccc; border-
-radius: 5px; background-color: #fff;}";
-body += "</style>";
-body += "</head>";
-body += "<body style=\"text-align: center;\">";
-body += " <h1>All Restaurants</h1>";
-vector<shared_ptr<Restaurant>> restaurants = utaste->get_all_restaurants();
-for (auto restaurant : restaurants) {
-body += "<div class=\"restaurant\">";
-body += " <p><strong>" + restaurant->get_name_restaurant() + "</strong></p>";
-body += " <a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">View Details</a>";
-body += "</div>";
-}
-body += " <a href=\"/logout\" class=\"logout-btn\">Logout</a>";
-body += "</body>";
-body += "</html>";
-res->setBody(body);
-return res;
+    Response* res = new Response();
+    res->setHeader("Content-Type", "text/html");
+
+    std::string body = R"(
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>All Restaurants</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                text-align: center;
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            li {
+                margin: 10px 0;
+            }
+            a {
+                text-decoration: none;
+                color: #007BFF;
+                font-size: 18px;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>All Restaurants</h1>
+        <ul>
+    )";
+
+    auto restaurants = utaste->get_all_restaurants();
+    for (const auto& restaurant : restaurants) {
+        body += "<li><a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">";
+        body += restaurant->get_name_restaurant() + "</a></li>";
+    }
+
+    body += R"(
+        </ul>
+        <a href="/Home">Back to Home</a>
+    </body>
+    </html>
+    )";
+
+    res->setBody(body);
+    return res;
 }
 
+
+view_restaurant_handler :: view_restaurant_handler(shared_ptr<Utaste> utaste, CmdHandler* cmd_handler)
+ 		: utaste(utaste) , cmd_handler(cmd_handler) {}
+
+Response* view_restaurant_handler::callback(Request* req) {
+    if (!cmd_handler->is_login()) {
+        return Response::redirect("/permissionDenied");
+    }
+
+    if (!req->hasQueryParam("name")) {
+        return Response::redirect("/badRequest");
+    }
+
+    std::string restaurant_name = req->getQueryParam("name");
+
+    Response* res = new Response();
+    res->setHeader("Content-Type", "text/html");
+
+    std::ostringstream body;
+    body << R"(
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Restaurant Details</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                color: #333;
+                text-align: center;
+                padding: 20px;
+            }
+            .details {
+                margin: 20px auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background: #fff;
+                max-width: 600px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            a {
+                text-decoration: none;
+                color: #007BFF;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Restaurant Details</h1>
+        <div class="details">
+    )";
+
+    try {
+        std::ostringstream details;
+        utaste->get_restaurant_detail(restaurant_name, details);
+        body << details.str();
+    } catch (const std::exception& ex) {
+        body << "<p>Error: " << ex.what() << "</p>";
+    }
+
+    body << R"(
+        </div>
+        <a href="/viewAllRestaurants">Back to All Restaurants</a>
+    </body>
+    </html>
+    )";
+
+    res->setBody(body.str());
+    return res;
+}
 Response* bad_request_handler::callback(Request* req) {
 	Response* res = new Response();
 	res->setHeader("Content-Type", "text/html");
@@ -237,6 +348,7 @@ body << "<h1>All Reservations</h1>";
 		body <<output.str();
 		body << "</div>";
 	}
+	body << "<a href=\"/Home\">Back to Home</a>";
 	body << "<a href=\"/logout\">Logout</a>";
 	body << "</body>";
 	body << "</html>";

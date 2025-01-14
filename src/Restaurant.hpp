@@ -18,11 +18,11 @@ public:
 	bool is_here(string name_);
 	bool is_same_restaurant(shared_ptr<Restaurant>& restaurant);
 	bool have_food(string name);
-	void print_menu();
-	void print_detail();
-	void print_total_discount();
-	void print_item_discount();
-	void print_first_discount();
+	void print_menu(ostream& out);
+	void print_detail(ostream& out);
+	void print_total_discount(ostream& out);
+	void print_item_discount(ostream& out);
+	void print_first_discount(ostream& out);
 
 	vector<shared_ptr<Food>> save_food_in_vector(vector<string>& foods);
 	void save_discounts(vector<string> total_discount_input,vector<string> first_order_discount_input,vector<string> item_discount_input);

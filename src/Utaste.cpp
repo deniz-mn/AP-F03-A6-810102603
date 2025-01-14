@@ -275,7 +275,7 @@ void  Utaste :: show_special_restaurants(string food){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-void   Utaste :: get_restaurant_detail( string restaurant_name){
+void   Utaste :: get_restaurant_detail( string restaurant_name ,ostream& out){
 
 	bool found = false;
 	
@@ -283,7 +283,7 @@ void   Utaste :: get_restaurant_detail( string restaurant_name){
 		if(r->get_name_restaurant() ==restaurant_name){
 
 			found = true;
-			r->print_detail();
+			r->print_detail(out);
 		}
 	}
 	if(found == false)

@@ -19,7 +19,7 @@ public:
 	shared_ptr<Reservation>  get_reservation_by_id(int id);
 	void delete_reservation_table(int id);
 	shared_ptr<Reservation>  find_reservation_by_id(int id);
-	void print_reservation_hours();
+	void print_reservation_hours(ostream& out);
 	int get_final_reservation_price(int id);
 	void print_table_details ();
 private:

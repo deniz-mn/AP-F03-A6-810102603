@@ -41,7 +41,7 @@ public:
 	void   show_all_restaurants();
 	void   show_special_restaurants(string food);
 
-	void   get_restaurant_detail( string restaurant_name );
+	void   get_restaurant_detail( string restaurant_name ,ostream& out);
 
 	void   add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods);
 	shared_ptr<Restaurant>  find_restaurant_by_name(string& name);

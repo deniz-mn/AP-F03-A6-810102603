@@ -28,7 +28,7 @@ int main() {
 	CmdHandler cmdHandler(utaste);Server server(port);
 
 
-	server.get("/", new home_handler(utaste, &cmdHandler));
+	server.get("/Home", new home_handler(utaste, &cmd_handler));
 	server.post("/signup", new signup_handler(utaste, &cmdHandler));
 	server.post("/login", new login_handler(utaste, &cmdHandler));
 	server.get("/logout", new logout_handler(utaste, &cmdHandler));

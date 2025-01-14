@@ -87,17 +87,17 @@ shared_ptr<Reservation>  Table ::  get_reservation_by_id(int id){
 	}
 	return nullptr;
 }
-void  Table ::  print_reservation_hours(){
+void  Table ::  print_reservation_hours(ostream& out){
 	
-	cout<<id<<": ";
+	out<<id<<": ";
 	if(reservations.size() == 0){
-		cout<<endl;
+		out<<"<br>";
 	}
 	else {
 		for(int i=0 ; i<reservations.size()-1 ; i++){
-		cout<<"("<<reservations[i]->get_start()<<"-"<<reservations[i]->get_end()<<"), ";
+		out<<"("<<reservations[i]->get_start()<<"-"<<reservations[i]->get_end()<<"), ";
 			}
-		cout<<"("<<reservations[ reservations.size()-1 ]->get_start()<<"-"<<reservations[ reservations.size()-1 ]->get_end()<<")"<<endl;
+		out<<"("<<reservations[ reservations.size()-1 ]->get_start()<<"-"<<reservations[ reservations.size()-1 ]->get_end()<<")"<<"<br>";
 	}
 }
 int  Table ::  get_final_reservation_price(int id){

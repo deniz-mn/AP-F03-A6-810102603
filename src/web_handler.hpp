@@ -4,7 +4,6 @@
 
 
 #include "CmdHandler.hpp"
-#include "Request.hpp"
 #include "../server/server.hpp"
 #include "Utaste.hpp"
 
@@ -54,6 +53,15 @@ private:
 	shared_ptr<Utaste> utaste;
 	CmdHandler* cmd_handler;
 };
+class view_restaurant_handler  {
+public:
+	view_restaurant_handler (shared_ptr<Utaste> utaste, CmdHandler*cmd_handler);
+	Response* callback(Request* req);
+private:
+	shared_ptr<Utaste> utaste;
+	CmdHandler* cmd_handler;
+};
+
 
 class view_reserves_handler {
 public:

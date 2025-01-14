@@ -66,27 +66,27 @@ bool  Restaurant ::   have_food(string name){
 	return false;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void  Restaurant  ::  print_menu(){
+void  Restaurant  ::  print_menu(ostream& out){
 	for(int i=0 ; i<menu.size()-1 ; i++){
-			cout<<menu[i]->get_name_food()<<"("
+			out<<menu[i]->get_name_food()<<"("
 				<<menu[i]->get_price_food()<<")"<<", ";
 	}
-	cout<<menu[ menu.size()-1 ]->get_name_food()<<"("
-		<<menu[ menu.size()-1 ]->get_price_food()<<")"<<endl;
+	out<<menu[ menu.size()-1 ]->get_name_food()<<"("
+		<<menu[ menu.size()-1 ]->get_price_food()<<")"<<"<br>";
 }
-void  Restaurant  ::  print_total_discount(){
+void  Restaurant  ::  print_total_discount(ostream& out){
 	auto total_discount_ptr =  dynamic_pointer_cast<Total_discount>(total_discount);
 	if(!total_discount_ptr->is_none()){
-		cout<<total_discount_ptr->get_type()<<", "
+		out<<total_discount_ptr->get_type()<<", "
 			<<total_discount_ptr->get_min_discount()<<", "
-			<<total_discount_ptr->get_value()<<endl;
+			<<total_discount_ptr->get_value()<<"<br>";
 	}
 	else{
-		cout<<endl;
+		out<<"<br>";
 	}
 	
 }
-void  Restaurant  ::  print_item_discount(){
+void  Restaurant  ::  print_item_discount(ostream& out){
 	vector<shared_ptr<Item_discount>> item_discount_ptr ;
 	
 	for(auto item : item_discount){
@@ -98,7 +98,7 @@ void  Restaurant  ::  print_item_discount(){
 	if(item_discount_ptr.size() > 0){
 		for(int i=0 ; i<item_discount_ptr.size()-1 ; i++){
 			if(!item_discount_ptr[i]->is_none()){
-				cout<<item_discount_ptr[i]->get_name_food()<<"("
+				out<<item_discount_ptr[i]->get_name_food()<<"("
 					<<item_discount_ptr[i]->get_type()<<": "
 					<<item_discount_ptr[i]->get_value()<<"), ";
 			}
@@ -106,48 +106,48 @@ void  Restaurant  ::  print_item_discount(){
 			}
 		int last_item = item_discount_ptr.size()-1;
 		if(!item_discount_ptr[last_item]->is_none()){
-			cout<<item_discount_ptr[last_item]->get_name_food()<<"("
+			out<<item_discount_ptr[last_item]->get_name_food()<<"("
 				<<item_discount_ptr[last_item]->get_type()<<": "
-				<<item_discount_ptr[last_item]->get_value()<<")"<<endl;
+				<<item_discount_ptr[last_item]->get_value()<<")"<<"<br>";
 		}
 		else{
-			cout<<endl;
+			out<<"<br>";
 		}	
 	}
 }
-void  Restaurant  ::  print_first_discount(){
+void  Restaurant  ::  print_first_discount(ostream& out){
 	auto first_order_discount_ptr = dynamic_pointer_cast<First_order_discount>(first_order_discount);
 	if(!first_order_discount_ptr->is_none()){
-		cout<<first_order_discount_ptr->get_type()<<", "
-		<<first_order_discount_ptr->get_value()<<endl;
+		out<<first_order_discount_ptr->get_type()<<", "
+		   <<first_order_discount_ptr->get_value()<<"<br>";
 	}
 	else{
-		cout<<endl;
+		out<<"<br>";
 	}
 }
-void  Restaurant  ::  print_detail(){
-	cout<<"Name: "<<name<<endl;
-	cout<<"District: "<<district<<endl;
-	cout<<"Time: "<<openning_time<<"-"<<closing_time<<endl;
-	cout<<"Menu: ";
-	print_menu();
+void  Restaurant  ::  print_detail(ostream& out){
+	out<<"Name: "<<name<<"<br>";
+	out<<"District: "<<district<<"<br>";
+	out<<"Time: "<<openning_time<<"-"<<closing_time<<"<br>";
+	out<<"Menu: ";
+	print_menu(out);
 	for(auto t : tables){
-		t->print_reservation_hours();
+		t->print_reservation_hours(out);
 	}
 	
 	if(!(total_discount->get_none())){
-		cout<<"Order Amount Discount: ";
-		print_total_discount();
+		out<<"Order Amount Discount: ";
+		print_total_discount(out);
 	}
 	
 	if(item_discount.size() > 0){
-		cout<<"Item Specific Discount: ";
-		print_item_discount();
+		out<<"Item Specific Discount: ";
+		print_item_discount(out);
 	}
 	
 	if(!(first_order_discount->get_none())){
-		cout<<"First Order Discount: ";
-		print_first_discount();
+		out<<"First Order Discount: ";
+		print_first_discount(out);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

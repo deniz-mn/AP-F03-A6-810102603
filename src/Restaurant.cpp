@@ -215,10 +215,10 @@ int    Restaurant :: num_of_reservation(){
 	}
 	return total;
 }
-void   Restaurant :: print_reservation_id(int id){
+void   Restaurant :: print_reservation_id(int id,ostream& out){
 
 	for(auto t : tables){
-		t->print_reservation_id(id);
+		t->print_reservation_id(id , out);
 	}
 	
 }

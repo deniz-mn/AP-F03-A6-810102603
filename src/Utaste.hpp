@@ -45,9 +45,9 @@ public:
 
 	void   add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods);
 	shared_ptr<Restaurant>  find_restaurant_by_name(string& name);
-	void   show_special_reservation(string restaurant_name , int id);
-	void   show_all_reservation();
-	void   show_res_reservation(string restaurant_name );
+	void   show_special_reservation(string restaurant_name , int id,ostream& out);
+	void   show_all_reservation(ostream& out);
+	void   show_res_reservation(string restaurant_name,ostream& out );
 	void   delete_reservation(string restaurant_name , int id);
 	int    num_of_reservation_ut();
 

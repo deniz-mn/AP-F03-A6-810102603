@@ -31,7 +31,7 @@ void   Person :: save_district(shared_ptr<Neighborhood> n){
 	district = n;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void    Person ::  print_restaurant_reservation(string name){
+void    Person ::  print_restaurant_reservation(string name ,ostream& out){
 	if(reservations.size() == 0){
 		throw Empty();
 	}
@@ -39,18 +39,18 @@ void    Person ::  print_restaurant_reservation(string name){
 	for(auto r : reservations){
 		if(r->get_name_restaurant() == name){
 			found = true;
-			r->print_in_line();
+			r->print_in_line(out);
 		}	
 	}
 	if(!found)
 		throw Empty();
 }
-void    Person ::  print_all_reservation(){
+void    Person ::  print_all_reservation(ostream& out){
 	if(reservations.size() == 0){
 		throw Empty();
 	}
 	for(auto r : reservations){
-		r->print_in_line();
+		r->print_in_line(out);
 	}
 }
 bool   Person :: has_reservation_at(int start_time , int end_time){

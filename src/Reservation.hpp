@@ -18,13 +18,13 @@ public:
 	bool is_at_end_time(int time);
 	void print_reservation_req();
 	int  count_original_price();
-	void print_foods();
+	void print_foods(ostream& out);
 	int  get_start();
 	int    get_end();
 	bool is_equal(int id);
 	string get_name_restaurant();
 	bool  has_reserve_id(int id);
-	void print_in_line();
+	void print_in_line(ostream& out);
 	int  get_time();
 	int get_reservation_id();
 	int get_final_price();

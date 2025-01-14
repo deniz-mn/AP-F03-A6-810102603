@@ -335,7 +335,7 @@ int    Utaste ::   num_of_reservation_ut(){
 	return total;
 }
 
-void   Utaste ::   show_special_reservation(string restaurant_name , int id){
+void   Utaste ::   show_special_reservation(string restaurant_name , int id, ostream& out){
 		
 		if( num_of_reservation_ut() == 0)
 			throw Empty();
@@ -348,22 +348,22 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id){
 			   
 		auto r = find_restaurant_by_name(restaurant_name);
 
-		r->print_reservation_id(id);
+		r->print_reservation_id(id, out);
 }
-void   Utaste ::   show_all_reservation(){
+void   Utaste ::   show_all_reservation(ostream& out){
 	if( num_of_reservation_ut() == 0){
 			throw Empty();
 	}
 	auto p = get_login_person();
-	p->print_all_reservation();
+	p->print_all_reservation(out);
 
 }
-void   Utaste ::   show_res_reservation(string restaurant_name ){
+void   Utaste ::   show_res_reservation(string restaurant_name,ostream& out ){
 	if( num_of_reservation_ut() == 0)
 				throw Empty();
 
 		auto p = get_login_person();
-		p->print_restaurant_reservation(restaurant_name);
+		p->print_restaurant_reservation(restaurant_name,out);
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
 	

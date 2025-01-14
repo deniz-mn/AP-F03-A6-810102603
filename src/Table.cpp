@@ -40,10 +40,10 @@ void Table :: print_table_details (){
 		cout<<endl;
 	}
 }
-void Table :: print_reservation_id(int id){
+void Table :: print_reservation_id(int id,ostream& out){
 	for(auto r : reservations){
 		if(r->is_equal(id)){
-			r->print_in_line();
+			r->print_in_line(out);
 		}
 	}
 }

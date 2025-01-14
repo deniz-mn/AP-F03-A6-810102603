@@ -130,18 +130,18 @@ bool  Reservation :: is_equal(int id){
 		return true;
 	return false;
 }
-void  Reservation :: print_in_line(){
+void  Reservation :: print_in_line(ostream& out){
 
-	cout<<reserve_id<<": "<<restaurant_name<<" "<<table_number<<" "<<start_time<<"-"<<end_time<<" ";
+	out<<reserve_id<<": "<<restaurant_name<<" "<<table_number<<" "<<start_time<<"-"<<end_time<<" ";
 	
 	if( ordered_food.size() > 0){
 		print_foods( );
 	}
-	cout<<" "<<count_original_price()<<" "<<get_final_price()<<endl;
+	out<<" "<<count_original_price()<<" "<<get_final_price()<<"<br>";
 
 }
 
-void  Reservation :: print_foods(){
+void  Reservation :: print_foods(ostream& out){
 	
 	sort(ordered_food.begin() , ordered_food.end() , [](const std::shared_ptr<Food>& a, const std::shared_ptr<Food>& b) { return a->get_name_food() < b->get_name_food(); });
 	map<string , int> food_count ;
@@ -149,7 +149,7 @@ void  Reservation :: print_foods(){
 		food_count[ food->get_name_food() ] ++;
 	}
 	for(auto item : food_count){
-		cout<<item.first <<"("<<item.second<<")";
+		out<<item.first <<"("<<item.second<<")";
 	}
 }
 int  Reservation  ::  get_reservation_id(){

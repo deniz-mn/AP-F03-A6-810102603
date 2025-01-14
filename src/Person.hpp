@@ -20,8 +20,8 @@ public:
 	void logout();
 
 	void save_district(shared_ptr<Neighborhood> n);
-	void print_restaurant_reservation(string name);
-	void print_all_reservation();
+	void print_restaurant_reservation(string name,ostream& out);
+	void print_all_reservation(ostream& out);
 
 	bool has_reservation_at(int start_time , int end_time);
 	void save_person_reservation(shared_ptr<Reservation>& r);

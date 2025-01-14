@@ -217,18 +217,24 @@ body << "<h1>All Reservations</h1>";
 			std::string restaurant_name = req->getQueryParam("restaurant_name");
 			int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
 			body << "<div><strong>Speciﬁc Reservation:</strong><br>";
-			body << utaste->show_special_reservation(restaurant_name, reserve_id);
+			ostringstream output;
+			utaste->show_special_reservation(restaurant_name, reserve_id,output);
+			body <<output.str() ;
 				body << "</div>";
 	} 
 	else if (req->hasQueryParam("restaurant_name")) {
 			std::string restaurant_name = req->getQueryParam("restaurant_name");
 			body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
-			body << utaste->show_res_reservation(restaurant_name);
+			ostringstream output;
+			utaste->show_res_reservation(restaurant_name,output)
+			body <<output.str();
 			body << "</div>";
 	}
 	else {
 		body << "<div><strong>All Reservations:</strong><br>";
-		body << utaste->show_all_reservation();
+		ostringstream output;
+		 utaste->show_all_reservation(output);
+		body <<output.str();
 		body << "</div>";
 	}
 	body << "<a href=\"/logout\">Logout</a>";

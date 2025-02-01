@@ -42,6 +42,8 @@ int main(int argc,char *argv[]) {
 	server.get("/login", new ShowPage("static/login.html"));
 	server.post("/login", new login_handler(utaste, &cmdHandler));
 	server.get("/logout", new logout_handler(utaste, &cmdHandler));
+	server.get("/addReservation", new ShowPage("static/addReservation.html"));
+	server.post("/addReservation", new add_reservation_handler(utaste, &cmdHandler));
 	server.get("/viewAllRestaurants", new view_all_restaurants_handler(utaste, &cmdHandler));
 	server.get("/viewRestaurant", new view_restaurant_handler(utaste, &cmdHandler));
 	server.get("/viewReservations", new view_reserves_handler(utaste, &cmdHandler));

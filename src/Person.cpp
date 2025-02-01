@@ -5,6 +5,7 @@ Person :: Person(const string& username_ , const string& password_){
 	password = password_;
 	login = true;
 	have_account = true;
+	wallet = 1000;
 	
 }
 Person :: ~Person(){}

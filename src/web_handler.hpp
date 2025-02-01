@@ -67,7 +67,14 @@ private:
 	CmdHandler* cmd_handler;
 };
 
-
+class add_reservation_handler : public RequestHandler {
+public:
+    add_reservation_handler(std::shared_ptr<Utaste> utaste, CmdHandler* cmd_handler);
+    Response* callback(Request* req);
+private:
+	shared_ptr<Utaste> utaste;
+    CmdHandler* cmd_handler;
+};
 class view_reserves_handler : public RequestHandler {
 public:
 	view_reserves_handler (shared_ptr<Utaste> utaste, CmdHandler* cmd_handler);

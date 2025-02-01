@@ -183,25 +183,26 @@ shared_ptr<Reservation>  Restaurant  :: check_reservation_in_restaurant(int tabl
 	table_id --;
 	auto t = tables[ table_id ];
 	table_id ++;
-	
+	cout<<"shit 11"<<endl;
 	if( (t->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();	
 	}
-	
+	cout<<"shit 11"<<endl;
 	reservation_id ++;
-	
+	cout<<"shit 11"<<endl;
 	auto  ordered_food =  save_food_in_vector(foods);
-	
+	cout<<"shit 11"<<endl;
 	auto r_table = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
-	
+	cout<<"shit 11"<<endl;
 	auto r_person = make_shared<Reservation>(name  ,start_time , end_time , ordered_food ,reservation_id, table_id , total_discount , first_order_discount , item_discount , is_first_order );
-
+cout<<"shit 11"<<endl;
 	reservation_id --;
 	int total_price_reservation = r_table->get_final_price();
-	
+	cout<<"shit 11"<<endl;
 	login_person->update_person_budget(total_price_reservation , '-');
-
+cout<<"shit 11"<<endl;
 	t->save_table_reservation(r_table);
+	cout<<"shit 11"<<endl;
 	reservation_id ++;
 	return r_person;
 }

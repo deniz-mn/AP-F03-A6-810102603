@@ -307,27 +307,29 @@ shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
 }
 void   Utaste :: add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods){
 	
+	cout<<restaurant_name<<table_id<<start_time<<end_time<<foods<<" information"<<endl;
 	auto r = find_restaurant_by_name(restaurant_name);
-	
+	cout<<"step 11"<<endl;
 	auto p = get_login_person();
-
+	cout<<"step 22"<<endl;
 	auto ordered_food = string_seprator(foods , ',');
-
+	cout<<"step 33"<<endl;
 	
 	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
 		throw  Premission_Denied();
-
+cout<<"step 44"<<endl;
 	if( (p->has_reservation_at(start_time , end_time))){
 		throw  Premission_Denied();
 	}
-	
+	cout<<"step 55"<<endl;
 	bool is_first_order =!( p-> has_ordered_from(restaurant_name));
 	
 	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order, p);
-
+cout<<"step 66"<<endl;
 	p->save_person_reservation(reservation);
-
+cout<<"step 77"<<endl;
 	reservation->print_reservation_req();
+	cout<<"step 88"<<endl;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int    Utaste ::   num_of_reservation_ut(){
@@ -354,11 +356,15 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id, ost
 		r->print_reservation_id(id, out);
 }
 void   Utaste ::   show_all_reservation(ostream& out){
+	cout<<" ding 1"<<endl;
 	if( num_of_reservation_ut() == 0){
 			throw Empty();
 	}
+	cout<<" ding 2"<<endl;
 	auto p = get_login_person();
+	cout<<" ding 3"<<endl;
 	p->print_all_reservation(out);
+	cout<<" ding 4"<<endl;
 
 }
 void   Utaste ::   show_res_reservation(string restaurant_name,ostream& out ){

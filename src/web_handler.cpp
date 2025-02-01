@@ -53,7 +53,6 @@ Response* home_handler::callback(Request* req) {
     </body>
     </html>
     )";
-    cerr<<"nadnakhti"<<endl;
     res->setBody(body);
     return res;
 }
@@ -62,13 +61,11 @@ signup_handler :: signup_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_hand
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* signup_handler :: callback(Request* req) {
-    cerr<<"horaaaaa"<<endl;
+  
     string username = req->getBodyParam("username");
     string password = req->getBodyParam("password");
-    cout<<"username                               "<<username<<"password                    "<<password<<endl;
+   
 try{
-    cerr<<"horaaaaa"<<endl;
-
 	utaste->signup(username,password);
 	cmd_handler->login();
 }
@@ -77,14 +74,13 @@ catch (Exception& ex){
 		return Response::redirect("/badRequest");
 	}
 	else if(ex.show_error() == "Not Found"){
-    cerr<<"nadnakhti"<<endl;
 	return Response::redirect("/notFound");
 	}
 	else{
 	return Response::redirect("/permissionDenied");
 	}
 }
-    cerr<<"nadnakhti"<<endl;
+    
 	Response* res = Response::redirect("/Home");
 	res->setSessionId(username);
 	return res;
@@ -127,6 +123,9 @@ logout_handler :: logout_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_hand
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* logout_handler :: callback(Request* req) {
+    cerr<<endl;
+    cerr<<"here logout"<<endl;
+    cerr<<endl;
 	try{
 	utaste->logout();cmd_handler->logout();
 	}
@@ -149,10 +148,9 @@ view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> 
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_all_restaurants_handler::callback(Request* req) {
-    // if (!cmd_handler->is_login()) {
-    //     return Response::redirect("/permissionDenied");
-    // }
-
+    if (!cmd_handler->is_login()) {
+        return Response::redirect("/permissionDenied");
+    }
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
 
@@ -191,13 +189,12 @@ Response* view_all_restaurants_handler::callback(Request* req) {
         <h1>All Restaurants</h1>
         <ul>
     )";
-
     auto restaurants = utaste->get_all_restaurants();
+
     for (const auto& restaurant : restaurants) {
         body += "<li><a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">";
         body += restaurant->get_name_restaurant() + "</a></li>";
     }
-
     body += R"(
         </ul>
         <a href="/Home">Back to Home</a>
@@ -288,6 +285,12 @@ Response* bad_request_handler::callback(Request* req) {
 	Response* res = new Response();
 	res->setHeader("Content-Type", "text/html");
 	res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request could notbe processed.</p></body></html>");
+return res;
+}
+Response* empty::callback(Request* req) {
+    Response* res = new Response();
+    res->setHeader("Content-Type", "text/html");
+    res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request is empty</p></body></html>");
 return res;
 }
 

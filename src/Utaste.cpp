@@ -66,9 +66,6 @@ bool find_username(string username){}
 
 void Utaste :: signup (string& username , string& password){
 	
-	cout<<endl;
-    cout<<"here signup"<<endl;
-    cout<<endl;
 	if(find_username(username)){
 		throw	Bad_Request();
 	}

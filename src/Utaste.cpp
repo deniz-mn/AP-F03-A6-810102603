@@ -27,7 +27,6 @@ void Utaste :: save_restaurant_input(const string& file_name){
 
 
 void Utaste :: save_neighbors_input(const string& file_name){
-
 	vector<string> file_input = file_reader(file_name);
 	
 	for(int i=0 ; i<file_input.size() ; i++){
@@ -39,7 +38,6 @@ void Utaste :: save_neighbors_input(const string& file_name){
 	}
 }
 void Utaste :: save_discount_input(const string& file_name){
-	
 	vector<string> file_input = file_reader(file_name);
 
 	for(int i=0 ; i<file_input.size() ; i++){
@@ -66,8 +64,11 @@ bool wrong_pass(string username, string password){}
 bool find_username(string username){}
 
 
-void Utaste :: signup(string& username , string& password){
+void Utaste :: signup (string& username , string& password){
 	
+	cout<<endl;
+    cout<<"here signup"<<endl;
+    cout<<endl;
 	if(find_username(username)){
 		throw	Bad_Request();
 	}
@@ -85,8 +86,13 @@ void Utaste :: signup(string& username , string& password){
 }
 void Utaste :: login(string& username , string& password){
 
-	if(!find_username(username))
+		cout<<endl;
+    cout<<"here login"<<endl;
+    cout<<endl;
+	if(!find_username(username)){
+		cout<<"i m here Not_Found"<<endl;
 		throw	Not_Found();
+	}
 	else if(wrong_pass(username,password))
 		throw	Premission_Denied();
 	else if(check_login(username,password) || get_login_person() != nullptr )

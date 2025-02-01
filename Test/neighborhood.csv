@@ -1,0 +1,11 @@
+Azadi,SatarKhan;Shadman;Behboodi
+Behboodi,Azadi;Jomhouri
+SatarKhan,Behboodi;SatarKhan
+Shadman,Jomhouri;Shahrak Gharb
+Saadat Abad,Punak;Shahrak Gharb;Tajrish
+Punak,Tajrish;Behboodi
+Shahrak Gharb,Enghelab;Karegar
+Tajrish,Shahrak Gharb;
+Enghelab,Jomhouri;Karegar;SatarKhan
+Jomhouri,Behboodi;Azadi
+Karegar,SatarKhan;Shadman

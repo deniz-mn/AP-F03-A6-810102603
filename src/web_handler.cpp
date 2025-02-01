@@ -11,7 +11,6 @@ home_handler::home_handler(shared_ptr<Utaste> utaste , CmdHandler* cmd_handler)
 
 
 Response* home_handler::callback(Request* req) {
-   
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
     std::string body = R"(
@@ -54,6 +53,7 @@ Response* home_handler::callback(Request* req) {
     </body>
     </html>
     )";
+    cerr<<"nadnakhti"<<endl;
     res->setBody(body);
     return res;
 }
@@ -62,11 +62,12 @@ signup_handler :: signup_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_hand
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* signup_handler :: callback(Request* req) {
-    cout<<"horaaaaa"<<endl;
+    cerr<<"horaaaaa"<<endl;
     string username = req->getBodyParam("username");
     string password = req->getBodyParam("password");
+    cout<<"username                               "<<username<<"password                    "<<password<<endl;
 try{
-    cout<<"horaaaaa"<<endl;
+    cerr<<"horaaaaa"<<endl;
 
 	utaste->signup(username,password);
 	cmd_handler->login();
@@ -76,14 +77,14 @@ catch (Exception& ex){
 		return Response::redirect("/badRequest");
 	}
 	else if(ex.show_error() == "Not Found"){
-
+    cerr<<"nadnakhti"<<endl;
 	return Response::redirect("/notFound");
 	}
 	else{
 	return Response::redirect("/permissionDenied");
 	}
 }
-
+    cerr<<"nadnakhti"<<endl;
 	Response* res = Response::redirect("/Home");
 	res->setSessionId(username);
 	return res;
@@ -96,6 +97,9 @@ Response* login_handler :: callback(Request* req) {
 	string username = req->getBodyParam("username");
 	string password = req->getBodyParam("password");
 try{
+    cerr<<endl;
+    cerr<<"here login"<<endl;
+    cerr<<endl;
 	utaste->login(username,password);
 	cmd_handler->login();
   }
@@ -104,6 +108,9 @@ catch (Exception& ex){
 	return Response::redirect("/badRequest");
 	}
 	else if(ex.show_error() == "Not Found"){
+        cout<<endl;
+        cout<<"not founddddd"<<endl;
+        cout<<endl;
 	return Response::redirect("/notFound");
 	}
 	else{

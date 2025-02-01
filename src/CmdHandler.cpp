@@ -36,6 +36,7 @@ try{
       if(cmd[1] == "signup"){
         if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
           throw Bad_Request();
+        cout<<"i got you"<<endl;
         utaste->signup(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
         throw Ok();

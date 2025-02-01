@@ -81,6 +81,10 @@ class bad_request_handler : public RequestHandler {
 public:
 	Response* callback(Request* req);
 };
+class empty_handler : public RequestHandler {
+public:
+	Response* callback(Request* req);
+};
 
 class not_found_handler : public RequestHandler  {
 public:

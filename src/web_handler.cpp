@@ -93,9 +93,6 @@ Response* login_handler :: callback(Request* req) {
 	string username = req->getBodyParam("username");
 	string password = req->getBodyParam("password");
 try{
-    cerr<<endl;
-    cerr<<"here login"<<endl;
-    cerr<<endl;
 	utaste->login(username,password);
 	cmd_handler->login();
   }
@@ -104,15 +101,12 @@ catch (Exception& ex){
 	return Response::redirect("/badRequest");
 	}
 	else if(ex.show_error() == "Not Found"){
-        cout<<endl;
-        cout<<"not founddddd"<<endl;
-        cout<<endl;
 	return Response::redirect("/notFound");
 	}
 	else{
 	return Response::redirect("/permissionDenied");
 	}
-	}
+}
 Response* res = Response::redirect("/Home");
 res->setSessionId(username);
 return res;
@@ -287,7 +281,7 @@ Response* bad_request_handler::callback(Request* req) {
 	res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request could notbe processed.</p></body></html>");
 return res;
 }
-Response* empty::callback(Request* req) {
+Response* empty_handler::callback(Request* req) {
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
     res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request is empty</p></body></html>");
@@ -302,7 +296,6 @@ return res;
 }
 
 Response* permission_denied_handler::callback(Request* req) {
-     cout<<" innnnnn permission_denied_handler"<<endl;
 	Response* res = new Response();
 	res->setHeader("Content-Type", "text/html");
 	res->setBody("<html><body><h1>403 Forbidden</h1><p>You do not havepermission to access this page.</p></body></html>");
@@ -337,35 +330,49 @@ body << "</head>";
 body << "<body>";
 body << "<h1>All Reservations</h1>";
 
-
-
-	if (!req->getQueryParam("restaurant_name").empty() && !req->getQueryParam("reserve_id").empty()) {
+    if (!req->getQueryParam("restaurant_name").empty() && !req->getQueryParam("reserve_id").empty()) {
             std::string restaurant_name = req->getQueryParam("restaurant_name");
             int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
-			ostringstream output;
-			utaste->show_special_reservation(restaurant_name, reserve_id,output);
-			body <<output.str() ;
-				body << "</div>";
-	} 
-	else if (!req->getQueryParam("restaurant_name").empty()) {
+            ostringstream output;
+            try{
+                utaste->show_special_reservation(restaurant_name, reserve_id,output);
+            }
+            catch (Exception& ex){
+                if(ex.show_error() == "Bad Request"){
+                    return Response::redirect("/badRequest");
+                }
+                else if(ex.show_error() == "Not Found"){
+                    return Response::redirect("/notFound");
+                }
+                else{
+                    return Response::redirect("/permissionDenied");
+                }
+        }
+            body <<output.str() ;
+                body << "</div>";
+    } 
+    else if (!req->getQueryParam("restaurant_name").empty()) {
             std::string restaurant_name = req->getQueryParam("restaurant_name");
-			body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
-			ostringstream output;
-			utaste->show_res_reservation(restaurant_name,output);
-			body <<output.str();
-			body << "</div>";
-	}
-	else {
-		body << "<div><strong>All Reservations:</strong><br>";
-		ostringstream output;
-		 utaste->show_all_reservation(output);
-		body <<output.str();
-		body << "</div>";
-	}
-	body << "<a href=\"/Home\">Back to Home</a>";
-	body << "<a href=\"/logout\">Logout</a>";
-	body << "</body>";
-	body << "</html>";
+            body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
+            ostringstream output;
+            utaste->show_res_reservation(restaurant_name,output);
+            body <<output.str();
+            body << "</div>";
+    }
+    else {
+        body << "<div><strong>All Reservations:</strong><br>";
+        ostringstream output;
+         utaste->show_all_reservation(output);
+        body <<output.str();
+        body << "</div>";
+    }
+    
+
+    body << "<a href=\"/Home\">Back to Home</a>";
+    body << "<a href=\"/logout\">Logout</a>";
+    body << "</body>";
+    body << "</html>";
+	
 	res->setBody(body.str());
 	return res;
 }

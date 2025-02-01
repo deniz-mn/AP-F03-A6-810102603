@@ -142,9 +142,10 @@ view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> 
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_all_restaurants_handler::callback(Request* req) {
-    if (!cmd_handler->is_login()) {
-        return Response::redirect("/permissionDenied");
-    }
+    // if (!cmd_handler->is_login()) {
+    //     return Response::redirect("/permissionDenied");
+    // }
+
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
 
@@ -177,21 +178,37 @@ Response* view_all_restaurants_handler::callback(Request* req) {
             a:hover {
                 text-decoration: underline;
             }
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                margin-top: 20px;
+                font-size: 16px;
+                color: white;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .button:hover {
+                background-color: #0056b3;
+            }
         </style>
     </head>
     <body>
         <h1>All Restaurants</h1>
         <ul>
     )";
-    auto restaurants = utaste->get_all_restaurants();
 
+    auto restaurants = utaste->get_all_restaurants();
     for (const auto& restaurant : restaurants) {
         body += "<li><a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">";
         body += restaurant->get_name_restaurant() + "</a></li>";
     }
+
     body += R"(
         </ul>
-        <a href="/Home">Back to Home</a>
+        <a href="/Home" class="button">Back to Home</a>
     </body>
     </html>
     )";
@@ -209,12 +226,11 @@ Response* view_restaurant_handler::callback(Request* req) {
         return Response::redirect("/permissionDenied");
     }
 
-    if (!req->getQueryParam("name").empty()) {
-        return Response::redirect("/badRequest");
-    }
+    // if (!req->getQueryParam("name").empty()) {
+    //     return Response::redirect("/badRequest");
+    // }
 
     std::string restaurant_name = req->getQueryParam("name");
-
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
 
@@ -259,12 +275,12 @@ Response* view_restaurant_handler::callback(Request* req) {
 
     try {
         std::ostringstream details;
+       
         utaste->get_restaurant_detail(restaurant_name, details);
         body << details.str();
     } catch (const std::exception& ex) {
         body << "<p>Error: " << ex.what() << "</p>";
     }
-
     body << R"(
         </div>
         <a href="/viewAllRestaurants">Back to All Restaurants</a>

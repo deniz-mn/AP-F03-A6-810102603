@@ -44,7 +44,7 @@ void Response::setBody(const std::string& body) {
 }
 
 void Response::setSessionId(const std::string& sessionId) {
-    setHeader("set-cookie", "sessionId=" + sessionId + ";");
+    setHeader("set-cookie", "sessionId=" + sessionId + "; Path=/; HttpOnly; SameSite=Lax");
 }
 
 std::string Response::getHeader() const {

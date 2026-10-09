@@ -82,7 +82,11 @@ $(BUILD_DIR)/Table.o: src/Table.cpp src/Table.hpp
 
 
 
-.PHONY: all clean
+.PHONY: all clean test
+
+test: $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -Wall -Wextra Test/regression.cpp $(filter-out src/main.cpp src/web_handler.cpp,$(wildcard src/*.cpp)) utils/request.cpp utils/utilities.cpp utils/strutils.cpp -o $(BUILD_DIR)/regression
+	./$(BUILD_DIR)/regression
 
 clean:
 	rm -rf $(BUILD_DIR) *.o $(OUT_EXE) &> /dev/null

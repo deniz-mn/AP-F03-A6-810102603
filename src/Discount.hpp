@@ -7,6 +7,7 @@
 
 class Discount {
 public:
+virtual ~Discount() = default;
 Discount(string type_ , int value_);
 Discount(bool none);
 bool get_none();

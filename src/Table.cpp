@@ -11,7 +11,7 @@ bool Table ::   is_this_id(int id_){
 
 bool Table ::  has_reservation_at(int start_time , int end_time){
 	for( auto r : reservations){
-		if(r->is_at_start_time(start_time) || r->is_at_end_time(end_time))
+		if(start_time < r->get_end() && end_time > r->get_start())
 			return true;
 	}
 	return false;
@@ -47,11 +47,8 @@ void Table :: print_reservation_id(int id,ostream& out){
 		}
 	}
 }
-shared_ptr<Reservation>  Table ::  find_reservation_by_id(int id){
-	for( auto r : reservations){
-		if(r->has_reserve_id(id))
-			return r;
-	}
+shared_ptr<Reservation> Table::find_reservation_by_id(int id) {
+    return get_reservation_by_id(id);
 }
 void  Table ::   delete_reservation_table(int id){
 	auto to_delete = find_reservation_by_id(id);

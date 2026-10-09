@@ -18,6 +18,7 @@ void Utaste :: save_restaurant_input(const string& file_name){
 
 	for(int i=0 ; i<file_input.size() ; i++){
 		auto restaurant_data = string_seprator(file_input[i] , ',');
+        if (restaurant_data.size() != 6) throw Bad_Request();
 		auto foods = save_menu(restaurant_data[2]);
 		auto restaurant = make_shared<Restaurant>(restaurant_data[0],restaurant_data[1],foods, stoi(restaurant_data[3]),stoi(restaurant_data[4]),stoi(restaurant_data[5]));
 		restaurants.push_back(restaurant);
@@ -31,6 +32,7 @@ void Utaste :: save_neighbors_input(const string& file_name){
 	
 	for(int i=0 ; i<file_input.size() ; i++){
 		auto neighborhood_data = string_seprator(file_input[i] , ',');
+        if (neighborhood_data.size() != 2) throw Bad_Request();
 		auto neighbors = string_seprator(neighborhood_data[1],';');
 		sort(neighbors.begin() , neighbors.end() , compare_first_char);
 		auto neighborhood = make_shared<Neighborhood>(neighborhood_data[0],neighbors);
@@ -42,6 +44,7 @@ void Utaste :: save_discount_input(const string& file_name){
 
 	for(int i=0 ; i<file_input.size() ; i++){
 		auto line = string_seprator(file_input[i] , ',');
+        if (line.size() != 4) throw Bad_Request();
 		auto restaurant = find_restaurant_by_name(line[0]);
 		auto total_discount = string_seprator(line[1] , ';');
 		auto first_order_discount = string_seprator(line[2] , ';');
@@ -59,13 +62,12 @@ vector<shared_ptr<Restaurant>>  Utaste :: get_all_restaurants(){
 	return restaurants;
 }
 
-bool check_login(string username,string password){}
-bool wrong_pass(string username, string password){}
-bool find_username(string username){}
+
 
 
 void Utaste :: signup (string& username , string& password){
 	
+	if(username.empty() || password.empty()) throw Bad_Request();
 	if(find_username(username)){
 		throw	Bad_Request();
 	}
@@ -83,11 +85,9 @@ void Utaste :: signup (string& username , string& password){
 }
 void Utaste :: login(string& username , string& password){
 
-		cout<<endl;
-    cout<<"here login"<<endl;
-    cout<<endl;
+    if (username.empty() || password.empty()) throw Bad_Request();
 	if(!find_username(username)){
-		cout<<"i m here Not_Found"<<endl;
+
 		throw	Not_Found();
 	}
 	else if(wrong_pass(username,password))
@@ -202,17 +202,15 @@ shared_ptr<Neighborhood>  Utaste :: get_district_by_name(string name){
 }
 void  Utaste ::  save_person_district(string name){
 	auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 	auto n = get_district_by_name(name);
 	p->save_district(n);
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-shared_ptr<Neighborhood>  Utaste ::  get_district (string name){
-	for(auto n : neighborhoods){
-		if(n->is_equal(name))
-			return n;
-	}
+shared_ptr<Neighborhood> Utaste::get_district(string name) {
+    return get_district_by_name(name);
 }
 bool  Utaste :: contain_restaurant(vector<shared_ptr<Restaurant>>& restaurant_list , shared_ptr<Restaurant>& restaurant){
 	for(auto& r : restaurant_list){
@@ -252,6 +250,7 @@ void Utaste :: save_closest_restaurants( shared_ptr<Neighborhood> district, vect
 }
 void  Utaste :: save_sort_restaurants(vector<shared_ptr<Restaurant>>& closest_restaurants){
 	auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 	auto district = p->get_district();
 
 	if(district == nullptr)
@@ -305,37 +304,29 @@ shared_ptr<Restaurant>  Utaste ::  find_restaurant_by_name(string& name){
 	if(found == false)
 		throw Not_Found();
 }
-void   Utaste :: add_reservation(string restaurant_name , int table_id , int start_time , int end_time , string foods){
-	
-	cout<<restaurant_name<<table_id<<start_time<<end_time<<foods<<" information"<<endl;
-	auto r = find_restaurant_by_name(restaurant_name);
-	cout<<"step 11"<<endl;
-	auto p = get_login_person();
-	cout<<"step 22"<<endl;
-	auto ordered_food = string_seprator(foods , ',');
-	cout<<"step 33"<<endl;
-	
-	if( !(r->is_during_operating_hours(start_time)) || !(r->is_during_operating_hours(end_time)) || start_time<1 || end_time >24 )
-		throw  Premission_Denied();
-cout<<"step 44"<<endl;
-	if( (p->has_reservation_at(start_time , end_time))){
-		throw  Premission_Denied();
-	}
-	cout<<"step 55"<<endl;
-	bool is_first_order =!( p-> has_ordered_from(restaurant_name));
-	
-	auto reservation = r->check_reservation_in_restaurant(table_id , start_time , end_time ,ordered_food, is_first_order, p);
-cout<<"step 66"<<endl;
-	p->save_person_reservation(reservation);
-cout<<"step 77"<<endl;
-	reservation->print_reservation_req();
-	cout<<"step 88"<<endl;
+void Utaste::add_reservation(string restaurant_name, int table_id, int start_time, int end_time, string foods) {
+    auto person = get_login_person();
+    if (!person) throw Premission_Denied();
+    if (start_time < 1 || end_time > 24 || start_time >= end_time) throw Bad_Request();
+    auto restaurant = find_restaurant_by_name(restaurant_name);
+    auto ordered_food = string_seprator(foods, ',');
+    for (auto& food : ordered_food) {
+        auto first = food.find_first_not_of(" \t\r\n");
+        if (first == string::npos) throw Bad_Request();
+        food = food.substr(first, food.find_last_not_of(" \t\r\n") - first + 1);
+    }
+    if (person->has_reservation_at(start_time, end_time)) throw Premission_Denied();
+    auto reservation = restaurant->check_reservation_in_restaurant(table_id, start_time, end_time,
+        ordered_food, !person->has_ordered_from(restaurant_name), person);
+    person->save_person_reservation(reservation);
+    reservation->print_reservation_req();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 int    Utaste ::   num_of_reservation_ut(){
 	
 	int total = 0 ;
 	auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 	total = p->num_of_reservation();
 	return total;
 }
@@ -346,6 +337,7 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id, ost
 			throw Empty();
 
 		auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 		
 		if(!p->has_reservation_id(restaurant_name, id)){
 			 throw Premission_Denied();
@@ -356,15 +348,15 @@ void   Utaste ::   show_special_reservation(string restaurant_name , int id, ost
 		r->print_reservation_id(id, out);
 }
 void   Utaste ::   show_all_reservation(ostream& out){
-	cout<<" ding 1"<<endl;
+
 	if( num_of_reservation_ut() == 0){
 			throw Empty();
 	}
-	cout<<" ding 2"<<endl;
+
 	auto p = get_login_person();
-	cout<<" ding 3"<<endl;
+    if (!p) throw Premission_Denied();
+
 	p->print_all_reservation(out);
-	cout<<" ding 4"<<endl;
 
 }
 void   Utaste ::   show_res_reservation(string restaurant_name,ostream& out ){
@@ -372,16 +364,19 @@ void   Utaste ::   show_res_reservation(string restaurant_name,ostream& out ){
 				throw Empty();
 
 		auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 		p->print_restaurant_reservation(restaurant_name,out);
 }
 void   Utaste ::  delete_reservation(string restaurant_name , int id){
 	
 	auto p = get_login_person();
-	p->person_delete_reservation(restaurant_name , id);
+    if (!p) throw Premission_Denied();
+	if (!p || !p->has_reservation_id(restaurant_name, id)) throw Premission_Denied();
 
 	auto r = find_restaurant_by_name(restaurant_name);
 
 	r->restaurant_delete_reseravtion(id , p);
+	p->person_delete_reservation(restaurant_name, id);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,10 +385,12 @@ void   Utaste ::   increase_budget(int amount){
 		throw Bad_Request();
 
 	auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 	p->update_person_budget(amount , '+');
 }
 void   Utaste ::   show_budget(){
 	auto p = get_login_person();
+    if (!p) throw Premission_Denied();
 	p->show_person_budget();
 
 }
@@ -401,11 +398,13 @@ void   Utaste ::   show_budget(){
 vector<string> file_reader (string file_name){
 		
 		ifstream file(file_name);
+        if (!file) throw runtime_error("Cannot open data file: " + file_name);
 		string line;
 		vector<string> file_input;
 		
 		while(getline(file,line)){
-			file_input.push_back(line);
+			if (!line.empty() && line.back() == '\r') line.pop_back();
+            if (!line.empty()) file_input.push_back(line);
 		}
 
 		
@@ -432,6 +431,7 @@ vector<shared_ptr<Food>> save_menu (string input){
 	vector<shared_ptr<Food>> foods;
 		for(int j=0 ; j<menu.size() ; j++){
 			vector<string> menu_item = string_seprator(menu[j], ':');
+            if (menu_item.size() != 2 || menu_item[0].empty()) throw Bad_Request();
 			auto food = make_shared<Food>(menu_item[0],stoi(menu_item[1]));
 			foods.push_back(food);
 		}
@@ -439,11 +439,11 @@ vector<shared_ptr<Food>> save_menu (string input){
 }
 
 bool compare_first_char_restaurant(shared_ptr<Restaurant>& a ,shared_ptr<Restaurant>& b){
-	return a->get_name_restaurant()[0] < b->get_name_restaurant()[0];
+	return a->get_name_restaurant() < b->get_name_restaurant();
 }
 
 bool compare_first_char(string& a , string& b){
-	return a[0] < b[0];
+	return a < b;
 }
 
 

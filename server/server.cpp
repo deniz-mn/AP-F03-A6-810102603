@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 
 #include "../utils/strutils.hpp"
@@ -92,6 +93,7 @@ Request* parseRawReq(char* reqData, size_t length) {
     string reqDataStr(reqData, reqData + length);
     try {
         size_t endOfHeader = reqDataStr.find("\r\n\r\n");
+        if (endOfHeader == string::npos) return nullptr;
         string reqHeader = reqDataStr.substr(0, endOfHeader);
         string reqBody = reqDataStr.substr(endOfHeader + 4, reqDataStr.size());
         if (endOfHeader == string::npos) {
@@ -129,8 +131,10 @@ Request* parseRawReq(char* reqData, size_t length) {
                 throw Server::Exception("Invalid header");
             req->setHeader(R[0], R[1], false);
             if (strutils::tolower(R[0]) == strutils::tolower("Content-Length"))
-                if (realBodySize != (size_t)atol(R[1].c_str()))
+                if (realBodySize != (size_t)atol(R[1].c_str())) {
+                    delete req;
                     return nullptr;
+                }
         }
 
         string contentType = req->getHeader("Content-Type");
@@ -203,9 +207,11 @@ Request* parseRawReq(char* reqData, size_t length) {
         }
     }
     catch (const Server::Exception&) {
+        delete req;
         throw;
     }
     catch (const std::exception& e) {
+        delete req;
         throw Server::Exception("Error on parsing request: " + std::string(e.what()));
     }
     return req;
@@ -237,7 +243,7 @@ Server::Server(int port) : port_(port) {
 
     struct sockaddr_in serv_addr;
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     serv_addr.sin_port = htons(port_);
 
     if (::bind(sc_, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) != 0) {
@@ -281,24 +287,29 @@ void Server::run() {
             throw Exception("Error on accept: " + string(getSocketError()));
         Response* res = nullptr;
         try {
-            char* data = new char[BUFSIZE + 1];
+            auto data = std::make_unique<char[]>(BUFSIZE + 1);
             size_t recv_len, recv_total_len = 0;
             Request* req = nullptr;
             while (!req) {
-                recv_len = recv(newsc, data + recv_total_len, BUFSIZE - recv_total_len, 0);
+                if (recv_total_len >= BUFSIZE) {
+                    throw Exception("Request is too large.");
+                }
+                int received = recv(newsc, data.get() + recv_total_len, BUFSIZE - recv_total_len, 0);
+                recv_len = received > 0 ? static_cast<size_t>(received) : 0;
                 if (recv_len > 0) {
                     recv_total_len += recv_len;
                     data[recv_total_len >= 0 ? recv_total_len : 0] = 0;
-                    req = parseRawReq(data, recv_total_len);
+                    req = parseRawReq(data.get(), recv_total_len);
                 }
                 else
                     break;
             }
-            delete[] data;
-            if (!recv_total_len) {
+            data.reset();
+            if (!req) {
                 CLOSESOCKET(newsc);
                 continue;
             }
+            std::unique_ptr<Request> owned_request(req);
             req->log();
             size_t i = 0;
             for (; i < routes_.size(); i++) {
@@ -310,11 +321,14 @@ void Server::run() {
             if (i == routes_.size() && notFoundHandler_) {
                 res = notFoundHandler_->callback(req);
             }
-            delete req;
         }
         catch (const Exception& exc) {
             delete res;
             res = ServerErrorHandler::callback(exc.getMessage());
+        }
+        catch (const std::exception&) {
+            delete res;
+            res = ServerErrorHandler::callback("Unable to process request.");
         }
         res->log();
         string res_data = res->getResponse();

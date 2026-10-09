@@ -4,6 +4,51 @@
 #include <iostream>
 #include "Exception.hpp"
 #include <ctime>
+#include <random>
+#include <iomanip>
+
+namespace {
+string active_session;
+string new_session() {
+    random_device random;
+    ostringstream token;
+    for (int i = 0; i < 8; ++i) token << hex << setw(8) << setfill('0') << random();
+    active_session = token.str();
+    return active_session;
+}
+bool authenticated(Request* req, CmdHandler* handler) {
+    return handler->is_login() && !active_session.empty() && req->getSessionId() == active_session;
+}
+int integer_param(const string& value) {
+    try {
+        size_t used = 0;
+        int result = stoi(value, &used);
+        if (used != value.size()) throw Bad_Request();
+        return result;
+    } catch (const std::exception&) { throw Bad_Request(); }
+}
+Response* error_response(Exception& error) {
+    const string message = error.show_error();
+    if (message == BAD_REQUEST) return Response::redirect("/badRequest");
+    if (message == NOT_FOUND) return Response::redirect("/notFound");
+    if (message == EMPTY) return Response::redirect("/empty");
+    return Response::redirect("/permissionDenied");
+}
+string escape_html(const string& value) {
+    string result;
+    for (char c : value) {
+        switch (c) {
+            case '&': result += "&amp;"; break;
+            case '<': result += "&lt;"; break;
+            case '>': result += "&gt;"; break;
+            case '"': result += "&quot;"; break;
+            case '\'': result += "&#39;"; break;
+            default: result += c;
+        }
+    }
+    return result;
+}
+}
 
 
 home_handler::home_handler(shared_ptr<Utaste> utaste , CmdHandler* cmd_handler)
@@ -83,7 +128,7 @@ catch (Exception& ex){
 }
     
 	Response* res = Response::redirect("/Home");
-	res->setSessionId(username);
+	res->setSessionId(new_session());
 	return res;
 }
 
@@ -109,7 +154,7 @@ catch (Exception& ex){
 	}
 }
 Response* res = Response::redirect("/Home");
-res->setSessionId(username);
+res->setSessionId(new_session());
 return res;
 }
 
@@ -117,25 +162,14 @@ return res;
 logout_handler :: logout_handler(shared_ptr<Utaste> utaste , CmdHandler*cmd_handler)
 	: utaste(utaste) , cmd_handler(cmd_handler) {}
 
-Response* logout_handler :: callback(Request* req) {
-    cerr<<endl;
-    cerr<<"here logout"<<endl;
-    cerr<<endl;
-	try{
-	utaste->logout();cmd_handler->logout();
-	}
-	catch (Exception& ex){
-		if(ex.show_error() == "Bad Request"){
-			return Response::redirect("/badRequest");
-		}
-		else if(ex.show_error() == "Not Found"){
-				return Response::redirect("/notFound");
-		}
-		else{
-			return Response::redirect("/permissionDenied");
-		}
-	}	
-	return Response::redirect("/Home");
+Response* logout_handler::callback(Request* req) {
+    if (!authenticated(req, cmd_handler)) return Response::redirect("/permissionDenied");
+    try { utaste->logout(); cmd_handler->logout(); }
+    catch (Exception& ex) { return error_response(ex); }
+    active_session.clear();
+    auto res = Response::redirect("/Home");
+    res->setHeader("Set-Cookie", "sessionId=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax");
+    return res;
 }
 
 
@@ -143,7 +177,7 @@ view_all_restaurants_handler :: view_all_restaurants_handler(shared_ptr<Utaste> 
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_all_restaurants_handler::callback(Request* req) {
-    // if (!cmd_handler->is_login()) {
+    // if (!authenticated(req, cmd_handler)) {
     //     return Response::redirect("/permissionDenied");
     // }
 
@@ -203,8 +237,8 @@ Response* view_all_restaurants_handler::callback(Request* req) {
 
     auto restaurants = utaste->get_all_restaurants();
     for (const auto& restaurant : restaurants) {
-        body += "<li><a href=\"/viewRestaurant?name=" + restaurant->get_name_restaurant() + "\">";
-        body += restaurant->get_name_restaurant() + "</a></li>";
+        body += "<li><a href=\"/viewRestaurant?name=" + utils::urlEncode(restaurant->get_name_restaurant()) + "\">";
+        body += escape_html(restaurant->get_name_restaurant()) + "</a></li>";
     }
 
     body += R"(
@@ -223,7 +257,7 @@ view_restaurant_handler :: view_restaurant_handler(shared_ptr<Utaste> utaste, Cm
  		: utaste(utaste) , cmd_handler(cmd_handler) {}
 
 Response* view_restaurant_handler::callback(Request* req) {
-    if (!cmd_handler->is_login()) {
+    if (!authenticated(req, cmd_handler)) {
         return Response::redirect("/permissionDenied");
     }
 
@@ -279,8 +313,9 @@ Response* view_restaurant_handler::callback(Request* req) {
        
         utaste->get_restaurant_detail(restaurant_name, details);
         body << details.str();
-    } catch (const std::exception& ex) {
-        body << "<p>Error: " << ex.what() << "</p>";
+    } catch (Exception& ex) {
+        delete res;
+        return error_response(ex);
     }
     body << R"(
         </div>
@@ -293,29 +328,29 @@ Response* view_restaurant_handler::callback(Request* req) {
     return res;
 }
 Response* bad_request_handler::callback(Request* req) {
-	Response* res = new Response();
+	Response* res = new Response(Response::Status::badRequest);
 	res->setHeader("Content-Type", "text/html");
-	res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request could notbe processed.</p></body></html>");
+	res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request could not be processed.</p></body></html>");
 return res;
 }
 Response* empty_handler::callback(Request* req) {
     Response* res = new Response();
     res->setHeader("Content-Type", "text/html");
-    res->setBody("<html><body><h1>400 Bad Request</h1><p>Your request is empty</p></body></html>");
+    res->setBody("<html><body><h1>No Reservations</h1><p>No matching reservations were found.</p></body></html>");
 return res;
 }
 
 Response* not_found_handler::callback(Request* req) {
-	Response* res = new Response();
+	Response* res = new Response(Response::Status::notFound);
 	res->setHeader("Content-Type", "text/html");
-	res->setBody("<html><body><h1>404 Not Found</h1><p>The page you requestedcould not be found.</p></body></html>");
+	res->setBody("<html><body><h1>404 Not Found</h1><p>The page you requested could not be found.</p></body></html>");
 return res;
 }
 
 Response* permission_denied_handler::callback(Request* req) {
-	Response* res = new Response();
+	Response* res = new Response(Response::Status::forbidden);
 	res->setHeader("Content-Type", "text/html");
-	res->setBody("<html><body><h1>403 Forbidden</h1><p>You do not havepermission to access this page.</p></body></html>");
+	res->setBody("<html><body><h1>403 Forbidden</h1><p>You do not have permission to access this page.</p></body></html>");
 return res;
 }
 
@@ -326,51 +361,15 @@ return res;
 add_reservation_handler :: add_reservation_handler(std::shared_ptr<Utaste> utaste, CmdHandler* cmd_handler)
             : utaste(utaste), cmd_handler(cmd_handler) {}
 
-Response* add_reservation_handler :: callback(Request* req){
-        cout<<" ding 11"<<endl;
-            if (!cmd_handler->is_login()) {
-                return Response::redirect("/permissionDenied");
-            }
-    cout<<" ding 11"<<endl;
-            std::string restaurant_name = req->getBodyParam("restaurant_name");
-            int table_id = std::stoi(req->getBodyParam("table_id"));
-            int start_time = std::stoi(req->getBodyParam("start_time"));
-            int end_time = std::stoi(req->getBodyParam("end_time"));
-            std::string foods = req->getBodyParam("foods");
-    
-            Response* res = new Response();
-            res->setHeader("Content-Type", "text/html");
-    cout<<" ding 11"<<endl;
-            std::ostringstream body;
-            body << "<!DOCTYPE html><html lang=\"en\"><head>";
-            body << "<meta charset=\"UTF-8\">";
-            body << "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
-            body << "<title>Reservation Result</title></head><body>";
-            body << "<h1>Reservation Status</h1>";
-    
-            try {
-                
-                utaste->add_reservation(restaurant_name, table_id, start_time, end_time, foods);
-                cout<<" ding 55"<<endl;
-                body << "<p style='color: green;'>✅ Reservation successfully added for " << restaurant_name << ".</p>";
-            } 
-            catch (Exception& ex){
-                if(ex.show_error() == "Bad Request"){
-                    return Response::redirect("/badRequest");
-                }
-                else if(ex.show_error() == "Not Found"){
-                    return Response::redirect("/notFound");
-                }
-                else{
-                    return Response::redirect("/permissionDenied");
-                }
-            }
-    
-            body << "<br><a href=\"/Home\">Back to Home</a></body></html>";
-    
-            res->setBody(body.str());
-            return res;
-        }
+Response* add_reservation_handler::callback(Request* req) {
+    if (!authenticated(req, cmd_handler)) return Response::redirect("/permissionDenied");
+    try {
+        utaste->add_reservation(req->getBodyParam("restaurant_name"),
+            integer_param(req->getBodyParam("table_id")), integer_param(req->getBodyParam("start_time")),
+            integer_param(req->getBodyParam("end_time")), req->getBodyParam("foods"));
+        return Response::redirect("/viewReservations");
+    } catch (Exception& ex) { return error_response(ex); }
+}
 
 
 
@@ -383,10 +382,10 @@ view_reserves_handler  :: view_reserves_handler (shared_ptr<Utaste> utaste, CmdH
         : utaste(utaste) , cmd_handler(cmd_handler) {}
         
 Response* view_reserves_handler :: callback(Request* req){
-	if (!cmd_handler->is_login()) {
+	if (!authenticated(req, cmd_handler)) {
 		return Response::redirect("/permissionDenied");
 	}
-    cout<<"hi 11"<<endl;
+
 Response* res = new Response();
 res->setHeader("Content-Type", "text/html");
 std::ostringstream body;
@@ -402,44 +401,45 @@ body << "h1 { color: #81daf8; }";
 body << "p { font-size: 18px; }";
 body << "a { color: #007BFF; text-decoration: none; }";
 body << "a:hover { text-decoration: underline; }";
-body << "div { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #qf; }";
+body << "div { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #fff; }";
 body << "</style>";
 body << "</head>";
 body << "<body>";
 body << "<h1>All Reservations</h1>";
 
 try{ 
+    if (!req->getQueryParam("reserve_id").empty() && req->getQueryParam("restaurant_name").empty()) throw Bad_Request();
     if (!req->getQueryParam("restaurant_name").empty() && !req->getQueryParam("reserve_id").empty()) {
-        cout<<"hi 22"<<endl;
+
             std::string restaurant_name = req->getQueryParam("restaurant_name");
-            int reserve_id = std::stoi(req->getQueryParam("reserve_id"));
+            int reserve_id = integer_param(req->getQueryParam("reserve_id"));
             ostringstream output;
                 utaste->show_special_reservation(restaurant_name, reserve_id,output);
-            body <<output.str() ;
-                body << "</div>";
+            body << "<div>" << output.str() << "</div>";
     } 
     else if (!req->getQueryParam("restaurant_name").empty()) {
-        cout<<"hi 33"<<endl;
+
             std::string restaurant_name = req->getQueryParam("restaurant_name");
-            body << "<div><strong>Reservations for " << restaurant_name << ":</strong><br>";
+            body << "<div><strong>Reservations for " << escape_html(restaurant_name) << ":</strong><br>";
             ostringstream output;
             utaste->show_res_reservation(restaurant_name,output);
             body <<output.str();
             body << "</div>";
     }
     else {
-        cout<<"hi 44"<<endl;
+
         body << "<div><strong>All Reservations:</strong><br>";
         ostringstream output;
-        cout<<"hi 55"<<endl;
+
          utaste->show_all_reservation(output);
-          cout<<"hi 10101"<<endl;
+
         body <<output.str();
         body << "</div>";
-        cout<<"hi 66"<<endl;
+
     }
 }
 catch (Exception& ex){
+        delete res;
         if(ex.show_error() == "Bad Request"){
             return Response::redirect("/badRequest");
             }

@@ -21,10 +21,10 @@ vector<string>  Neighborhood ::  get_neighbors(){ return neighbors; }
 
 //////////////////////////////////////////////////////////////////////
 
-void print_vector_with_seprator(vector<string>neighbors , char seprator){
-	for(int i=0 ; i<neighbors.size()-1 ; i++){
-		cout<<neighbors[i]<<seprator<<" ";
-	}
-
-	cout<<neighbors[ neighbors.size()-1 ]<<endl;
+void print_vector_with_seprator(vector<string> neighbors, char separator) {
+    for (size_t i = 0; i < neighbors.size(); ++i) {
+        if (i) cout << separator << " ";
+        cout << neighbors[i];
+    }
+    cout << endl;
 }

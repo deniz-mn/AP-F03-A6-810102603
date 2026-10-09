@@ -24,6 +24,10 @@
 
 int main(int argc,char *argv[]) {
 
+    if (argc != 4) {
+        cerr << "Usage: " << argv[0] << " restaurants.csv neighborhoods.csv discounts.csv\n";
+        return 1;
+    }
 	try {
 	const int port = 5000; 
 	auto utaste = std::make_shared<Utaste>();
@@ -47,11 +51,18 @@ int main(int argc,char *argv[]) {
 	server.get("/viewAllRestaurants", new view_all_restaurants_handler(utaste, &cmdHandler));
 	server.get("/viewRestaurant", new view_restaurant_handler(utaste, &cmdHandler));
 	server.get("/viewReservations", new view_reserves_handler(utaste, &cmdHandler));
-	server.setNotFoundErrPage("404.html");
+    server.get("/badRequest", new bad_request_handler());
+    server.get("/notFound", new not_found_handler());
+    server.get("/permissionDenied", new permission_denied_handler());
+    server.get("/empty", new empty_handler());
 
 		cout << "Server is running on port " << port << "..." << std::endl;
 		server.run();
 	}
+	catch (Exception& e) {
+        cerr << "Error: " << e.show_error() << endl;
+        return 1;
+    }
 	catch (const std::exception& e) {
 		cerr << "Error: " << e.what() << std::endl;
 		return 1;

@@ -54,6 +54,7 @@ std::string urlEncode(const std::string& url) {
                 result += url[pos];
                 break;
             }
+        case ' ':
         case '$':
         case '&':
         case '+':
@@ -78,7 +79,7 @@ std::string urlEncode(const std::string& url) {
         case '[':
         case ']':
         case '`':
-            sprintf(encode_buf + 1, "%02X", url[pos]);
+            sprintf(encode_buf + 1, "%02X", static_cast<unsigned char>(url[pos]));
             result += encode_buf;
             break;
         }

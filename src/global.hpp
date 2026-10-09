@@ -2,6 +2,7 @@
 #define GLOBAL_HPP
 
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <sstream>

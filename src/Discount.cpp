@@ -1,7 +1,10 @@
 #include "Discount.hpp"
 
 Discount :: Discount (string type_ , int value_): value(value_), type(type_), none(false){
-	if(type_ == "percent")
+	if (value_ < 0 || (type_ != "percent" && type_ != "percentage" && type_ != "amount") ||
+        ((type_ == "percent" || type_ == "percentage") && value_ > 100))
+        throw std::invalid_argument("Invalid discount");
+    if(type_ == "percent")
 		type = "percentage";
 	if(type_ == "amount")
 		type = "amount";
@@ -17,15 +20,9 @@ bool Discount :: get_none(){
 int  Discount :: get_value_discount(){
 	return value;
 }
-int  Discount :: calculate_discount(int price){
-	if( type == "percentage" ){
-		int final_price = price - (  value*price / 100 );
-		return final_price;
-	}
-	else {
-		int final_price = price - value;
-		return final_price;
-	}
+int Discount::calculate_discount(int price) {
+    long long reduction = type == "percentage" ? static_cast<long long>(value) * price / 100 : value;
+    return static_cast<int>(max(0LL, static_cast<long long>(price) - reduction));
 }
 
 
@@ -86,7 +83,7 @@ bool  Item_discount ::    is_none(){
 
 
 
-Total_discount :: Total_discount  (string type , int value , int min) :  Discount( type , value) , min(min){}
+Total_discount :: Total_discount  (string type , int value , int min) :  Discount( type , value) , min(min){ if (min < 0) throw std::invalid_argument("Negative discount threshold"); }
 Total_discount :: Total_discount (bool none):Discount(none), min(0){}
 string  Total_discount :: get_type(){
 	return  get_type_discount();

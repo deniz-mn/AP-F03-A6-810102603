@@ -84,7 +84,7 @@ std::string Request::getSessionId() const {
     for (std::string kv : v) {
         trim(kv);
         std::vector<std::string> k = strutils::split(kv, "=");
-        if (k[0] == "sessionId") {
+        if (k.size() == 2 && k[0] == "sessionId") {
             return k[1];
         }
     }
@@ -137,7 +137,7 @@ void Request::log() const {
     for (auto itr = body_.begin(); itr != body_.end(); itr++) {
         std::string type = bodyTypes_.find(itr->first)->second;
         if (type == "application/x-www-form-urlencoded" || type == "text/plain") {
-            log += "  " + utils::urlDecode(itr->first) + ": " + utils::urlDecode(itr->second) + "\n";
+            log += "  " + utils::urlDecode(itr->first) + ": " + (itr->first == "password" ? "[redacted]" : utils::urlDecode(itr->second)) + "\n";
         }
         else {
             log += "  " + utils::urlDecode(itr->first) + ": <BINARY DATA>\n";

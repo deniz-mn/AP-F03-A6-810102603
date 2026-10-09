@@ -36,7 +36,7 @@ try{
       if(cmd[1] == "signup"){
         if (!cmd_map.count(USERNAME) || !cmd_map.count(PASSWORD))
           throw Bad_Request();
-        cout<<"i got you"<<endl;
+
         utaste->signup(cmd_map[USERNAME],cmd_map[PASSWORD]);
         login();
         throw Ok();
@@ -80,8 +80,10 @@ try{
       if(!is_login())
         throw Premission_Denied();
 
-        else if(cmd[1] == "my_district")
-          utaste->save_person_district(cmd[CMD_DISTRICT_NAME] );
+        else if(cmd[1] == "my_district") {
+          if (cmd.size() != CMD_FULL_ARGS) throw Bad_Request();
+          utaste->save_person_district(cmd[CMD_DISTRICT_NAME]);
+        }
       
         else
           throw Bad_Request();
@@ -118,7 +120,9 @@ try{
     }
       else if(cmd[1] == "restaurant_detail"){
         ostringstream out;
+        if (cmd.size() != CMD_FULL_ARGS) throw Bad_Request();
         utaste->get_restaurant_detail(cmd[ CMD_RESTAURANT_NAME ] , out);
+        cout << out.str();
       }
 
       else if(cmd[1] == "reserves"){
@@ -137,6 +141,7 @@ try{
         
         else
           throw Bad_Request();
+        cout << out.str();
       }
       else if(cmd[1] == "show_budget"){
         utaste->show_budget();
@@ -169,6 +174,9 @@ try{
     
 }
 
+catch(const std::exception&){
+  cout << BAD_REQUEST << endl;
+}
 catch(Exception& ex){
   
   cout<<ex.show_error()<<endl;
@@ -218,7 +226,7 @@ vector<string>  add_to_vector (string s){
     else { cmd.push_back(word); } }
    
     }
-    if(cmd[2] != "?")
+    if(cmd.size() < 3 || cmd[2] != "?")
       throw Bad_Request();
   return cmd;
 }

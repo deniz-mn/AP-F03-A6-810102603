@@ -162,5 +162,5 @@ int      Reservation  :: get_time(){
 	return start_time;
 }
 bool   Reservation  :: has_reserve_id(int id){
-	return reserve_id = id;
+	return reserve_id == id;
 }

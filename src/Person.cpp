@@ -54,24 +54,15 @@ void    Person ::  print_all_reservation(ostream& out){
 		r->print_in_line(out);
 	}
 }
-bool   Person :: has_reservation_at(int start_time , int end_time){
-	if(reservations.size() == 0){
-		return false;
-	}	
-	for(auto r : reservations){	
-
-		if(r->is_at_start_time(start_time) || r->is_at_end_time(end_time)){ 
-			return true;
-		}
-	return false;
-	
-	}
+bool Person::has_reservation_at(int start_time, int end_time) {
+    for (const auto& r : reservations) {
+        if (start_time < r->get_end() && end_time > r->get_start())
+            return true;
+    }
+    return false;
 }
-bool   Person ::  has_reservation_id(string restaurant_name ,int id){
-	for(auto r : reservations){
-		if(r->is_equal(id) && (r->get_name_restaurant() == restaurant_name ))
-			return true;
-	}
+bool Person::has_reservation_id(string restaurant_name, int id) {
+    return find_reservation(restaurant_name, id) != nullptr;
 }
 shared_ptr<Reservation>   Person :: find_reservation(string restaurant_name , int id){
 
@@ -94,24 +85,12 @@ void   Person ::  person_delete_reservation(string restaurant_name , int id){
 }
 void   Person :: save_person_reservation(shared_ptr<Reservation>& r){
 	reservations.push_back(r);
+    if (!has_ordered_from(r->get_name_restaurant()))
+        ordered_restaurant.push_back(r->get_name_restaurant());
 	sort(reservations.begin() , reservations.end(),compare_time);
 }
-bool   Person :: has_ordered_from(string name){
-	
-	if(ordered_restaurant.size() > 0){
-	
-		for(auto r : ordered_restaurant){
-			if(r == name){ 	
-				return true;
-			}	
-		}
-		ordered_restaurant.push_back(name);
-	return false;
-	}
-	else{
-		ordered_restaurant.push_back(name);
-		return false;
-	}
+bool Person::has_ordered_from(string name) {
+    return find(ordered_restaurant.begin(), ordered_restaurant.end(), name) != ordered_restaurant.end();
 }
 void   Person :: update_person_budget(int amount , char a){
 	if(a == '+')

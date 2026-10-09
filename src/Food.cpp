@@ -1,6 +1,6 @@
 #include "Food.hpp"
 
-Food :: Food (const string& name_ , int price_): name(name_),price(price_){}
+Food :: Food (const string& name_ , int price_): name(name_),price(price_){ if (price_ < 0) throw std::invalid_argument("Negative food price"); }
 Food :: Food (const string& name_ ): name(name_){}
 
 string Food :: get_name_food(){ return name;}

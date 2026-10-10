@@ -11,8 +11,6 @@ A local restaurant reservation website built with **C++20**, the bundled **AP HT
 - Calculate item, first-order, and order-total discounts, with payment from an internal wallet (initial balance: 1,000).
 - Reject overlapping bookings for both the table and the user; allow consecutive bookings with matching end/start hours.
 
-The backend also contains neighborhood-based restaurant discovery, food filtering, wallet top-ups, and cancellation with a 60% refund. These operations are not exposed through the current web interface; the older command-line entry point is commented out.
-
 ## Build and Run
 
 Requires a C++20-capable `g++`, GNU Make, and a POSIX shell (Linux or WSL). From the project directory:
@@ -39,11 +37,11 @@ Use exact restaurant and food names from the menus. Times must be integers with 
 | `Test/` | Sample CSV data, C++ regression checks, and a Python web smoke test |
 | `Makefile` | Build configuration |
 
-## Local App Scope
+## Usage Notes
 
 - Users, wallet balances, and reservations exist only in memory and reset when the server restarts.
 - One account can be logged in at a time. Protected actions require that browser's session cookie; log out before switching accounts.
-- Reservations use integer hours (1-24); calendar dates and party sizes are not modeled.
+- Reservations are organized by table and hourly time slot.
 - The server listens on the local machine only (`127.0.0.1:5000`).
 - CSV files have no header row. The supplied files show the expected format; monetary amounts use integer units.
 
@@ -62,5 +60,3 @@ python3 Test/web_smoke.py
 ```
 
 The checks cover overlapping and adjacent reservations, cancellation IDs, failed orders and first-order discounts, single-item discounts, invalid form input, error pages, and session access. The web test creates a temporary in-memory account named `smoke_user`.
-
-Verification note: the latest changes were reviewed statically and the Python test passed syntax validation. Build and runtime checks could not be run in the editing environment because no C++ compiler was available and WSL access was denied.
